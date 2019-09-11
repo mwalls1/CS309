@@ -11,6 +11,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
 	CharSequence text;
+	CharSequence text2;
 	BitmapFont font;
 	
 	@Override
@@ -18,6 +19,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("Group Photo.png");
 		text = "Hello World,\nThis is our wonderful project.";
+		text2 = "This is a test to show Noah how to \nimport our project properly.";
 		font = new BitmapFont();
 		
 	}
@@ -29,6 +31,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(img, 0, 0);
 		font.draw(batch, text, 425, 450);
+		font.draw(batch, text2, 400, 400);
 		batch.end();
 	}
 	
