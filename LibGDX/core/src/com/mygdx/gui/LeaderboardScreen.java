@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class LobbyScreen extends Game implements Screen{
+public class LeaderboardScreen extends Game implements Screen{
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private Skin skin;
@@ -28,7 +28,7 @@ public class LobbyScreen extends Game implements Screen{
 	private Game game;
 	
 	
-	public LobbyScreen(Game game)
+	public LeaderboardScreen(Game game)
 	{
 		this.game = game;
 		create();
@@ -106,29 +106,16 @@ public class LobbyScreen extends Game implements Screen{
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
+            	//Do some stuff when clicked
+            	backButton.setText("b");
             	game.setScreen(new MainScreen(game));
             }
         });
+       
         
-        leaderboardButton.addListener(new ClickListener(){
-            @Override 
-            public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
-            	leaderboardButton.setText("b");
-            }
-        });
         
-        optionsButton.addListener(new ClickListener(){
-            @Override 
-            public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
-            	optionsButton.setText("b");
-            }
-        });
         
         stage.addActor(backButton);
-        stage.addActor(leaderboardButton);
-        stage.addActor(optionsButton);
         
         Gdx.input.setInputProcessor(stage);
 

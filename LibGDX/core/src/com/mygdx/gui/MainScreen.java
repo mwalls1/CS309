@@ -123,7 +123,7 @@ public class MainScreen extends Game implements Screen{
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
-            	leaderboardButton.setText("a");
+            	game.setScreen(new LeaderboardScreen(game));
             }
         });
         
@@ -132,6 +132,7 @@ public class MainScreen extends Game implements Screen{
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
             	optionsButton.setText("a");
+            	game.setScreen(new OptionsScreen(game));
             	
             }
         });
