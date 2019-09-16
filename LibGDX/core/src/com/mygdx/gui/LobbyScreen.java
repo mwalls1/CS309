@@ -16,10 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class MainScreen extends Game implements Screen{
-	private TextButton playButton;
-	private TextButton leaderboardButton;
-	private TextButton optionsButton;
+public class LobbyScreen extends Game implements Screen{
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private Skin skin;
@@ -31,21 +28,17 @@ public class MainScreen extends Game implements Screen{
 	private Game game;
 	
 	
-	public MainScreen(Game game)
+	public LobbyScreen(Game game)
 	{
 		this.game = game;
 		create();
-			}
+	}
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(stage);
-		
 	}
-	private void init()
-	{
-		
-	}
+	
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
@@ -94,28 +87,28 @@ public class MainScreen extends Game implements Screen{
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
 
-        final TextButton playButton = new TextButton("Play", skin, "default");
-        final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default");
-        final TextButton optionsButton = new TextButton("Options", skin, "default");
+        final TextButton backButton = new TextButton("Back", skin, "default");
+        final TextButton leaderboardButton = new TextButton("Public Game", skin, "default");
+        final TextButton optionsButton = new TextButton("Private Game", skin, "default");
         
-        playButton.setWidth(200f);
+        backButton.setWidth(200f);
         leaderboardButton.setWidth(200f);
         optionsButton.setWidth(200f);
         
-        playButton.setHeight(20f);
+        backButton.setHeight(20f);
         leaderboardButton.setHeight(20f);
         optionsButton.setHeight(20f);
         
-        playButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2);
+        backButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2);
         leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 50f);
         optionsButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 100f);
        
-        playButton.addListener(new ClickListener(){
+        backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
-            	playButton.setText("a");
-            	game.setScreen(new LobbyScreen(game));
+            	backButton.setText("b");
+            	game.setScreen(new MainScreen(game));
             }
         });
         
@@ -123,7 +116,7 @@ public class MainScreen extends Game implements Screen{
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
-            	leaderboardButton.setText("a");
+            	leaderboardButton.setText("b");
             }
         });
         
@@ -131,12 +124,11 @@ public class MainScreen extends Game implements Screen{
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
-            	optionsButton.setText("a");
-            	
+            	optionsButton.setText("b");
             }
         });
         
-        stage.addActor(playButton);
+        stage.addActor(backButton);
         stage.addActor(leaderboardButton);
         stage.addActor(optionsButton);
         
