@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import util.Constants;
+
 public class LeaderboardScreen extends Game implements Screen{
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -26,6 +28,7 @@ public class LeaderboardScreen extends Game implements Screen{
 	private TextButtonStyle textButtonStyle;
 	private BitmapFont font;
 	private Game game;
+	private float offset = Gdx.graphics.getWidth() / 10;
 	
 	
 	public LeaderboardScreen(Game game)
@@ -51,7 +54,7 @@ public class LeaderboardScreen extends Game implements Screen{
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+		create();
 	}
 
 	@Override
@@ -91,17 +94,10 @@ public class LeaderboardScreen extends Game implements Screen{
         final TextButton leaderboardButton = new TextButton("Public Game", skin, "default");
         final TextButton optionsButton = new TextButton("Private Game", skin, "default");
         
-        backButton.setWidth(200f);
-        leaderboardButton.setWidth(200f);
-        optionsButton.setWidth(200f);
-        
-        backButton.setHeight(20f);
-        leaderboardButton.setHeight(20f);
-        optionsButton.setHeight(20f);
+        backButton.setWidth(Constants.BUTTON_WIDTH);        
+        backButton.setHeight(Constants.BUTTON_HEIGHT);
         
         backButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2);
-        leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 50f);
-        optionsButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 100f);
        
         backButton.addListener(new ClickListener(){
             @Override 

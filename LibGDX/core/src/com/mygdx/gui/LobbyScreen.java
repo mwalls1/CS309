@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import util.Constants;
+
 public class LobbyScreen extends Game implements Screen{
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -26,6 +28,7 @@ public class LobbyScreen extends Game implements Screen{
 	private TextButtonStyle textButtonStyle;
 	private BitmapFont font;
 	private Game game;
+	private float offset = Gdx.graphics.getHeight() / 10;
 	
 	
 	public LobbyScreen(Game game)
@@ -50,8 +53,8 @@ public class LobbyScreen extends Game implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		offset = Gdx.graphics.getHeight() / 10;
+		create();
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class LobbyScreen extends Game implements Screen{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+		stage.dispose();
 	}
 	
 
@@ -88,21 +91,25 @@ public class LobbyScreen extends Game implements Screen{
         stage = new Stage();
 
         final TextButton backButton = new TextButton("Back", skin, "default");
-        final TextButton leaderboardButton = new TextButton("Public Game", skin, "default");
-        final TextButton optionsButton = new TextButton("Private Game", skin, "default");
+        final TextButton privateGameButton = new TextButton("Private Game", skin, "default");
+        final TextButton publicGameButton = new TextButton("Public Game", skin, "default");
+        final TextButton singlePlayerButton = new TextButton("Single Player", skin, "default");
         
-        backButton.setWidth(200f);
-        leaderboardButton.setWidth(200f);
-        optionsButton.setWidth(200f);
+        backButton.setWidth(Constants.BUTTON_WIDTH);
+        privateGameButton.setWidth(Constants.BUTTON_WIDTH);
+        publicGameButton.setWidth(Constants.BUTTON_WIDTH);
+        singlePlayerButton.setWidth(Constants.BUTTON_WIDTH);
         
-        backButton.setHeight(20f);
-        leaderboardButton.setHeight(20f);
-        optionsButton.setHeight(20f);
+        backButton.setHeight(Constants.BUTTON_HEIGHT);
+        privateGameButton.setHeight(Constants.BUTTON_HEIGHT);
+        publicGameButton.setHeight(Constants.BUTTON_HEIGHT);
+        singlePlayerButton.setHeight(Constants.BUTTON_HEIGHT);
         
-        backButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2);
-        leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 50f);
-        optionsButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 100f);
-       
+        backButton.setPosition(Gdx.graphics.getWidth() /2 - backButton.getWidth()/2, Gdx.graphics.getHeight()/2);
+        privateGameButton.setPosition(Gdx.graphics.getWidth() /2 - privateGameButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
+        publicGameButton.setPosition(Gdx.graphics.getWidth() /2 - publicGameButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*2);
+        singlePlayerButton.setPosition(Gdx.graphics.getWidth() /2 - singlePlayerButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*3);
+        
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
@@ -110,25 +117,31 @@ public class LobbyScreen extends Game implements Screen{
             }
         });
         
-        leaderboardButton.addListener(new ClickListener(){
+        privateGameButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
-            	leaderboardButton.setText("b");
+            	privateGameButton.setText("b");
             }
         });
         
-        optionsButton.addListener(new ClickListener(){
+        publicGameButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
-            	optionsButton.setText("b");
+            	publicGameButton.setText("b");
+            }
+        });
+        
+        singlePlayerButton.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	game.setScreen(new  SinglePlayerGameSelectScreen(game));
             }
         });
         
         stage.addActor(backButton);
-        stage.addActor(leaderboardButton);
-        stage.addActor(optionsButton);
+        stage.addActor(privateGameButton);
+        stage.addActor(publicGameButton);
+        stage.addActor(singlePlayerButton);
         
         Gdx.input.setInputProcessor(stage);
 

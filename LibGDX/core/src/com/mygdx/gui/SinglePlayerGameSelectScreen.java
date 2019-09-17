@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import util.Constants;
 
-public class OptionsScreen extends Game implements Screen{
+public class SinglePlayerGameSelectScreen extends Game implements Screen{
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private Skin skin;
@@ -30,7 +30,7 @@ public class OptionsScreen extends Game implements Screen{
 	private Game game;
 	
 	
-	public OptionsScreen(Game game)
+	public SinglePlayerGameSelectScreen(Game game)
 	{
 		this.game = game;
 		create();
@@ -53,6 +53,7 @@ public class OptionsScreen extends Game implements Screen{
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
+		
 		create();
 	}
 
@@ -77,6 +78,7 @@ public class OptionsScreen extends Game implements Screen{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		stage.dispose();
 		
 	}
 	
@@ -89,33 +91,73 @@ public class OptionsScreen extends Game implements Screen{
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
 
+        final TextButton[] games = new TextButton[16];
+        final String[] gameNames = new String[16];
+        for (int i = 0; i<games.length; i++) gameNames[i] = "Coming soon!";
+      
+     
+        for (int i = 0; i < games.length; i++)
+        {
+        	final TextButton button = new TextButton(gameNames[i], skin, "default");
+        	button.setWidth(Gdx.graphics.getWidth()/7);
+        	button.setHeight(Gdx.graphics.getWidth()/7);
+        	button.setOrigin(0, 0);
+        	button.setPosition(10, 400);
+        
+        	games[i] = button;
+        	
+        }
+        
         final TextButton backButton = new TextButton("Back", skin, "default");
-        final TextButton leaderboardButton = new TextButton("Public Game", skin, "default");
-        final TextButton optionsButton = new TextButton("Private Game", skin, "default");
-        
-        backButton.setWidth(Constants.BUTTON_WIDTH);
-        leaderboardButton.setWidth(Constants.BUTTON_WIDTH);
-        optionsButton.setWidth(Constants.BUTTON_WIDTH);
-        
+        backButton.setWidth(Constants.BUTTON_WIDTH/4f);
         backButton.setHeight(Constants.BUTTON_HEIGHT);
-        leaderboardButton.setHeight(Constants.BUTTON_HEIGHT);
-        optionsButton.setHeight(Constants.BUTTON_HEIGHT);
+        backButton.setPosition(Gdx.graphics.getWidth()/1.2f, Gdx.graphics.getHeight()/4f);
+        stage.addActor(backButton);
         
-        backButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2);
+        float x1 = Gdx.graphics.getWidth()/75f;
+        float x2 = Gdx.graphics.getWidth()/5f;
+        float x3 = Gdx.graphics.getWidth()/2.586f;
+        float x4 = Gdx.graphics.getWidth()/1.744f;
+        float y1 = Gdx.graphics.getHeight()/1.315f;
+        float y2 = Gdx.graphics.getHeight()/1.9f;
+        float y3 = Gdx.graphics.getHeight()/3.5f;
+        float y4 = Gdx.graphics.getHeight()/3.5f;
+        
+        games[0].setPosition(x1, y1);
+        games[1].setPosition(x2, y1);
+        games[2].setPosition(x3, y1);
+        games[3].setPosition(x4, y1);
+        games[4].setPosition(x1, y2);
+        games[5].setPosition(x2, y2);
+        games[6].setPosition(x3, y2);
+        games[7].setPosition(x4, y2);
+        games[8].setPosition(x1, y3);
+        games[9].setPosition(x2, y3);
+        games[10].setPosition(x3, y3);
+        games[11].setPosition(x4, y3);
+        games[12].setPosition(x1, y4);
+        games[13].setPosition(x2, y4);
+        games[14].setPosition(x3, y4);
+        games[15].setPosition(x4, y4);
+        System.out.println(Gdx.graphics.getHeight());
+        System.out.println(Gdx.graphics.getHeight()/1.315f);
+        //125.01898
+       for (int i = 0; i < 16; i++)
+       {
+    	   stage.addActor(games[i]);
+       }
        
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
             	backButton.setText("b");
-            	game.setScreen(new MainScreen(game));
+            	game.setScreen(new LobbyScreen(game));
             }
         });
-       
         
-        
-        
-        stage.addActor(backButton);
+      
+      
         
         Gdx.input.setInputProcessor(stage);
 

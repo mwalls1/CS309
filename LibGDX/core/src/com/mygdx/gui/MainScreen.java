@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import util.Constants;
+
 public class MainScreen extends Game implements Screen{
 	private TextButton playButton;
 	private TextButton leaderboardButton;
@@ -29,7 +31,6 @@ public class MainScreen extends Game implements Screen{
 	private TextButtonStyle textButtonStyle;
 	private BitmapFont font;
 	private Game game;
-	
 	
 	public MainScreen(Game game)
 	{
@@ -58,7 +59,7 @@ public class MainScreen extends Game implements Screen{
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+		create();
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class MainScreen extends Game implements Screen{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+		stage.dispose();
 	}
 	
 
@@ -98,17 +99,17 @@ public class MainScreen extends Game implements Screen{
         final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default");
         final TextButton optionsButton = new TextButton("Options", skin, "default");
         
-        playButton.setWidth(200f);
-        leaderboardButton.setWidth(200f);
-        optionsButton.setWidth(200f);
+        playButton.setWidth(Gdx.graphics.getWidth() / 3);
+        leaderboardButton.setWidth(Gdx.graphics.getWidth() / 3);
+        optionsButton.setWidth(Gdx.graphics.getWidth() / 3);
         
-        playButton.setHeight(20f);
-        leaderboardButton.setHeight(20f);
-        optionsButton.setHeight(20f);
+        playButton.setHeight(Gdx.graphics.getHeight() / 20);
+        leaderboardButton.setHeight(Gdx.graphics.getHeight()/ 20);
+        optionsButton.setHeight(Gdx.graphics.getHeight() / 20);
         
-        playButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2);
-        leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 50f);
-        optionsButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2 - 100f);
+        playButton.setPosition(Gdx.graphics.getWidth() /2 - playButton.getWidth()/2, Gdx.graphics.getHeight()/2);
+        leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - leaderboardButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
+        optionsButton.setPosition(Gdx.graphics.getWidth() /2 - optionsButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*2);
        
         playButton.addListener(new ClickListener(){
             @Override 
