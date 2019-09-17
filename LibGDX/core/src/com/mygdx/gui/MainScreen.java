@@ -99,13 +99,13 @@ public class MainScreen extends Game implements Screen{
         final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default");
         final TextButton optionsButton = new TextButton("Options", skin, "default");
         
-        playButton.setWidth(Gdx.graphics.getWidth() / 3);
-        leaderboardButton.setWidth(Gdx.graphics.getWidth() / 3);
-        optionsButton.setWidth(Gdx.graphics.getWidth() / 3);
+        playButton.setWidth(Constants.BUTTON_WIDTH);
+        leaderboardButton.setWidth(Constants.BUTTON_WIDTH);
+        optionsButton.setWidth(Constants.BUTTON_WIDTH);
         
-        playButton.setHeight(Gdx.graphics.getHeight() / 20);
-        leaderboardButton.setHeight(Gdx.graphics.getHeight()/ 20);
-        optionsButton.setHeight(Gdx.graphics.getHeight() / 20);
+        playButton.setHeight(Constants.BUTTON_HEIGHT);
+        leaderboardButton.setHeight(Constants.BUTTON_HEIGHT);
+        optionsButton.setHeight(Constants.BUTTON_HEIGHT);
         
         playButton.setPosition(Gdx.graphics.getWidth() /2 - playButton.getWidth()/2, Gdx.graphics.getHeight()/2);
         leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - leaderboardButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
