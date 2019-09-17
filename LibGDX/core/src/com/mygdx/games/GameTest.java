@@ -1,11 +1,16 @@
 package com.mygdx.games;
 
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,9 +34,10 @@ public class GameTest extends Game implements Screen{
 	private BitmapFont font;
 	private Game game;
 	private float offset = Gdx.graphics.getHeight() / 10;
-	private int x = Gdx.graphics.getWidth()/2;
-	private int y = Gdx.graphics.getHeight()/2;
-
+	private int daWayx = Gdx.graphics.getWidth()/2;
+	private int daWayy = Gdx.graphics.getHeight()/2;
+	private Texture dawayTexture;
+	private Sprite sprite;
 	
 	
 	public GameTest(Game game)
@@ -52,6 +58,17 @@ public class GameTest extends Game implements Screen{
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
 	     stage.draw();
+	     if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
+	     {
+	    	 sprite.translateX(-1f);
+	     }
+	     if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+	     {
+	    	 sprite.translateX(1f);
+	     }
+		 batch.begin();
+	     sprite.draw(batch);
+	     batch.end();
 	}
 
 	@Override
@@ -88,10 +105,11 @@ public class GameTest extends Game implements Screen{
 	
 	@Override
 	public void create() {
-		// TODO Auto-generated method stub
 		batch = new SpriteBatch();
-		//add file handle
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+		FileHandle dawayFile = Gdx.files.internal("daway.jpg");//add file handle
+        dawayTexture = new Texture(dawayFile);
+        sprite = new Sprite(dawayTexture);
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
 
         final TextButton backButton = new TextButton("Back", skin, "default");
