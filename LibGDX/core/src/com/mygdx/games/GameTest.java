@@ -1,11 +1,13 @@
 package com.mygdx.games;
 
-
+import com.mygdx.gui.*;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,15 +36,19 @@ public class GameTest extends Game implements Screen{
 	private BitmapFont font;
 	private Game game;
 	private float offset = Gdx.graphics.getHeight() / 10;
-	private int daWayx = Gdx.graphics.getWidth()/2;
-	private int daWayy = Gdx.graphics.getHeight()/2;
+	private int daWayx;
+	private int daWayy;
 	private Texture dawayTexture;
 	private Sprite sprite;
+	private Texture background;
+	private CharSequence str;
+	private Sound theway;
 	
 	
 	public GameTest(Game game)
 	{
 		this.game = game;
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		create();
 	}
 	@Override
@@ -61,9 +67,9 @@ public class GameTest extends Game implements Screen{
 	     if(Gdx.input.isKeyPressed(Input.Keys.A))
 	     {
 	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-	    		 sprite.translateX(-10f);
+	    		 sprite.setX(sprite.getX()-10);
 	    	 else
-	    		 sprite.translateX(-5f);
+	    		 sprite.setX(sprite.getX()-5);
 	     }
 	     if(Gdx.input.isKeyPressed(Input.Keys.D))
 	     {
@@ -86,8 +92,20 @@ public class GameTest extends Game implements Screen{
 	    	 else
 	    		 sprite.translateY(-5f);
 	     }
+	     if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+	    	 theway.stop();
+	    	 game.setScreen(new SinglePlayerGameSelectScreen(game));
+	     }
+	     if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+	    	 theway.stop();
+	    	 theway.play();
+	     }
 		 batch.begin();
+		 batch.draw(background, 0, 0);
 	     sprite.draw(batch);
+	     font.setColor(Color.BLACK);
+	     str = "Sprite x,y pos: "+sprite.getX()+", "+sprite.getY();
+	     font.draw(batch, str, 10, 20);
 	     batch.end();
 	}
 
@@ -125,21 +143,27 @@ public class GameTest extends Game implements Screen{
 	
 	@Override
 	public void create() {
+		Gdx.graphics.setResizable(false);
+		font = new BitmapFont();
+		daWayx = Gdx.graphics.getDisplayMode().width/2;
+		daWayy = Gdx.graphics.getDisplayMode().height/2;
 		batch = new SpriteBatch();
-		FileHandle dawayFile = Gdx.files.internal("daway.jpg");//add file handle
+		FileHandle dawayFile = Gdx.files.internal("daway.png");//add file handle
         dawayTexture = new Texture(dawayFile);
         sprite = new Sprite(dawayTexture);
+        sprite.setX(995);
+        sprite.setY(215);
+        background = new Texture(Gdx.files.internal("tamriel.jpg"));
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
-
         final TextButton backButton = new TextButton("Back", skin, "default");
-
+        theway = Gdx.audio.newSound(Gdx.files.internal("douknow.mp3"));
         backButton.setWidth(Constants.BUTTON_WIDTH);
         
         backButton.setHeight(Constants.BUTTON_HEIGHT);
         
         
-        backButton.setPosition(10, Gdx.graphics.getHeight()-50);
+        backButton.setPosition(10, Gdx.graphics.getHeight()-60);
         
         backButton.addListener(new ClickListener(){
             @Override 
