@@ -58,13 +58,33 @@ public class GameTest extends Game implements Screen{
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
 	     stage.draw();
-	     if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
+	     if(Gdx.input.isKeyPressed(Input.Keys.A))
 	     {
-	    	 sprite.translateX(-1f);
+	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+	    		 sprite.translateX(-10f);
+	    	 else
+	    		 sprite.translateX(-5f);
 	     }
-	     if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+	     if(Gdx.input.isKeyPressed(Input.Keys.D))
 	     {
-	    	 sprite.translateX(1f);
+	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+	    		 sprite.translateX(10f);
+	    	 else
+	    		 sprite.translateX(5f);
+	     }
+	     if(Gdx.input.isKeyPressed(Input.Keys.W))
+	     {
+	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+	    		 sprite.translateY(10f);
+	    	 else
+	    		 sprite.translateY(5f);
+	     }
+	     if(Gdx.input.isKeyPressed(Input.Keys.S))
+	     {
+	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+	    		 sprite.translateY(-10f);
+	    	 else
+	    		 sprite.translateY(-5f);
 	     }
 		 batch.begin();
 	     sprite.draw(batch);
