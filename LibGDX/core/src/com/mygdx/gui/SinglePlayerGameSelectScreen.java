@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.games.GameTest;
 
 import util.Constants;
 
@@ -146,6 +147,14 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
        {
     	   stage.addActor(games[i]);
        }
+       games[0].addListener(new ClickListener(){
+           @Override 
+           public void clicked(InputEvent event, float x, float y){
+           	//Do some stuff when clicked
+           	backButton.setText("b");
+           	game.setScreen(new GameTest(game));
+           }
+       });
        
         backButton.addListener(new ClickListener(){
             @Override 

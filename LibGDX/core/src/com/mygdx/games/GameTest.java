@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -39,16 +40,27 @@ public class GameTest extends Game implements Screen{
 	private int daWayx;
 	private int daWayy;
 	private Texture dawayTexture;
-	private Sprite sprite;
 	private Texture background;
 	private CharSequence str;
 	private Sound theway;
-	
+	private Player player;
+	private ShapeRenderer shape;
+	private int height;
+	private int width;
+	private Sprite knuckles;
 	
 	public GameTest(Game game)
 	{
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
+		camera = new OrthographicCamera(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+		camera.update();
+		player = new Player();
+		shape = new ShapeRenderer();
+		knuckles = new Sprite(new Texture(Gdx.files.internal("Daway.png")));
+		knuckles.setPosition(width/2, height/2);
 		create();
 	}
 	@Override
@@ -64,49 +76,26 @@ public class GameTest extends Game implements Screen{
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
 	     stage.draw();
-	     if(Gdx.input.isKeyPressed(Input.Keys.A))
-	     {
-	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-	    		 sprite.setX(sprite.getX()-10);
-	    	 else
-	    		 sprite.setX(sprite.getX()-5);
-	     }
-	     if(Gdx.input.isKeyPressed(Input.Keys.D))
-	     {
-	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-	    		 sprite.translateX(10f);
-	    	 else
-	    		 sprite.translateX(5f);
-	     }
-	     if(Gdx.input.isKeyPressed(Input.Keys.W))
-	     {
-	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-	    		 sprite.translateY(10f);
-	    	 else
-	    		 sprite.translateY(5f);
-	     }
-	     if(Gdx.input.isKeyPressed(Input.Keys.S))
-	     {
-	    	 if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-	    		 sprite.translateY(-10f);
-	    	 else
-	    		 sprite.translateY(-5f);
-	     }
-	     if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-	    	 theway.stop();
-	    	 game.setScreen(new SinglePlayerGameSelectScreen(game));
-	     }
-	     if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-	    	 theway.stop();
-	    	 theway.play();
-	     }
-		 batch.begin();
-		 batch.draw(background, 0, 0);
-	     sprite.draw(batch);
+	     batch.begin();
+		 batch.draw(background, -1*(camera.position.x - Gdx.graphics.getWidth()/2), -1*(camera.position.y - Gdx.graphics.getHeight()/2));
+		 knuckles.draw(batch);
 	     font.setColor(Color.BLACK);
-	     str = "Sprite x,y pos: "+sprite.getX()+", "+sprite.getY();
+	     str = "Sprite x,y pos: "+player.getX()+", "+player.getY();
 	     font.draw(batch, str, 10, 20);
+	     str = "Camera x,y pos: "+camera.position.x+", "+camera.position.y;
+	     font.draw(batch, str, 10, 60);
 	     batch.end();
+	     player.render(shape, camera, knuckles);
+	     player.update();
+	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+	     {
+	    	 game.setScreen(new MainScreen(game));
+	     }
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+		{
+			theway.stop();
+			theway.play();
+		}
 	}
 
 	@Override
@@ -145,21 +134,13 @@ public class GameTest extends Game implements Screen{
 	public void create() {
 		Gdx.graphics.setResizable(false);
 		font = new BitmapFont();
-		daWayx = Gdx.graphics.getDisplayMode().width/2;
-		daWayy = Gdx.graphics.getDisplayMode().height/2;
 		batch = new SpriteBatch();
-		FileHandle dawayFile = Gdx.files.internal("daway.png");//add file handle
-        dawayTexture = new Texture(dawayFile);
-        sprite = new Sprite(dawayTexture);
-        sprite.setX(995);
-        sprite.setY(215);
-        background = new Texture(Gdx.files.internal("tamriel.jpg"));
+        background = new Texture(Gdx.files.internal("island.png"));
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
         final TextButton backButton = new TextButton("Back", skin, "default");
         theway = Gdx.audio.newSound(Gdx.files.internal("douknow.mp3"));
         backButton.setWidth(Constants.BUTTON_WIDTH);
-        
         backButton.setHeight(Constants.BUTTON_HEIGHT);
         
         
