@@ -11,10 +11,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -40,6 +42,8 @@ public class GameTest extends Game implements Screen{
 	private int daWayx;
 	private int daWayy;
 	private Texture dawayTexture;
+	private Texture left;
+	private Texture right;
 	private Texture background;
 	private CharSequence str;
 	private Sound theway;
@@ -48,6 +52,11 @@ public class GameTest extends Game implements Screen{
 	private int height;
 	private int width;
 	private Sprite knuckles;
+	private Animation<TextureRegion> runLeft;
+	private Animation<TextureRegion> runRight;
+	private TextureAtlas rLeft;
+	private TextureAtlas rRight;
+	private float elapsed = 0;
 	
 	public GameTest(Game game)
 	{
@@ -57,9 +66,15 @@ public class GameTest extends Game implements Screen{
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 		camera.update();
+		rLeft = new TextureAtlas(Gdx.files.internal("runLeft.atlas"));
+		rRight = new TextureAtlas(Gdx.files.internal("runRight.atlas"));
+		runLeft = new Animation<TextureRegion>(1/5f, rLeft.getRegions());
+		runRight = new Animation<TextureRegion>(1/5f, rRight.getRegions());
 		player = new Player();
 		shape = new ShapeRenderer();
-		knuckles = new Sprite(new Texture(Gdx.files.internal("Daway.png")));
+		left = new Texture(Gdx.files.internal("dawayLeft.png"));
+		right = new Texture(Gdx.files.internal("dawayRight.png"));
+		knuckles = new Sprite(left);
 		knuckles.setPosition(width/2, height/2);
 		create();
 	}
@@ -78,11 +93,41 @@ public class GameTest extends Game implements Screen{
 	     stage.draw();
 	     batch.begin();
 		 batch.draw(background, -1*(camera.position.x - Gdx.graphics.getWidth()/2), -1*(camera.position.y - Gdx.graphics.getHeight()/2));
-		 knuckles.draw(batch);
+		if(!player.isMoving)
+		 {
+			 if(player.direction==0)
+			 {
+				 knuckles.setTexture(left);
+				 knuckles.draw(batch);
+			 }
+			 else
+			 {
+				 knuckles.setTexture(right);
+				 knuckles.draw(batch);
+			 }
+		 }
+		 if(player.isMoving)
+		 {
+			 if(player.direction==0)
+			 {
+				 if(player.isRunning)
+					 runLeft.setFrameDuration(1/10f);
+				 batch.draw(runLeft.getKeyFrame(elapsed,true), 960, 540);
+				 runLeft.setFrameDuration(1/5f);
+			 }
+			 else
+			 {
+				 if(player.isRunning)
+					 runRight.setFrameDuration(1/10f);
+				 batch.draw(runRight.getKeyFrame(elapsed,true), 960, 540);
+				 runRight.setFrameDuration(1/5f);
+			 }
+		 }
+		 elapsed += Gdx.graphics.getDeltaTime();
 	     font.setColor(Color.BLACK);
-	     str = "Sprite x,y pos: "+player.getX()+", "+player.getY();
+	     str = "Sprite x,y pos is moving: "+player.getX()+", "+player.getY()+", "+player.isMoving;
 	     font.draw(batch, str, 10, 20);
-	     str = "Camera x,y pos: "+camera.position.x+", "+camera.position.y;
+	     str = "Camera x,y pos and elapsed: "+camera.position.x+", "+camera.position.y + ", "+elapsed;
 	     font.draw(batch, str, 10, 60);
 	     batch.end();
 	     player.render(shape, camera, knuckles);

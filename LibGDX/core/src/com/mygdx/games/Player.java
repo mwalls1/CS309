@@ -18,7 +18,13 @@ public class Player {
     public SpriteBatch batch;
     public Sprite sprite;
     public Texture knuckles;
+    public boolean isMoving;
+    public int direction;
+    public boolean isRunning;
     public Player(){
+    	direction = 1;
+    	isMoving = false;
+    	isRunning = false;
         hp = 100;
         width = 1150;
         height = 500;
@@ -40,44 +46,76 @@ public class Player {
         camera.update();
 
     }
-    public void update(){
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-        	if(x>965)
-        	{
-        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            		x -= 2*dx;
-        		else
-            		x -= dx;
-        	}
-    }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-        	if(x<6675)
-        	{
-        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            		x += 2*dx;
-        		else
-            		x += dx;
-        	}
-    }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-        	if(y>555)
-        	{
-        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            		y -= 2*dy;
-        		else
-            		y -= dy;
-        	}
-    }
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-        	if(y<3735)
-        	{
-        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            		y += 2*dy;
-        		else
-            		y += dy;
-        	}
-    }
-}
+
+	public void update() {
+		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S)
+				|| Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+				if (x > 965) {
+					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+					{
+						x -= 2 * dx;
+						isRunning = true;
+					}
+					else
+					{
+						isRunning = false;
+						x -= dx;
+					}
+					direction = 0;
+					isMoving = true;
+				}
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+				if (x < 6675) {
+					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+					{
+						isRunning = true;
+						x += 2 * dx;
+					}
+					else
+					{
+						isRunning = false;
+						x += dx;
+					}
+					direction = 1;
+					isMoving = true;
+				}
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+				if (y > 555) {
+					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+					{
+						isRunning = true;
+						y -= 2 * dy;
+					}
+					else
+					{
+						isRunning = false;
+						y -= dy;
+					}
+					isMoving = true;
+				}
+
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+				if (y < 3735) {
+					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+					{
+						isRunning = true;
+						y += 2 * dy;
+					}
+					else
+					{
+						isRunning = false;
+						y += dy;
+					}
+					isMoving = true;
+				}
+			}
+		} else
+			isMoving = false;
+	}
     public void setPos(int x, int y){
         x = this.x;
         y = this.y;
