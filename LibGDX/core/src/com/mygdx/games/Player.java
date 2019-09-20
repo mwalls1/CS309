@@ -42,20 +42,40 @@ public class Player {
     }
     public void update(){
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
-        	if(x>960)
-        		x -= dx;
+        	if(x>965)
+        	{
+        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            		x -= 2*dx;
+        		else
+            		x -= dx;
+        	}
     }
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-        	if(x<2840)
-        		x += dx;
+        	if(x<6675)
+        	{
+        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            		x += 2*dx;
+        		else
+            		x += dx;
+        	}
     }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
-        	if(y>540)
-        		y -= dy;
+        	if(y>555)
+        	{
+        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            		y -= 2*dy;
+        		else
+            		y -= dy;
+        	}
     }
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-        	if(y<1580)
-        		y += dy;
+        	if(y<3735)
+        	{
+        		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            		y += 2*dy;
+        		else
+            		y += dy;
+        	}
     }
 }
     public void setPos(int x, int y){

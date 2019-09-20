@@ -135,7 +135,7 @@ public class GameTest extends Game implements Screen{
 		Gdx.graphics.setResizable(false);
 		font = new BitmapFont();
 		batch = new SpriteBatch();
-        background = new Texture(Gdx.files.internal("island.png"));
+        background = new Texture(Gdx.files.internal("island2.png"));
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
         final TextButton backButton = new TextButton("Back", skin, "default");
