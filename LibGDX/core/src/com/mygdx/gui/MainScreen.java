@@ -31,29 +31,34 @@ public class MainScreen extends Game implements Screen{
 	private TextButtonStyle textButtonStyle;
 	private BitmapFont font;
 	private Game game;
-	
+	/**
+	 * Main screen with play, options and leaderboard buttons
+	 * @param game game object, we use Game's setScreen() method to switch between different screens
+	 */
+
 	public MainScreen(Game game)
 	{
 		this.game = game;
 		create();
 			}
-	@Override
+	/**
+	 * From screen interface, called when this screen is set
+	 */
 	public void show() {
 		// TODO Auto-generated method stub
-		Gdx.input.setInputProcessor(stage);
+		Gdx.input.setInputProcessor(stage); //Uses the stage, gets input from cursor/clicks
 		
 	}
-	private void init()
-	{
-		
-	}
-	@Override
+	
+	/**
+	 * Runs every frame, draws updated stage and sets background color
+	 */
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		 Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
-	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	     stage.act();
-	     stage.draw();
+		 Gdx.gl.glClearColor(.1f, .12f, .16f, 1); //Color of background
+	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this
+	     stage.act(); //Starts button functionality
+	     stage.draw(); //Draws buttons
 	}
 
 	@Override
@@ -70,61 +75,63 @@ public class MainScreen extends Game implements Screen{
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
+	/**
+	 * Clears screen to free memory
+	 */
 	public void dispose() {
-		// TODO Auto-generated method stub
 		stage.dispose();
 	}
 	
 
 	
-	@Override
+	/**
+	 * Describes button functionality and position
+	 */
 	public void create() {
 		// TODO Auto-generated method stub
 		batch = new SpriteBatch();
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
 
-        final TextButton playButton = new TextButton("Play", skin, "default");
-        final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default");
-        final TextButton optionsButton = new TextButton("Options", skin, "default");
+        final TextButton playButton = new TextButton("Play", skin, "default"); //Creates button with label "play"
+        final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default"); //Creates button with label "leaderboards"
+        final TextButton optionsButton = new TextButton("Options", skin, "default"); //Creates button with label "options"
         
-        playButton.setWidth(Constants.BUTTON_WIDTH);
+        //Three lines below this set the widths of buttons using the constant widths
+        playButton.setWidth(Constants.BUTTON_WIDTH); 
         leaderboardButton.setWidth(Constants.BUTTON_WIDTH);
         optionsButton.setWidth(Constants.BUTTON_WIDTH);
         
+        //Set the heights using constant height
         playButton.setHeight(Constants.BUTTON_HEIGHT);
         leaderboardButton.setHeight(Constants.BUTTON_HEIGHT);
         optionsButton.setHeight(Constants.BUTTON_HEIGHT);
         
+        //Sets positions for buttons
         playButton.setPosition(Gdx.graphics.getWidth() /2 - playButton.getWidth()/2, Gdx.graphics.getHeight()/2);
         leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - leaderboardButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
         optionsButton.setPosition(Gdx.graphics.getWidth() /2 - optionsButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*2);
        
-        playButton.addListener(new ClickListener(){
+        playButton.addListener(new ClickListener(){ //This tells button what to do when clicked
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
-            	playButton.setText("a");
-            	game.setScreen(new LobbyScreen(game));
+            	game.setScreen(new LobbyScreen(game)); //Switch over to lobby screen
             }
         });
         
         leaderboardButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
-            	game.setScreen(new LeaderboardScreen(game));
+            	game.setScreen(new LeaderboardScreen(game)); //Switch over to leaderboard screen
             }
         });
         
@@ -137,7 +144,7 @@ public class MainScreen extends Game implements Screen{
             	
             }
         });
-        
+        //Adds all buttons to stage to be rendered
         stage.addActor(playButton);
         stage.addActor(leaderboardButton);
         stage.addActor(optionsButton);
