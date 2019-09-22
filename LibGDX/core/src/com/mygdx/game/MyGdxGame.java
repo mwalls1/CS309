@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.mygdx.space.Space;
+import com.mygdx.gui.*;
 
 public class MyGdxGame extends Game {
 	private boolean paused;
@@ -9,7 +10,7 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
-		game.setScreen(new Space(game));
+		game.setScreen(new MainScreen(game));
 	}
 	
 	

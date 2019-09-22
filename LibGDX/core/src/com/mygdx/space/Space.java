@@ -7,7 +7,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,15 +21,15 @@ public class Space extends Game implements Screen{
 	private BitmapFont font;
 	private Game game;
 	private Sprite sprite;
-	private Sprite enemy;
-	private Sprite shotSprite;
-	private boolean shotFired = false;
-	private boolean secondShotFired = false;
-	private Sprite secondShotSprite;
+	private Goon enemy;
+	private Sprite eSprite;
 	private int frameCounter = 0;
-	private Ship playerShip;
-	
-	
+	private Level level;
+	private Ship[] enemies;
+	public static double score = 0;
+	private boolean alive[];
+	private PlayerShip player;
+	private boolean shotPressed;
 	
 	/**
 	 * Main screen with play, options and leaderboard buttons
@@ -53,44 +52,48 @@ public class Space extends Game implements Screen{
 	 * Runs every frame, draws updated stage and sets background color
 	 */
 	public void render(float delta) {
-		frameCounter++;
 		// TODO Auto-generated method stub
 		 Gdx.gl.glClearColor((float)4/255, (float)7/255, (float)40/255, 1); //Color of background
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this
-	     handleInput(delta);
-	     batch.begin();
-			//batch.setColor(1, 0, 0, 1);
-			//batch.draw(texture, 10, 10);
-			//batch.setColor(0, 1, 0, 1);
+	     batch = new SpriteBatch();
 	     
-	   
-			sprite.draw(batch);
-			enemy.draw(batch);
-			if (shotFired) {
-				shotSprite.draw(batch);
-				shotSprite.translate(0, 10);
-			}
-			if(secondShotFired)
-			{
-				secondShotSprite.draw(batch);
-				secondShotSprite.translate(0, 10);
-			}
-			
-			if (shotSprite.getY() > Gdx.graphics.getHeight()) shotFired = false;
-			if (secondShotSprite.getY() > Gdx.graphics.getHeight()) secondShotFired = false;
-			batch.end();
-			
-			if (frameCounter == 60) frameCounter = 0;
-			enemy.translate(0, -1);
-			playerShip.testCollisions(sprite, enemy);
-			playerShip.testCollisions(enemy, shotSprite);
-			
+	     enemies = level.getShips();
+	     batch.begin();
+	     handleInput(delta);
+	     player.draw(batch);
+	    // enemy.draw(batch);
+	     for (int i = 0; i < enemies.length; i++)
+	     {
+	    	 if (enemies[i].isAlive())
+	    		 {
+	    		 	enemies[i].draw(batch);
+	    		 	enemies[i].move(0.0f,0.0f);
+	    		 }
+	     }
+	    	
+	    // enemy.move(0,0);
+//	     player.collision(enemy.getSprite());
+//	     enemy.collision(player.getSprite());
+	     
+	    if (shotPressed)
+	    {
+	    	player.shoot(batch);
+	    	enemies[0].shoot(batch);
+	    	for (int j = 0; j < enemies.length; j++)
+	    	{
+	    		enemies[j].collision(player.getShotOneSprite());
+	    		enemies[j].collision(player.getShotTwoSprite());
+	    	}
+	    }
+	     
+	     font.draw(batch, "Score\n" + score, 100, 50);
+	     batch.end();
+		
 		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 		create();
 	}
 
@@ -123,21 +126,11 @@ public class Space extends Game implements Screen{
 	 * Describes button functionality and position
 	 */
 	public void create() {
-		
-//		texture = new Texture(Gdx.files.internal("ship.png"));
-		
-		playerShip = new Ship(Ship.PLAYER);
-		Ship enemyShip = new Ship(Ship.ENEMY_1);
-		batch = new SpriteBatch();
-		sprite = playerShip.get();	
-		enemy = enemyShip.get();
-		enemy.setPosition(Gdx.graphics.getWidth()/2, 300);
-		
-		Texture lineTexture = new Texture("shot.png");
-		shotSprite = new Sprite(lineTexture);
-		secondShotSprite = new Sprite(lineTexture);
-		
-		sprite.setPosition(Gdx.graphics.getWidth()/2, 5);
+		font = new BitmapFont();
+		score = 0;
+		level = new Level(1);
+		player = new PlayerShip();
+		sprite = player.getSprite();
 		
 	}
 	
@@ -148,20 +141,17 @@ public class Space extends Game implements Screen{
 		{
 			return;
 		}
-		float sprMoveSpeed = 500 * deltaTime;
-		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && sprite.getX() > 90) sprite.translate(-sprMoveSpeed,0);
-		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && sprite.getX() < Gdx.graphics.getWidth()-100) sprite.translate(sprMoveSpeed, 0);
-		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) sprite.translateY(sprMoveSpeed);
-		if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) && sprite.getY() > 5) sprite.translateY(-sprMoveSpeed);
-		if ((Gdx.input.isKeyPressed(Keys.SPACE) && !shotFired)) {
-			shotFired = true;
-			shotSprite.setPosition(sprite.getX(), sprite.getY()+30);
-		}
-		if (Gdx.input.isKeyPressed(Keys.SPACE) && (shotFired) && (!secondShotFired) && shotSprite.getY() > 100)
-		{
-			secondShotFired = true;
-			secondShotSprite.setPosition(sprite.getX(), sprite.getY()+30);
-		}
+		float sprMoveSpeed = 250 * deltaTime;
+		if (Gdx.input.isKeyPressed(Keys.R)) create();
+		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && sprite.getX() > 90) player.move(-sprMoveSpeed,0);
+		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && sprite.getX() < Gdx.graphics.getWidth()-100) player.move(sprMoveSpeed,0);
+		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) player.move(0,sprMoveSpeed);
+		if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) && sprite.getY() > 5) player.move(0,-sprMoveSpeed);
+		if (Gdx.input.isKeyPressed(Keys.SPACE)) shotPressed = true;
+		
+		
+	}
+	
+
 	}
 
-}
