@@ -13,6 +13,8 @@ public boolean shotTwoFired;
 private Sprite shotOne;
 private Sprite shotTwo;
 private boolean alive;
+private boolean shotPressed;
+Texture shotTexture;
 
 	public PlayerShip()
 	{
@@ -22,7 +24,7 @@ private boolean alive;
 		sprite.setPosition(Gdx.graphics.getWidth()/2, 5);
 		shotOneFired = false;
 		shotTwoFired = false;
-		Texture shotTexture = new Texture("shot.png");
+		shotTexture = new Texture("shot.png");
 		shotOne = new Sprite(shotTexture);
 		shotTwo = new Sprite(shotTexture);
 	}
@@ -39,8 +41,14 @@ private boolean alive;
 		shotTwo = new Sprite(shotTexture);
 	}
 	
-	public void move(float x, float y) {
-		sprite.translate(x, y);
+	public void move() {
+		float sprMoveSpeed = 250 * Gdx.graphics.getDeltaTime();
+		
+		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && sprite.getX() > 90) sprite.translate(-sprMoveSpeed,0);
+		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && sprite.getX() < Gdx.graphics.getWidth()-100) sprite.translate(sprMoveSpeed,0);
+		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) sprite.translate(0,sprMoveSpeed);
+		if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) && sprite.getY() > 5) sprite.translate(0,-sprMoveSpeed);
+		if (Gdx.input.isKeyPressed(Keys.SPACE)) shotPressed = true;
 	}
 
 	@Override
@@ -53,6 +61,7 @@ private boolean alive;
 		if (!shotOneFired && Gdx.input.isKeyPressed(Keys.SPACE))
 		{
 			shotOneFired = true;
+			Space.shotsTaken++;
 			shotOne.setPosition(sprite.getX(), sprite.getY()+30);
 		}
 		else if (shotOneFired && !shotTwoFired && Gdx.input.isKeyPressed(Keys.SPACE) && shotOne.getY() > sprite.getY()+200)
@@ -117,7 +126,14 @@ private boolean alive;
 		if (shotNum == 1) shotOne.translate(0, 5);
 		if (shotNum == 2) shotTwo.translate(0, 5);
 	}
-	
+	public boolean isShotFired()
+	{
+		return (shotOneFired || shotTwoFired);
+	}
+	public Sprite getShot() //This method does not apply to Ship objects that can fire multiple shots 
+	{
+		return null;
+	}
 	public boolean getShotOne()
 	{
 		return shotOneFired;
@@ -132,6 +148,7 @@ private boolean alive;
 	{
 		alive = false;
 		sprite.setAlpha(0);
+		sprite.setPosition(0, 0);
 	}
 	
 	public boolean isAlive()
@@ -147,6 +164,21 @@ private boolean alive;
 	public Sprite getShotTwoSprite()
 	{
 		return shotTwo;
+	}
+	
+	public boolean getShotPressed()
+	{
+		return shotPressed;
+	}
+	
+	public void dispose()
+	{
+		shotTexture.dispose();
+	}
+	
+	public String getType()
+	{
+		return "player";
 	}
 	
 }

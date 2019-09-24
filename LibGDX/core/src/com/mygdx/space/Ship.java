@@ -42,12 +42,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public interface Ship{
 	
 	public Sprite getSprite();
+	public Sprite getShot();
 	public void shoot(SpriteBatch batch);
 	public void collision(Sprite coll);
 	public float getX();
 	public float getY();
-	public void move(float x, float y);
+	public void move();
 	public void draw(SpriteBatch batch);
 	public void destroy();
 	public boolean isAlive();
+	public boolean isShotFired();
+	public void dispose();
+	public String getType();
 }

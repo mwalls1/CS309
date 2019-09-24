@@ -15,6 +15,7 @@ public class Goon implements Ship{
 	private boolean shotFired;
 	private Sprite shotSprite;
 	private Texture shotTexture;
+	private int shotSpeed = 5;
 	
 	public Goon()
 	{
@@ -29,18 +30,19 @@ public class Goon implements Ship{
 		
 	}
 	
-	public Goon(float xPos)
+	public Goon(float xPos, float yPos, int shotSpeed)
 	{
 		texture = new Texture("enemy1.png");
 		shotTexture = new Texture("shot.png");
 		sprite = new Sprite(texture);
-		sprite.setPosition(xPos, Gdx.graphics.getHeight() - 100);
+		sprite.setPosition(xPos, yPos);
 		alive = true;
 		xOrigin = sprite.getX();
 		shotSprite = new Sprite(shotTexture);
+		this.shotSpeed = shotSpeed * -1;
 	}
 
-	public void move(float x, float y) {
+	public void move() {
 		if (sprite.getX() > xOrigin + 50 || sprite.getX() > Gdx.graphics.getWidth()-100) dir = -1;
 		else if (sprite.getX() < xOrigin - 50 || sprite.getX() < 90) dir = 1;
 		
@@ -60,21 +62,29 @@ public class Goon implements Ship{
 
 	@Override
 	public void shoot(SpriteBatch batch) {
-		if (!shotFired && Gdx.input.isKeyPressed(Keys.SPACE))
+		if (!shotFired)
 		{
 			shotFired = true;
-			shotSprite.setPosition(sprite.getX(), sprite.getY()+30);
+			shotSprite.setPosition(sprite.getX(), sprite.getY()-30);
 		}
 		
 		
-		if (shotSprite.getY() > Gdx.graphics.getHeight()) shotFired = false;
-		if (shotSprite.getX() < 1) shotFired = false;
+		if (shotSprite.getY() < 1) {
+			shotFired = false;
+			
+		}
+		if (shotSprite.getX() < 1) {
+			shotFired = false;
+			
+		}
 		
 		if (shotFired) 
 			{
-			 shotSprite.translateY(Gdx.graphics.getHeight()/-75);
+			 shotSprite.translateY(shotSpeed);
 			 shotSprite.draw(batch);
 			}
+		
+		
 		
 	}
 
@@ -83,6 +93,7 @@ public class Goon implements Ship{
 		if (Math.abs(sprite.getX() - coll.getX()) < 25 && Math.abs(sprite.getY() - coll.getY()) < 10 && isAlive())
 		{
 			coll.setPosition(0, 0);
+			Space.shotsLanded++;
 			destroy();
 		}		
 	}
@@ -109,11 +120,32 @@ public class Goon implements Ship{
 		alive = false;
 		sprite.setPosition(0, 0);
 		Space.score += 10;
+		texture.dispose();
 		//sprite.setAlpha(0);
 	}
 
 	public boolean isAlive()
 	{
 		return alive;
+	}
+	
+	public boolean isShotFired()
+	{
+		return shotFired;
+	}
+	
+	public Sprite getShot()
+	{
+		return shotSprite;
+	}
+	
+	public void dispose()
+	{
+		shotTexture.dispose();
+	}
+	
+	public String getType()
+	{
+		return "Goon";
 	}
 }
