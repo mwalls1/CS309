@@ -1,7 +1,7 @@
 package com.mygdx.space;
 
 import java.util.Random;
-
+	
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,8 +18,6 @@ import com.mygdx.gui.MainScreen;
 
 public class Space extends Game implements Screen{
 	private SpriteBatch batch;
-	private OrthographicCamera camera;
-	private Viewport viewport;
 	private BitmapFont font;
 	private Game game;
 	private Sprite sprite;
@@ -34,8 +32,11 @@ public class Space extends Game implements Screen{
 	private  Random rand = new Random();	
 	private final int LAST_LEVEL = 7;
 	private double accuracy;
-	private Timer timer;
-	
+	private Asteroid asteroid;
+	private int asteroidSpeedY;
+	private int asteroidSpeedX;
+	public static int asteroidsShot;
+	public static int enemiesKilled;
 	
 	
 	/**
@@ -73,7 +74,19 @@ public class Space extends Game implements Screen{
 	     player.draw(batch);
 	     
 		 enemies[rand.nextInt(enemies.length)].shoot(batch);
-	    // enemy.draw(batch);
+		 
+		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) {
+			asteroid = new Asteroid(asteroidsShot);
+			asteroidSpeedY = rand.nextInt(8)+3;
+			asteroidSpeedX = rand.nextInt(10)+5;
+		}
+		 
+		 if (asteroid.isIntact())
+		 {
+			 asteroid.draw(batch);
+			 asteroid.move(1, 0);
+			
+		 }
 	     for (int i = 0; i < enemies.length; i++)
 	     {
 	    	 if (enemies[i].getType() == "Captain") enemies[i].shoot(batch);
@@ -98,6 +111,8 @@ public class Space extends Game implements Screen{
 	    	{
 	    		enemies[j].collision(player.getShotOneSprite());
 	    		enemies[j].collision(player.getShotTwoSprite());
+	    		asteroid.collision(player.getShotOneSprite());
+	    		asteroid.collision(player.getShotTwoSprite());
 	    	}
 	    }
 	     
@@ -109,12 +124,16 @@ public class Space extends Game implements Screen{
 		
 	     if (isComplete())
 	     {
-	    	 timer = new Timer();
+	    	 asteroidsShot = 0;
+	    	 enemiesKilled = 0;
+	    	 asteroid = new Asteroid(asteroidsShot);
 	    	 batch.begin();
 	    	 int scoreAdded = (int)accuracy * 1000;
 	    	 font.draw(batch, "Level " + levelNum + " complete! \nAccuracy Bonus: " + scoreAdded, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 	    	 score += (int)(accuracy * 1000);
 	    	 levelNum++;
+	    	 shotsTaken = 0;
+	    	 shotsLanded = 0;
 	    	 if (levelNum == LAST_LEVEL) game.setScreen(new MainScreen(game));
 	    	 level = new Level(levelNum, player);
 	    	 batch.end();
@@ -157,11 +176,13 @@ public class Space extends Game implements Screen{
 	 */
 	public void create() {
 		font = new BitmapFont();
+		asteroidsShot = 0;
+		enemiesKilled = 0;
 		score = 0;
 		level = new Level(levelNum, player);
 		shotsLanded = 0;
 		shotsTaken = 0;
-		
+		asteroid = new Asteroid(asteroidsShot);
 		player = new PlayerShip();
 		sprite = player.getSprite();
 		

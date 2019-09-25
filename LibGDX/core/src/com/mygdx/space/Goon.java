@@ -120,8 +120,8 @@ public class Goon implements Ship{
 		alive = false;
 		sprite.setPosition(0, 0);
 		Space.score += 10;
+		Space.enemiesKilled++;
 		texture.dispose();
-		//sprite.setAlpha(0);
 	}
 
 	public boolean isAlive()

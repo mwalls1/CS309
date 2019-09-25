@@ -113,6 +113,7 @@ public class Ram implements Ship{
 	public void destroy() {
 		alive = false;
 		Space.score += 20;
+		Space.enemiesKilled++;
 		sprite.setPosition(0, 0);
 		sprite.setAlpha(0);
 		damagedTexture.dispose();
