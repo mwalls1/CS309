@@ -66,6 +66,7 @@ Texture shotTexture;
 		}
 		else if (shotOneFired && !shotTwoFired && Gdx.input.isKeyPressed(Keys.SPACE) && shotOne.getY() > sprite.getY()+200)
 		{
+			Space.shotsTaken++;
 			shotTwoFired = true;
 			shotTwo.setPosition(sprite.getX(), sprite.getY()+30);
 		}

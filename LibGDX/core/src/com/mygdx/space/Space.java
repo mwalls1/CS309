@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.gui.MainScreen;
 
@@ -33,6 +34,7 @@ public class Space extends Game implements Screen{
 	private  Random rand = new Random();	
 	private final int LAST_LEVEL = 7;
 	private double accuracy;
+	private Timer timer;
 	
 	
 	
@@ -107,9 +109,15 @@ public class Space extends Game implements Screen{
 		
 	     if (isComplete())
 	     {
+	    	 timer = new Timer();
+	    	 batch.begin();
+	    	 int scoreAdded = (int)accuracy * 1000;
+	    	 font.draw(batch, "Level " + levelNum + " complete! \nAccuracy Bonus: " + scoreAdded, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+	    	 score += (int)(accuracy * 1000);
 	    	 levelNum++;
 	    	 if (levelNum == LAST_LEVEL) game.setScreen(new MainScreen(game));
 	    	 level = new Level(levelNum, player);
+	    	 batch.end();
 	     }
 	}
 
