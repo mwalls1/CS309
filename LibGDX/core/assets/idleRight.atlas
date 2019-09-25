@@ -1,30 +1,30 @@
 
-runLeft.png
+idleRight.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-knightRunLeft1
+knightIdleRight1
   rotate: false
   xy: 1, 1
   size: 16, 28
   orig: 16, 28
   offset: 0, 0
   index: -1
-knightRunLeft2
+knightIdleRight2
   rotate: false
   xy: 19, 1
   size: 16, 28
   orig: 16, 28
   offset: 0, 0
   index: -1
-knightRunLeft3
+knightIdleRight3
   rotate: false
   xy: 37, 1
   size: 16, 28
   orig: 16, 28
   offset: 0, 0
   index: -1
-knightRunLeft4
+knightIdleRight4
   rotate: false
   xy: 55, 1
   size: 16, 28

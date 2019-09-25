@@ -8,6 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Player {
     public int x,y;
@@ -26,20 +33,16 @@ public class Player {
     	isMoving = false;
     	isRunning = false;
         hp = 100;
-        width = 1150;
-        height = 500;
+        width = 16;
+        height = 16;
         area = width*height;
-        x = Gdx.graphics.getWidth()/2;
-        y = Gdx.graphics.getHeight()/2;
-        dx = 5;
-        dy = 5;
+        x = 32;
+        y = 32;
+        dx = 3;
+        dy = 3;
 
     }
-    public void render(ShapeRenderer shape, OrthographicCamera camera, Sprite sprite){
-        shape.setProjectionMatrix(camera.combined);
-        shape.begin(ShapeType.Line);
-        shape.circle(x, y, 0);
-        shape.end();
+    public void render(ShapeRenderer shape, OrthographicCamera camera){
         //sprite.setPosition(x, y);
         camera.position.x = x;
         camera.position.y = y;
@@ -47,78 +50,80 @@ public class Player {
 
     }
 
-	public void update() {
+	public void update(TiledMapTileLayer walls, Sprite sprite) {
+		float tileW = walls.getTileWidth();
+		float tileH = walls.getTileHeight();
 		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S)
 				|| Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-				if (x > 965) {
-					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-					{
-						x -= 2 * dx;
-						isRunning = true;
-					}
+			if(Gdx.input.isKeyPressed(Input.Keys.A))
+			{
+				for(int i = 0; i < dx; i ++)
+				{
+					if(walls.getCell((int)((x-1)/tileW), (int)(y/tileH))!=null && walls.getCell((int)((x-1)/tileW), (int)(y/tileH)).getTile().getProperties().containsKey("blocked"))
+						break;
+					else if(walls.getCell((int)((x-1)/tileW), (int)((y+height)/tileH))!=null && walls.getCell((int)((x-1)/tileW), (int)((y+height)/tileH)).getTile().getProperties().containsKey("blocked"))
+						break;
 					else
 					{
-						isRunning = false;
-						x -= dx;
+						x-=1;
+						direction = 0;
+						isMoving = true;
 					}
-					direction = 0;
-					isMoving = true;
 				}
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-				if (x < 6675) {
-					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-					{
-						isRunning = true;
-						x += 2 * dx;
-					}
-					else
-					{
-						isRunning = false;
-						x += dx;
-					}
-					direction = 1;
-					isMoving = true;
+			if(Gdx.input.isKeyPressed(Input.Keys.D))
+			{
+				for(int i = 0; i < dx; i ++) 
+				{
+					 if(walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH))!=null && walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH)).getTile().getProperties().containsKey("blocked"))
+						 break;
+					 else if(walls.getCell((int)((x+width+1)/tileW), (int)((y+height)/tileH))!=null && walls.getCell((int)((x+width+1)/tileW), (int)((y+height)/tileH)).getTile().getProperties().containsKey("blocked"))
+						 break;
+					 else
+					 {
+						x+=1;
+						direction = 1;
+						isMoving = true;
+					 }
 				}
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-				if (y > 555) {
-					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-					{
-						isRunning = true;
-						y -= 2 * dy;
-					}
+			if(Gdx.input.isKeyPressed(Input.Keys.W))
+			{
+				for(int i = 0; i < dy; i ++) 
+				{
+					if(walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH))!=null && walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH)).getTile().getProperties().containsKey("blocked"))
+						break;
+					else if(walls.getCell((int)((x+width)/tileW), (int)((y+height+1)/tileH))!=null && walls.getCell((int)((x+width)/tileW), (int)((y+height+1)/tileH)).getTile().getProperties().containsKey("blocked"))
+						break;
 					else
 					{
-						isRunning = false;
-						y -= dy;
+						y+=1;
+						isMoving = true;
 					}
-					isMoving = true;
 				}
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.S))
+			{
+				for(int i = 0; i < dy; i ++) 
+				{
+					if(walls.getCell((int)((x)/tileW), (int)((y-6)/tileH))!=null && walls.getCell((int)((x)/tileW), (int)((y-6)/tileH)).getTile().getProperties().containsKey("blocked"))
+						break;
+					else if(walls.getCell((int)((x+width)/tileW), (int)((y-6)/tileH))!=null && walls.getCell((int)((x+width)/tileW), (int)((y-6)/tileH)).getTile().getProperties().containsKey("blocked"))
+						break;
+					else
+					{
+						isMoving = true;
+						y-=1;
+					}
+				}
+			}
 
-			}
-			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-				if (y < 3735) {
-					if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-					{
-						isRunning = true;
-						y += 2 * dy;
-					}
-					else
-					{
-						isRunning = false;
-						y += dy;
-					}
-					isMoving = true;
-				}
-			}
 		} else
 			isMoving = false;
 	}
-    public void setPos(int x, int y){
-        x = this.x;
-        y = this.y;
+    public void setPos(int x1, int y1){
+        x = x1;
+        y = y1;
     }
 
 

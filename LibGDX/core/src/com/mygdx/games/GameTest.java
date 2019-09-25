@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +19,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -54,28 +62,40 @@ public class GameTest extends Game implements Screen{
 	private Sprite knuckles;
 	private Animation<TextureRegion> runLeft;
 	private Animation<TextureRegion> runRight;
+	private Animation<TextureRegion> idleLeft;
+	private Animation<TextureRegion> idleRight;
 	private TextureAtlas rLeft;
 	private TextureAtlas rRight;
+	private TextureAtlas iLeft;
+	private TextureAtlas iRight;
 	private float elapsed = 0;
-	
+	private TiledMap map;
+	private TiledMapTileLayer terrain;
+	private TiledMapTileLayer walls;
+	private TiledMapTileLayer collision;
+	private MapObjects objs;
+	private OrthogonalTiledMapRenderer renderer;
 	public GameTest(Game game)
 	{
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-		camera = new OrthographicCamera(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-		camera.update();
+		camera = new OrthographicCamera(360, 202);
+		map = new TmxMapLoader().load("dungeon.tmx");
+		MapLayers mapLayers = map.getLayers();
+		terrain = (TiledMapTileLayer) mapLayers.get("floor");
+		walls = (TiledMapTileLayer) mapLayers.get("walls");
+		collision = (TiledMapTileLayer) mapLayers.get("blockage");
 		rLeft = new TextureAtlas(Gdx.files.internal("runLeft.atlas"));
 		rRight = new TextureAtlas(Gdx.files.internal("runRight.atlas"));
-		runLeft = new Animation<TextureRegion>(1/5f, rLeft.getRegions());
-		runRight = new Animation<TextureRegion>(1/5f, rRight.getRegions());
+		iRight = new TextureAtlas(Gdx.files.internal("idleRight.atlas"));
+		iLeft = new TextureAtlas(Gdx.files.internal("idleLeft.atlas"));
+		runLeft = new Animation<TextureRegion>(1/10f, rLeft.getRegions());
+		runRight = new Animation<TextureRegion>(1/10f, rRight.getRegions());
+		idleLeft = new Animation<TextureRegion>(1/5f, iLeft.getRegions());
+		idleRight = new Animation<TextureRegion>(1/5f, iRight.getRegions());
 		player = new Player();
-		shape = new ShapeRenderer();
-		left = new Texture(Gdx.files.internal("dawayLeft.png"));
-		right = new Texture(Gdx.files.internal("dawayRight.png"));
-		knuckles = new Sprite(left);
-		knuckles.setPosition(width/2, height/2);
 		create();
 	}
 	@Override
@@ -87,51 +107,37 @@ public class GameTest extends Game implements Screen{
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		 Gdx.gl.glClearColor(1, 1, 1, 1);
+		 Gdx.gl.glClearColor(0,0,0,0);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
 	     stage.draw();
-	     batch.begin();
-		 batch.draw(background, -1*(camera.position.x - Gdx.graphics.getWidth()/2), -1*(camera.position.y - Gdx.graphics.getHeight()/2));
+	     camera.update();
+		 renderer.setView(camera);
+		 renderer.render();
+		 batch.setProjectionMatrix(camera.combined);
+		 batch.begin();
 		if(!player.isMoving)
 		 {
 			 if(player.direction==0)
 			 {
-				 knuckles.setTexture(left);
-				 knuckles.draw(batch);
+				 batch.draw(idleLeft.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
 			 }
 			 else
 			 {
-				 knuckles.setTexture(right);
-				 knuckles.draw(batch);
+				 batch.draw(idleRight.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
 			 }
 		 }
 		 if(player.isMoving)
 		 {
 			 if(player.direction==0)
-			 {
-				 if(player.isRunning)
-					 runLeft.setFrameDuration(1/10f);
-				 batch.draw(runLeft.getKeyFrame(elapsed,true), 960, 540);
-				 runLeft.setFrameDuration(1/5f);
-			 }
+				 batch.draw(runLeft.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
 			 else
-			 {
-				 if(player.isRunning)
-					 runRight.setFrameDuration(1/10f);
-				 batch.draw(runRight.getKeyFrame(elapsed,true), 960, 540);
-				 runRight.setFrameDuration(1/5f);
-			 }
+				 batch.draw(runRight.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
 		 }
+		 batch.end();
 		 elapsed += Gdx.graphics.getDeltaTime();
-	     font.setColor(Color.BLACK);
-	     str = "Sprite x,y pos is moving: "+player.getX()+", "+player.getY()+", "+player.isMoving;
-	     font.draw(batch, str, 10, 20);
-	     str = "Camera x,y pos and elapsed: "+camera.position.x+", "+camera.position.y + ", "+elapsed;
-	     font.draw(batch, str, 10, 60);
-	     batch.end();
-	     player.render(shape, camera, knuckles);
-	     player.update();
+	     player.update(collision, knuckles);
+	     player.render(shape, camera);
 	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
 	    	 game.setScreen(new MainScreen(game));
@@ -178,28 +184,12 @@ public class GameTest extends Game implements Screen{
 	@Override
 	public void create() {
 		Gdx.graphics.setResizable(false);
+		renderer = new OrthogonalTiledMapRenderer(map);
 		font = new BitmapFont();
 		batch = new SpriteBatch();
-        background = new Texture(Gdx.files.internal("island2.png"));
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
-        final TextButton backButton = new TextButton("Back", skin, "default");
         theway = Gdx.audio.newSound(Gdx.files.internal("douknow.mp3"));
-        backButton.setWidth(Constants.BUTTON_WIDTH);
-        backButton.setHeight(Constants.BUTTON_HEIGHT);
-        
-        
-        backButton.setPosition(10, Gdx.graphics.getHeight()-60);
-        
-        backButton.addListener(new ClickListener(){
-            @Override 
-            public void clicked(InputEvent event, float x, float y){
-            }
-        });
-        
-        
-        stage.addActor(backButton);
-        
         Gdx.input.setInputProcessor(stage);
 
 	}
