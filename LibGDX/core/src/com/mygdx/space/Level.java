@@ -26,6 +26,11 @@ private Asteroid[] asteroids;
 	
 	public void initLevel(int levelNum, Ship ship)
 	{
+		if (levelNum == 0) //Debug level
+		{
+			enemies = new Ship[1];
+			enemies[0] = new Captain(ship.getX(), Gdx.graphics.getHeight()-50);
+		}
 		if (levelNum == 1)
 		{
 			enemies = new Ship[5];
@@ -58,13 +63,15 @@ private Asteroid[] asteroids;
 		}
 		else if (levelNum == 6)
 		{
-			enemies = new Ship[25];
+			enemies = new Ship[30];
 			for (int i = 0; i<10; i++) enemies[i] = new Goon(i*100+200, Gdx.graphics.getHeight()-100,9);
 			for (int j = 10; j<19; j++) enemies[j] = new Goon((j-10)*100+250, Gdx.graphics.getHeight()-150,9);
-			for (int k = 19; k<24; k++) enemies[k] = new Ram((k-20)*100+200);
+			for (int k = 19; k<30; k++) enemies[k] = new Ram((k-20)*100+200);
 			enemies[24] = new Captain(ship.getX(), Gdx.graphics.getHeight()-50);
 		}
+		
 	}
+	
 	
 	
 	

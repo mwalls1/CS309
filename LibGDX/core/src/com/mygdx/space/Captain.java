@@ -50,11 +50,11 @@ int step;
 		}
 		
 		
-		if (shotSprite.getY() < 1) shotFired = false;
+		if (shotSprite.getY() < -50) shotFired = false;
 		
 		if (shotFired) 
 			{
-			 shotSprite.translateY(Gdx.graphics.getHeight()/-100);
+			 shotSprite.translateY(-8);
 			 shotSprite.draw(batch);
 			}
 		

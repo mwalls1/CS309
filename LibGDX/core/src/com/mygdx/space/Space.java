@@ -90,7 +90,9 @@ public class Space extends Game implements Screen{
 	     for (int i = 0; i < enemies.length; i++)
 	     {
 	    	 if (enemies[i].getType() == "Captain") enemies[i].shoot(batch);
-	    	 if (enemies[i].isShotFired()) player.collision(enemies[i].getShot());
+	    	 if (enemies[i].isShotFired()) {
+	    		 player.collision(enemies[i].getShot());
+	    	 }
 	    	 if (enemies[i].isAlive())
 	    		 {
 	    		 	enemies[i].draw(batch);
@@ -137,6 +139,7 @@ public class Space extends Game implements Screen{
 	    	 if (levelNum == LAST_LEVEL) game.setScreen(new MainScreen(game));
 	    	 level = new Level(levelNum, player);
 	    	 batch.end();
+	    	 dispose();
 	     }
 	}
 
@@ -165,7 +168,6 @@ public class Space extends Game implements Screen{
 	 * Clears screen to free memory
 	 */
 	public void dispose() {
-		font.dispose();
 		for (int i = 0; i<enemies.length; i++) enemies[i].dispose();
 	}
 	
@@ -179,12 +181,12 @@ public class Space extends Game implements Screen{
 		asteroidsShot = 0;
 		enemiesKilled = 0;
 		score = 0;
-		level = new Level(levelNum, player);
 		shotsLanded = 0;
 		shotsTaken = 0;
 		asteroid = new Asteroid(asteroidsShot);
 		player = new PlayerShip();
 		sprite = player.getSprite();
+		level = new Level(levelNum, player);
 		
 	}
 	
@@ -196,7 +198,10 @@ public class Space extends Game implements Screen{
 			return;
 		}
 		float sprMoveSpeed = 250 * deltaTime;
-		if (Gdx.input.isKeyPressed(Keys.R)) create();
+		if (Gdx.input.isKeyPressed(Keys.R)) {
+			dispose();
+			create();
+		}
 		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && sprite.getX() > 90) player.getSprite().translate(-sprMoveSpeed,0);
 		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && sprite.getX() < Gdx.graphics.getWidth()-100) player.getSprite().translate(sprMoveSpeed,0);
 		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) player.getSprite().translate(0,sprMoveSpeed);
