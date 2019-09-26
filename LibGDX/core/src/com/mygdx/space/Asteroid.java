@@ -14,16 +14,16 @@ public class Asteroid {
 	private int type;
 	private boolean intact;
 	private Random rand;
-	
+	private int levelNum;
 	public static final int SMALL = 2;
 	public static final int MEDIUM = 1;
 	public static final int LARGE = 0;
 	public static final int GOLDEN = 3;
 	
-public Asteroid(int type)
+public Asteroid(int type, int levelNum)
 {
 	this.type = type;
-	
+	this.levelNum = levelNum;
 	if (type == SMALL) texture = new Texture("smallAsteroid.png");
 	else if (type == MEDIUM) texture = new Texture("mediumAsteroid.png");
 	else if (type == LARGE) texture = new Texture("largeAsteroid.png");
@@ -89,10 +89,10 @@ public void destroy()
 {
 	intact = false;
 	sprite.setPosition(0, 0);
-	if (type == SMALL) Space.score += 15;
-	if (type == MEDIUM) Space.score += 30;
-	if (type == LARGE) Space.score += 60;
-	if (type == GOLDEN) Space.score += 300;
+	if (type == SMALL) Space.score += 15*levelNum;
+	if (type == MEDIUM) Space.score += 30*levelNum;
+	if (type == LARGE) Space.score += 60*levelNum;
+	if (type == GOLDEN) Space.score += 300*levelNum;
 	texture.dispose();
 	
 }

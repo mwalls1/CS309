@@ -76,9 +76,9 @@ public class Space extends Game implements Screen{
 		 enemies[rand.nextInt(enemies.length)].shoot(batch);
 		 
 		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) {
-			asteroid = new Asteroid(asteroidsShot);
-			asteroidSpeedY = rand.nextInt(8)+3;
-			asteroidSpeedX = rand.nextInt(10)+5;
+			asteroid = new Asteroid(asteroidsShot, levelNum);
+			asteroidSpeedY = rand.nextInt(1)-2;
+			asteroidSpeedX = rand.nextInt(1)+1;
 		}
 		 
 		 if (asteroid.isIntact())
@@ -128,7 +128,7 @@ public class Space extends Game implements Screen{
 	     {
 	    	 asteroidsShot = 0;
 	    	 enemiesKilled = 0;
-	    	 asteroid = new Asteroid(asteroidsShot);
+	    	 asteroid = new Asteroid(asteroidsShot, levelNum);
 	    	 batch.begin();
 	    	 int scoreAdded = (int)accuracy * 1000;
 	    	 font.draw(batch, "Level " + levelNum + " complete! \nAccuracy Bonus: " + scoreAdded, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
@@ -183,7 +183,7 @@ public class Space extends Game implements Screen{
 		score = 0;
 		shotsLanded = 0;
 		shotsTaken = 0;
-		asteroid = new Asteroid(asteroidsShot);
+		asteroid = new Asteroid(asteroidsShot, levelNum);
 		player = new PlayerShip();
 		sprite = player.getSprite();
 		level = new Level(levelNum, player);

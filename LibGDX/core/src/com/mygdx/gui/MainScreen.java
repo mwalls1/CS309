@@ -124,6 +124,7 @@ public class MainScreen extends Game implements Screen{
         playButton.addListener(new ClickListener(){ //This tells button what to do when clicked
             @Override 
             public void clicked(InputEvent event, float x, float y){
+            	dispose();
             	game.setScreen(new LobbyScreen(game)); //Switch over to lobby screen
             }
         });
@@ -131,6 +132,7 @@ public class MainScreen extends Game implements Screen{
         leaderboardButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
+            	dispose();
             	game.setScreen(new LeaderboardScreen(game)); //Switch over to leaderboard screen
             }
         });
@@ -139,7 +141,7 @@ public class MainScreen extends Game implements Screen{
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
-            	optionsButton.setText("a");
+            	dispose();
             	game.setScreen(new OptionsScreen(game));
             	
             }
