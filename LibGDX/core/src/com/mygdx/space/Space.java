@@ -66,32 +66,32 @@ public class Space extends Game implements Screen{
 	     batch = new SpriteBatch();
 	     
 	     
-	     enemies = level.getShips();
+	     enemies = level.getShips(); //Array of enemy ships determined by current level
 	     
-	     batch.begin();
-	    handleInput(delta);
-	     if (Gdx.input.isKeyPressed(Keys.R)) create();
+	     batch.begin(); //Start drawing
+	     handleInput(delta); //Get input from keyboard
+	     if (Gdx.input.isKeyPressed(Keys.R)) create(); //Reset; for debugging only
 	     player.draw(batch);
 	     
 		 enemies[rand.nextInt(enemies.length)].shoot(batch);
 		 
-		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) {
+		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) { //Handles logic for streak of hitting asteroids
 			asteroid = new Asteroid(asteroidsShot, levelNum);
-			asteroidSpeedY = rand.nextInt(1)-2;
+			asteroidSpeedY = rand.nextInt(1)-2; 
 			asteroidSpeedX = rand.nextInt(1)+1;
 		}
 		 
-		 if (asteroid.isIntact())
+		 if (asteroid.isIntact()) //Move asteroid as long as it is intact
 		 {
 			 asteroid.draw(batch);
 			 asteroid.move(1, 0);
 			
 		 }
-	     for (int i = 0; i < enemies.length; i++)
+	     for (int i = 0; i < enemies.length; i++) 
 	     {
-	    	 if (enemies[i].getType() == "Captain") enemies[i].shoot(batch);
+	    	 if (enemies[i].getType() == "Captain") enemies[i].shoot(batch); //Calls captain's shoot method every frame
 	    	 if (enemies[i].isShotFired()) {
-	    		 player.collision(enemies[i].getShot());
+	    		 player.collision(enemies[i].getShot()); //Continue moving ship's fire if ship has fired
 	    	 }
 	    	 if (enemies[i].isAlive())
 	    		 {
@@ -101,15 +101,13 @@ public class Space extends Game implements Screen{
 	    	 if (enemies[i].isShotFired()) enemies[i].shoot(batch);
 	     }
 	    	
-	    // enemy.move(0,0);
-//	     player.collision(enemy.getSprite());
-//	     enemy.collision(player.getSprite());
+	 
 	  
 	    
-	    if (shotPressed)
+	    if (shotPressed) //Handles logic of player ship's fire
 	    {
 	    	player.shoot(batch);
-	    	for (int j = 0; j < enemies.length; j++)
+	    	for (int j = 0; j < enemies.length; j++) //Checks for collisions of player shots with asteroids and enemy ships
 	    	{
 	    		enemies[j].collision(player.getShotOneSprite());
 	    		enemies[j].collision(player.getShotTwoSprite());
@@ -119,31 +117,38 @@ public class Space extends Game implements Screen{
 	    }
 	     
 	    accuracy = 0;
-	    if (shotsLanded != 0 && shotsTaken != 0) accuracy = shotsLanded/shotsTaken;
+	    if (shotsLanded != 0 && shotsTaken != 0) accuracy = shotsLanded/shotsTaken; //Calculates accuracy, used to avoid division by zero
 	    
-	     font.draw(batch, "Score\n" + score + "\nStage: "+ levelNum + "\nAccuracy: " + accuracy, 100, 200);
-	     batch.end();
+	     font.draw(batch, "Score\n" + score + "\nStage: "+ levelNum + "\nAccuracy: " + accuracy, 100, 200); //Draws player info
+	     batch.end(); //Stop drawing
 		
-	     if (isComplete())
+	     if (isComplete()) //If level has been finished
 	     {
-	    	 asteroidsShot = 0;
-	    	 enemiesKilled = 0;
-	    	 asteroid = new Asteroid(asteroidsShot, levelNum);
-	    	 batch.begin();
-	    	 int scoreAdded = (int)accuracy * 1000;
+	    	 asteroidsShot = 0; //Reset asteroid streak counter
+	    	 enemiesKilled = 0; //Reset kill count per level
+	    	 asteroid = new Asteroid(asteroidsShot, levelNum); //Creates new asteroids for new level
+	    	 batch.begin(); //Start drawing
+	    	 int scoreAdded = (int)accuracy * 1000; 
+	    	 //TODO get this line to work 
 	    	 font.draw(batch, "Level " + levelNum + " complete! \nAccuracy Bonus: " + scoreAdded, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-	    	 score += (int)(accuracy * 1000);
-	    	 levelNum++;
-	    	 shotsTaken = 0;
-	    	 shotsLanded = 0;
-	    	 if (levelNum == LAST_LEVEL) game.setScreen(new MainScreen(game));
-	    	 level = new Level(levelNum, player);
-	    	 batch.end();
-	    	 dispose();
+	    	 
+	    	 
+	    	 score += (int)(accuracy * 1000); //Add accuracy bonus to score
+	    	 levelNum++; //Increment level
+	    	 shotsTaken = 0; //Reset for accuracy calculation
+	    	 shotsLanded = 0; //Reset for accuracy calculation
+	    	 //TODO implement real game exiting
+	    	 if (levelNum == LAST_LEVEL) game.setScreen(new MainScreen(game)); //Exits game if won
+	    	 level = new Level(levelNum, player); //Create new level
+	    	 batch.end(); //Stop drawing
+	    	 dispose(); //Dispose unused textures
 	     }
 	}
 
 	@Override
+	/*
+	 * Called whenever window is resized
+	 */
 	public void resize(int width, int height) {
 		create();
 	}
@@ -189,11 +194,13 @@ public class Space extends Game implements Screen{
 		level = new Level(levelNum, player);
 		
 	}
-	
+	/*
+	 * Handles input from keyboard
+	 */
 	private void handleInput(float deltaTime)
 	{
-
-		if (Gdx.app.getType() != Application.ApplicationType.Desktop)
+		//TODO implement instructions for touch screen capability
+		if (Gdx.app.getType() != Application.ApplicationType.Desktop) //Ensures device is desktop
 		{
 			return;
 		}
@@ -202,6 +209,7 @@ public class Space extends Game implements Screen{
 			dispose();
 			create();
 		}
+		//Movement according to WASD, arrow keys, and space bar
 		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && sprite.getX() > 90) player.getSprite().translate(-sprMoveSpeed,0);
 		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && sprite.getX() < Gdx.graphics.getWidth()-100) player.getSprite().translate(sprMoveSpeed,0);
 		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) player.getSprite().translate(0,sprMoveSpeed);
@@ -210,11 +218,14 @@ public class Space extends Game implements Screen{
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) pause();
 		
 	}
-	
+
+	/*
+	 * Checks if level is complete
+	 */
 public boolean isComplete()
 {
 	for (int i = 0; i<enemies.length; i++) {
-		if (enemies[i].isAlive()) return false;
+		if (enemies[i].isAlive()) return false; //If one enemy is alive, returns false
 	}
 	return true;
 }

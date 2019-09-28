@@ -3,55 +3,76 @@
 package com.mygdx.space;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-//
-//import com.badlogic.gdx.graphics.Texture;
-//import com.badlogic.gdx.graphics.g2d.Sprite;
-//
-//public class Ship{
-//private Texture texture;
-//private Sprite sprite;
-//public static final int PLAYER = 0;
-//public static final int ENEMY_1 = 1;
-//	
-//	public Ship(int shipType)
-//	{
-//		if (shipType == PLAYER) texture = new Texture("ship.png");
-//		else if (shipType == ENEMY_1) texture = new Texture("enemy1.png");
-//		sprite = new Sprite(texture);
-//		
-//	}
-//	
-//	public Sprite get()
-//	{
-//		return sprite;
-//	}
-//	
-//	
-//	public boolean testCollisions(Sprite mainSprite, Sprite otherSprite)
-//	{
-//			if (Math.abs(otherSprite.getX() - mainSprite.getX()) < 25 && Math.abs(otherSprite.getY() - mainSprite.getY()) < 10)
-//			{
-//				return true;
-//			}
-//			else return false;	
-//	}
-//	
-//}
 
 
 public interface Ship{
 	
+	/*
+	 * Returns sprite of ship
+	 */
 	public Sprite getSprite();
+	
+	/*
+	 * Returns ship's fire
+	 */
 	public Sprite getShot();
+	
+	/*
+	 * Runs attack behavior for ship
+	 */
 	public void shoot(SpriteBatch batch);
+	
+	/*
+	 * Check collisions between ship's sprite and a given sprite
+	 */
 	public void collision(Sprite coll);
+	
+	/*
+	 * Return x position of ship's sprite
+	 */
 	public float getX();
+	
+	/*
+	 * Return y position of ship's sprite
+	 */
 	public float getY();
+	
+	/*
+	 * Moves ship according to each individual ship type
+	 */
 	public void move();
+	
+	
+	/*
+	 * Draws the ship's sprite with a given SpriteBatch
+	 */
 	public void draw(SpriteBatch batch);
+	
+	
+	/*
+	 * Stop rendering the ship
+	 */
 	public void destroy();
+	
+	
+	/*
+	 * Returns true is ship not destroyed
+	 */
 	public boolean isAlive();
+	
+	
+	/*
+	 * Returns true if ship has fired 
+	 */
 	public boolean isShotFired();
+	
+	/*
+	 * Disposes of textures for the ship
+	 */
 	public void dispose();
+	
+	/*
+	 * Returns type of ship as a string
+	 */
 	public String getType();
 }
