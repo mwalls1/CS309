@@ -1,29 +1,26 @@
 package com.mygdx.space;
 
-import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import java.util.Random;
 public class Level {
 private int level;
 private Ship[] enemies;
-private Sprite[] sprites;
-private boolean[] alive;
-private Texture texture;
-private int dir;
-private double score;
-private boolean[] aliveArray;
-private Asteroid[] asteroids;
-	
+	/**
+	 * Creates new level
+	 * @param level what level should be generated
+	 * @param ship Player ship
+	 */
 	public Level(int level, Ship ship)
 	{
 		this.level = level;
 		initLevel(level, ship);
 	}
 	
-	
+	/**
+	 * Pre-determined ship arrays for each level
+	 * @param levelNum level to be generated
+	 * @param ship player ship
+	 */
 	public void initLevel(int levelNum, Ship ship)
 	{
 		if (levelNum == 0) //Debug level
@@ -74,7 +71,9 @@ private Asteroid[] asteroids;
 	
 	
 	
-	
+	/*
+	 * Returns array of enemy ships
+	 */
 	public Ship[] getShips()
 	{
 		return enemies;

@@ -89,6 +89,7 @@ public class MainScreen extends Game implements Screen{
 	 */
 	public void dispose() {
 		stage.dispose();
+		
 	}
 	
 
@@ -105,7 +106,7 @@ public class MainScreen extends Game implements Screen{
         final TextButton playButton = new TextButton("Play", skin, "default"); //Creates button with label "play"
         final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default"); //Creates button with label "leaderboards"
         final TextButton optionsButton = new TextButton("Options", skin, "default"); //Creates button with label "options"
-        
+      
         //Three lines below this set the widths of buttons using the constant widths
         playButton.setWidth(Constants.BUTTON_WIDTH); 
         leaderboardButton.setWidth(Constants.BUTTON_WIDTH);

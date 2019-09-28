@@ -12,7 +12,9 @@ public class Ram implements Ship{
 	private boolean alive;
 	private int health;
 	private boolean shotFired;
-	
+	/*
+	 * Creates new ship at default position; used for debugging
+	 */
 	public Ram()
 	{
 		texture = new Texture("enemy2.png");
@@ -24,7 +26,9 @@ public class Ram implements Ship{
 		health = 4;
 		shotFired = false;
 	}
-
+	/*
+	 * Creates new ship at a given x position
+	 */
 	public Ram(float xPos)
 	{
 		texture = new Texture("enemy2.png");
@@ -38,17 +42,25 @@ public class Ram implements Ship{
 	}
 	
 	@Override
+	/*
+	 * Returns ship sprite
+	 */
 	public Sprite getSprite() {
 		return sprite;
 	}
 
 	@Override
+	/*
+	 * Returns sprite instead of shot; this enemy type does not fire
+	 */
 	public Sprite getShot() {
-		// TODO Auto-generated method stub
 		return sprite;
 	}
 
 	@Override
+	/*
+	 * Instead of firing shots, this ship charges downward
+	 */
 	public void shoot(SpriteBatch batch) {
 		if (!shotFired)
 		{

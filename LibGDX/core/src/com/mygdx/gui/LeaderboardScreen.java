@@ -4,10 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,15 +17,9 @@ import util.Constants;
 
 public class LeaderboardScreen extends Game implements Screen{
 	private SpriteBatch batch;
-	private OrthographicCamera camera;
 	private Skin skin;
 	private Stage stage;
-	private Viewport viewport;
-	private TextureAtlas atlas;
-	private TextButtonStyle textButtonStyle;
-	private BitmapFont font;
 	private Game game;
-	private float offset = Gdx.graphics.getWidth() / 10;
 	
 	
 	public LeaderboardScreen(Game game)
@@ -38,13 +29,11 @@ public class LeaderboardScreen extends Game implements Screen{
 	}
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(stage);
 	}
 	
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
 		 Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
@@ -53,7 +42,6 @@ public class LeaderboardScreen extends Game implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 		create();
 	}
 
@@ -77,8 +65,7 @@ public class LeaderboardScreen extends Game implements Screen{
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		stage.dispose();
 	}
 	
 
@@ -91,8 +78,6 @@ public class LeaderboardScreen extends Game implements Screen{
         stage = new Stage();
 
         final TextButton backButton = new TextButton("Back", skin, "default");
-        final TextButton leaderboardButton = new TextButton("Public Game", skin, "default");
-        final TextButton optionsButton = new TextButton("Private Game", skin, "default");
         
         backButton.setWidth(Constants.BUTTON_WIDTH);        
         backButton.setHeight(Constants.BUTTON_HEIGHT);
@@ -103,7 +88,7 @@ public class LeaderboardScreen extends Game implements Screen{
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
-            	backButton.setText("b");
+            	dispose();
             	game.setScreen(new MainScreen(game));
             }
         });
@@ -113,7 +98,6 @@ public class LeaderboardScreen extends Game implements Screen{
         
         stage.addActor(backButton);
         
-        Gdx.input.setInputProcessor(stage);
 
 	}
 

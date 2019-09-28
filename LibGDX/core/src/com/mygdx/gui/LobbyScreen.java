@@ -4,8 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,13 +18,11 @@ import util.Constants;
 
 public class LobbyScreen extends Game implements Screen{
 	private SpriteBatch batch;
-	private OrthographicCamera camera;
 	private Skin skin;
 	private Stage stage;
 	private Viewport viewport;
 	private TextureAtlas atlas;
 	private TextButtonStyle textButtonStyle;
-	private BitmapFont font;
 	private Game game;
 	private float offset = Gdx.graphics.getHeight() / 10;
 	
@@ -113,6 +109,7 @@ public class LobbyScreen extends Game implements Screen{
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
+            	dispose();
             	game.setScreen(new MainScreen(game));
             }
         });
@@ -120,13 +117,16 @@ public class LobbyScreen extends Game implements Screen{
         privateGameButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
+            	dispose();
             	privateGameButton.setText("b");
+            	
             }
         });
         
         publicGameButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
+            	dispose();
             	publicGameButton.setText("b");
             }
         });
@@ -134,6 +134,7 @@ public class LobbyScreen extends Game implements Screen{
         singlePlayerButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
+            	dispose();
             	game.setScreen(new  SinglePlayerGameSelectScreen(game));
             }
         });

@@ -157,7 +157,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
+            	dispose();
             	game.setScreen(new LobbyScreen(game));
             }
         });
@@ -165,6 +165,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         games[1].addListener(new ClickListener(){
         	@Override
         	public void clicked(InputEvent event, float x, float y) {
+        		dispose();
         		game.setScreen(new Space(game));
         		
         	}

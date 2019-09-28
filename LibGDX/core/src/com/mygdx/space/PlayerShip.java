@@ -16,6 +16,9 @@ private boolean alive;
 private boolean shotPressed;
 Texture shotTexture;
 
+/**
+ * Creates player ship at a default position for debugging
+ */
 	public PlayerShip()
 	{
 		alive = true;
@@ -28,6 +31,10 @@ Texture shotTexture;
 		shotOne = new Sprite(shotTexture);
 		shotTwo = new Sprite(shotTexture);
 	}
+	
+	/*
+	 * Creates player ship at a given x position
+	 */
 	public PlayerShip(float xPos)
 	{
 		alive = true;
@@ -40,7 +47,9 @@ Texture shotTexture;
 		shotOne = new Sprite(shotTexture);
 		shotTwo = new Sprite(shotTexture);
 	}
-	
+	/*
+	 * Move ship according to input retrieved from keyboard
+	 */
 	public void move() {
 		float sprMoveSpeed = 250 * Gdx.graphics.getDeltaTime();
 		
@@ -52,36 +61,43 @@ Texture shotTexture;
 	}
 
 	@Override
+	/*
+	 * Returns sprite of player ship
+	 */
 	public Sprite getSprite() {
 		return sprite;
 	}
 
 	@Override
+	/*
+	 * Handles logic for ship's firing. Ship is allowed to have two active shots at any given time
+	 * Shots become inactive when traveling off-screen and when colliding with an object
+	 */
 	public void shoot(SpriteBatch batch) {
-		if (!shotOneFired && Gdx.input.isKeyPressed(Keys.SPACE))
+		if (!shotOneFired && Gdx.input.isKeyPressed(Keys.SPACE)) //If shot one not fired and fire button is pressed
 		{
-			shotOneFired = true;
-			Space.shotsTaken++;
-			shotOne.setPosition(sprite.getX(), sprite.getY()+30);
+			shotOneFired = true; //Shot one has been fired
+			Space.shotsTaken++; //For accuracy calculation
+			shotOne.setPosition(sprite.getX(), sprite.getY()+30); //Initial position for shot one
 		}
-		else if (shotOneFired && !shotTwoFired && Gdx.input.isKeyPressed(Keys.SPACE) && shotOne.getY() > sprite.getY()+200)
+		else if (shotOneFired && !shotTwoFired && Gdx.input.isKeyPressed(Keys.SPACE) && shotOne.getY() > sprite.getY()+200) //If shot one fired, but shot two not yet fired
 		{
-			Space.shotsTaken++;
+			Space.shotsTaken++; //For accuracy calculation
 			shotTwoFired = true;
-			shotTwo.setPosition(sprite.getX(), sprite.getY()+30);
+			shotTwo.setPosition(sprite.getX(), sprite.getY()+30); //Set position for second shot sprite
 		}
 		
-		if (shotOne.getY() > Gdx.graphics.getHeight()) shotOneFired = false;
-		if (shotTwo.getY() > Gdx.graphics.getHeight()) shotTwoFired = false;
-		if (shotOne.getX() < 1) shotOneFired = false;
-		if (shotTwo.getX() < 1) shotTwoFired = false;
+		if (shotOne.getY() > Gdx.graphics.getHeight()) shotOneFired = false; //If shot one off screen
+		if (shotTwo.getY() > Gdx.graphics.getHeight()) shotTwoFired = false; //If shot two off
+		if (shotOne.getX() < 1) shotOneFired = false; //If shot one off screen (moved here when collided with ship)
+		if (shotTwo.getX() < 1) shotTwoFired = false; //If shot two off screen (moved here when collided with ship)
 		
-		if (shotOneFired) 
+		if (shotOneFired)  //If shot one fired, continue its movement upward
 			{
 			 shotOne.translateY(Gdx.graphics.getHeight()/75);
 			 shotOne.draw(batch);
 			}
-		if (shotTwoFired) 
+		if (shotTwoFired)  //If shot two fired, continue its movement upward
 			{
 			shotTwo.translateY(Gdx.graphics.getHeight()/75);
 			shotTwo.draw(batch);
@@ -93,20 +109,27 @@ Texture shotTexture;
 	}
 
 	@Override
+	/**
+	 * Determines if player has collided with another sprite
+	 */
 	public void collision(Sprite coll) {
-		if (Math.abs(sprite.getX() - coll.getX()) < 25 && Math.abs(sprite.getY() - coll.getY()) < 10)
+		if (Math.abs(sprite.getX() - coll.getX()) < 25 && Math.abs(sprite.getY() - coll.getY()) < 10) //If given sprite is within a tolerance of ship's position
 		{
 			destroy();
 		}
 	}
-	
+	/*
+	 * Destroys shot if it connects with an object
+	 */
 	public void shotLanded(boolean whichShot)
 	{
 		if (!whichShot) shotOneFired = false;
 		else if (whichShot) shotTwoFired = false;
 		
 	}
-	
+	/*
+	 * Draws ship sprite
+	 */
 	public void draw(SpriteBatch batch)
 	{
 		sprite.draw(batch);
@@ -147,9 +170,9 @@ Texture shotTexture;
 	
 	public void destroy()
 	{
-		alive = false;
-		sprite.setAlpha(0);
-		sprite.setPosition(0, 0);
+//		alive = false;
+//		sprite.setAlpha(0);
+//		sprite.setPosition(0, 0);
 	}
 	
 	public boolean isAlive()

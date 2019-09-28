@@ -77,7 +77,7 @@ public class OptionsScreen extends Game implements Screen{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+		stage.dispose();
 	}
 	
 
@@ -107,7 +107,7 @@ public class OptionsScreen extends Game implements Screen{
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	//Do some stuff when clicked
-            	backButton.setText("b");
+            	dispose();
             	game.setScreen(new MainScreen(game));
             }
         });
