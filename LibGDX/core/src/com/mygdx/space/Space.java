@@ -22,7 +22,7 @@ public class Space extends Game implements Screen{
 	private Game game;
 	private Sprite sprite;
 	private Level level;
-	private int levelNum = 1;
+	private int levelNum = 5;
 	private Ship[] enemies;
 	public static double score = 0;
 	public static double shotsTaken = 0;
@@ -37,6 +37,7 @@ public class Space extends Game implements Screen{
 	private int asteroidSpeedX;
 	public static int asteroidsShot;
 	public static int enemiesKilled;
+	public boolean  paused;
 	
 	
 	/**
@@ -60,6 +61,8 @@ public class Space extends Game implements Screen{
 	 * Runs every frame, draws updated stage and sets background color
 	 */
 	public void render(float delta) {
+		handleInput(delta); //Get input from keyboard
+		if (paused) return;
 		// TODO Auto-generated method stub
 		 Gdx.gl.glClearColor((float)4/255, (float)7/255, (float)40/255, 1); //Color of background
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this
@@ -69,7 +72,7 @@ public class Space extends Game implements Screen{
 	     enemies = level.getShips(); //Array of enemy ships determined by current level
 	     
 	     batch.begin(); //Start drawing
-	     handleInput(delta); //Get input from keyboard
+	     
 	     if (Gdx.input.isKeyPressed(Keys.R)) create(); //Reset; for debugging only
 	     player.draw(batch);
 	     
@@ -155,12 +158,12 @@ public class Space extends Game implements Screen{
 
 	@Override
 	public void pause() {
-		
+		paused = true;
 	}
 
 	@Override
 	public void resume() {
-		
+		paused = false;
 	}
 
 	@Override
@@ -215,7 +218,8 @@ public class Space extends Game implements Screen{
 		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) player.getSprite().translate(0,sprMoveSpeed);
 		if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) && sprite.getY() > 5) player.getSprite().translate(0,-sprMoveSpeed);
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) shotPressed = true;
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) pause();
+		if (Gdx.input.isKeyPressed(Keys.ESCAPE) && !paused) pause();
+		if (Gdx.input.isKeyPressed(Keys.ESCAPE) && paused) resume();
 		
 	}
 
