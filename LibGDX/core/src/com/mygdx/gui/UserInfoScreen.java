@@ -115,6 +115,7 @@ public class UserInfoScreen extends Game implements Screen {
 		stage.addActor(createUserButton);
 
 		Gdx.input.setInputProcessor(stage);
+		
 
 	}
 
