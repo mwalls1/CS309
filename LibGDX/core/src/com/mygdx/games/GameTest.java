@@ -49,7 +49,7 @@ public class GameTest extends Game implements Screen{
 	private float offset = Gdx.graphics.getHeight() / 10;
 	private int daWayx;
 	private int daWayy;
-	private Texture dawayTexture;
+	private Texture blade;
 	private Texture left;
 	private Texture right;
 	private Texture background;
@@ -73,16 +73,17 @@ public class GameTest extends Game implements Screen{
 	private TiledMapTileLayer terrain;
 	private TiledMapTileLayer walls;
 	private TiledMapTileLayer collision;
-	private MapObjects objs;
 	private OrthogonalTiledMapRenderer renderer;
+	private Hazard hazard;
+	private Enemy zombie;
 	public GameTest(Game game)
 	{
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-		camera = new OrthographicCamera(360, 202);
-		map = new TmxMapLoader().load("dungeon.tmx");
+		camera = new OrthographicCamera(1920/4, 1080/4);
+		map = new TmxMapLoader().load("dungeon2.tmx");
 		MapLayers mapLayers = map.getLayers();
 		terrain = (TiledMapTileLayer) mapLayers.get("floor");
 		walls = (TiledMapTileLayer) mapLayers.get("walls");
@@ -96,6 +97,11 @@ public class GameTest extends Game implements Screen{
 		idleLeft = new Animation<TextureRegion>(1/5f, iLeft.getRegions());
 		idleRight = new Animation<TextureRegion>(1/5f, iRight.getRegions());
 		player = new Player();
+		blade = new Texture(Gdx.files.internal("blade.png"));
+		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
+		hazard = new Hazard(blade,100,100, camera);
+		zombie = new Enemy(zom, 30, 30, camera);
+		shape = new ShapeRenderer();
 		create();
 	}
 	@Override
@@ -134,19 +140,22 @@ public class GameTest extends Game implements Screen{
 			 else
 				 batch.draw(runRight.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
 		 }
+		 hazard.render(batch);
+		 zombie.render(batch, player, collision);
+		 font.draw(batch, "Health: "+player.hp, 0, 20);
 		 batch.end();
 		 elapsed += Gdx.graphics.getDeltaTime();
-	     player.update(collision, knuckles);
+		 hazard.checkCollision(player);
+		 hazard.drawRect();
+	     player.update(collision);
 	     player.render(shape, camera);
+		 hazard.update();
+		 zombie.drawVision();
 	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
+	    	 dispose();
 	    	 game.setScreen(new MainScreen(game));
 	     }
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-		{
-			theway.stop();
-			theway.play();
-		}
 	}
 
 	@Override
@@ -176,7 +185,11 @@ public class GameTest extends Game implements Screen{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		batch.dispose();
+		map.dispose();
+		renderer.dispose();
 		stage.dispose();
+		
 	}
 	
 
@@ -186,10 +199,10 @@ public class GameTest extends Game implements Screen{
 		Gdx.graphics.setResizable(false);
 		renderer = new OrthogonalTiledMapRenderer(map);
 		font = new BitmapFont();
+		font.setColor(Color.WHITE);
 		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
-        theway = Gdx.audio.newSound(Gdx.files.internal("douknow.mp3"));
         Gdx.input.setInputProcessor(stage);
 
 	}

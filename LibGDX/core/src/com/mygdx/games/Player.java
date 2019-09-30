@@ -27,30 +27,37 @@ public class Player {
     public Texture knuckles;
     public boolean isMoving;
     public int direction;
+    public float midX;
+    public float midY;
     public boolean isRunning;
     public Player(){
+    	sprite = new Sprite();
     	direction = 1;
     	isMoving = false;
     	isRunning = false;
         hp = 100;
-        width = 16;
-        height = 16;
+        width = 14;
+        height = 14;
         area = width*height;
         x = 32;
         y = 32;
         dx = 3;
         dy = 3;
-
+        sprite.setSize(width,height);
+        midX = (2*x+width)/2;
+        midY = (2*y+height)/2;
     }
     public void render(ShapeRenderer shape, OrthographicCamera camera){
         //sprite.setPosition(x, y);
         camera.position.x = x;
         camera.position.y = y;
+        sprite.setX(x);
+        sprite.setY(y);
         camera.update();
 
     }
 
-	public void update(TiledMapTileLayer walls, Sprite sprite) {
+	public void update(TiledMapTileLayer walls) {
 		float tileW = walls.getTileWidth();
 		float tileH = walls.getTileHeight();
 		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S)
@@ -59,9 +66,9 @@ public class Player {
 			{
 				for(int i = 0; i < dx; i ++)
 				{
-					if(walls.getCell((int)((x-1)/tileW), (int)(y/tileH))!=null && walls.getCell((int)((x-1)/tileW), (int)(y/tileH)).getTile().getProperties().containsKey("blocked"))
+					if(walls.getCell((int)((x-1)/tileW), (int)(y/tileH))!=null)
 						break;
-					else if(walls.getCell((int)((x-1)/tileW), (int)((y+height)/tileH))!=null && walls.getCell((int)((x-1)/tileW), (int)((y+height)/tileH)).getTile().getProperties().containsKey("blocked"))
+					else if(walls.getCell((int)((x-1)/tileW), (int)((y+height)/tileH))!=null)
 						break;
 					else
 					{
@@ -75,9 +82,9 @@ public class Player {
 			{
 				for(int i = 0; i < dx; i ++) 
 				{
-					 if(walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH))!=null && walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH)).getTile().getProperties().containsKey("blocked"))
+					 if(walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH))!=null)
 						 break;
-					 else if(walls.getCell((int)((x+width+1)/tileW), (int)((y+height)/tileH))!=null && walls.getCell((int)((x+width+1)/tileW), (int)((y+height)/tileH)).getTile().getProperties().containsKey("blocked"))
+					 else if(walls.getCell((int)((x+width+1)/tileW), (int)((y+height)/tileH))!=null )
 						 break;
 					 else
 					 {
@@ -91,9 +98,9 @@ public class Player {
 			{
 				for(int i = 0; i < dy; i ++) 
 				{
-					if(walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH))!=null && walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH)).getTile().getProperties().containsKey("blocked"))
+					if(walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH))!=null)
 						break;
-					else if(walls.getCell((int)((x+width)/tileW), (int)((y+height+1)/tileH))!=null && walls.getCell((int)((x+width)/tileW), (int)((y+height+1)/tileH)).getTile().getProperties().containsKey("blocked"))
+					else if(walls.getCell((int)((x+width)/tileW), (int)((y+height+1)/tileH))!=null )
 						break;
 					else
 					{
@@ -106,9 +113,9 @@ public class Player {
 			{
 				for(int i = 0; i < dy; i ++) 
 				{
-					if(walls.getCell((int)((x)/tileW), (int)((y-6)/tileH))!=null && walls.getCell((int)((x)/tileW), (int)((y-6)/tileH)).getTile().getProperties().containsKey("blocked"))
+					if(walls.getCell((int)((x)/tileW), (int)((y-6)/tileH))!=null)
 						break;
-					else if(walls.getCell((int)((x+width)/tileW), (int)((y-6)/tileH))!=null && walls.getCell((int)((x+width)/tileW), (int)((y-6)/tileH)).getTile().getProperties().containsKey("blocked"))
+					else if(walls.getCell((int)((x+width)/tileW), (int)((y-6)/tileH))!=null)
 						break;
 					else
 					{
@@ -117,6 +124,8 @@ public class Player {
 					}
 				}
 			}
+	        midX = (2*x+width)/2;
+	        midY = (2*y+height)/2;
 
 		} else
 			isMoving = false;
@@ -125,7 +134,10 @@ public class Player {
         x = x1;
         y = y1;
     }
-
+    public Sprite getSprite()
+    {
+    	return sprite;
+    }
 
     public int getX(){
         return x;
