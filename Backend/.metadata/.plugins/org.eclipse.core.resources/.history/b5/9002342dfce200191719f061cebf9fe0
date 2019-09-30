@@ -1,0 +1,14 @@
+package com.example.demo.leaderboard;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * This is an empty public interface that connects to the leaderboard table
+ * in our database
+ * @author coleweitzel
+ *
+ */
+@Repository
+public interface lederboardRepository extends JpaRepository<leaderboard, Integer>{
+
+}
