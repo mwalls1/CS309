@@ -106,22 +106,26 @@ public class MainScreen extends Game implements Screen{
         final TextButton playButton = new TextButton("Play", skin, "default"); //Creates button with label "play"
         final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default"); //Creates button with label "leaderboards"
         final TextButton optionsButton = new TextButton("Options", skin, "default"); //Creates button with label "options"
+        final TextButton userInfoButton = new TextButton("User Info", skin, "default");//Creates button with label "User Info"
       
         //Three lines below this set the widths of buttons using the constant widths
         playButton.setWidth(Constants.BUTTON_WIDTH); 
         leaderboardButton.setWidth(Constants.BUTTON_WIDTH);
         optionsButton.setWidth(Constants.BUTTON_WIDTH);
+        userInfoButton.setWidth(Constants.BUTTON_WIDTH);
         
         //Set the heights using constant height
         playButton.setHeight(Constants.BUTTON_HEIGHT);
         leaderboardButton.setHeight(Constants.BUTTON_HEIGHT);
         optionsButton.setHeight(Constants.BUTTON_HEIGHT);
+        userInfoButton.setHeight(Constants.BUTTON_HEIGHT);
         
         //Sets positions for buttons
         playButton.setPosition(Gdx.graphics.getWidth() /2 - playButton.getWidth()/2, Gdx.graphics.getHeight()/2);
         leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - leaderboardButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
         optionsButton.setPosition(Gdx.graphics.getWidth() /2 - optionsButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*2);
-       
+        userInfoButton.setPosition(Gdx.graphics.getWidth() /2 - userInfoButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*3);
+        
         playButton.addListener(new ClickListener(){ //This tells button what to do when clicked
             @Override 
             public void clicked(InputEvent event, float x, float y){
@@ -147,10 +151,22 @@ public class MainScreen extends Game implements Screen{
             	
             }
         });
+        
+        userInfoButton.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	//Do some stuff when clicked
+            	dispose();
+            	game.setScreen(new UserInfoScreen(game));
+            	
+            }
+        });
+        
         //Adds all buttons to stage to be rendered
         stage.addActor(playButton);
         stage.addActor(leaderboardButton);
         stage.addActor(optionsButton);
+        stage.addActor(userInfoButton);
         
         Gdx.input.setInputProcessor(stage);
 
