@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import com.mygdx.userInfo.*;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -19,11 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-
+import com.mygdx.userInfo.*;
 
 import util.Constants;
 
@@ -105,14 +100,14 @@ public class LeaderboardScreen extends Game implements Screen {
 		TextArea textField = new TextArea("text", skin, "default");
 		
 		try {
-			String s = "[{\"id\":29,\"name\":\"tay2\",\"password\":\"newpass\"},{\"id\":28,\"name\":\"tay\",\"password\":\"newpass\"},{\"id\":14,\"name\":\"name3\",\"password\":\"newpass\"},{\"id\":6,\"name\":\"taylor\",\"password\":\"pw\"},{\"id\":15,\"name\":\"name1\",\"password\":\"newpass\"},{\"id\":13,\"name\":\"name2\",\"password\":\"newpass\"}]";
+//			String s = "[{\"id\":29,\"name\":\"tay2\",\"password\":\"newpass\"},{\"id\":28,\"name\":\"tay\",\"password\":\"newpass\"},{\"id\":14,\"name\":\"name3\",\"password\":\"newpass\"},{\"id\":6,\"name\":\"taylor\",\"password\":\"pw\"},{\"id\":15,\"name\":\"name1\",\"password\":\"newpass\"},{\"id\":13,\"name\":\"name2\",\"password\":\"newpass\"}]";
 			String s2 = getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUsers");
 //			List<userInfo> users = jsonToUserInfo(s);
 			String userString = "";
 //			for (userInfo user : users) {
 //				userString.concat(user.getName()+"\n");
 //			}
-			textField = new TextArea(userString, skin, "default");
+			textField = new TextArea(s2, skin, "default");
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -162,11 +157,11 @@ public class LeaderboardScreen extends Game implements Screen {
 		stage.addActor(refresh);
 
 	}
-	public List<userInfo> jsonToUserInfo(String s) throws JsonProcessingException, IOException{
-//		ObjectMapper mapper = new ObjectMapper();
-		List<userInfo> users = (List<userInfo>) new ObjectMapper().reader()
-//			      .withType(new TypeReference<List<userInfo>>() {})
-			      .readValues(s);
-		return users;
-	}
+//	public List<userInfo> jsonToUserInfo(String s) throws JsonProcessingException, IOException{
+////		ObjectMapper mapper = new ObjectMapper();
+//		List<userInfo> users = (List<userInfo>) new ObjectMapper().reader()
+////			      .withType(new TypeReference<List<userInfo>>() {})
+//			      .readValues(s);
+//		return users;
+//	}
 }

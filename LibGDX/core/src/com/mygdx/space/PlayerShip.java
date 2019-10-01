@@ -170,9 +170,9 @@ Texture shotTexture;
 	
 	public void destroy()
 	{
-//		alive = false;
-//		sprite.setAlpha(0);
-//		sprite.setPosition(0, 0);
+		alive = false;
+		sprite.setAlpha(0);
+		sprite.setPosition(0, 0);
 	}
 	
 	public boolean isAlive()
