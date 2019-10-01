@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import util.Constants;
+import util.JsonParser;
 
 public class UserInfoScreen extends Game implements Screen {
 	private SpriteBatch batch;
@@ -165,7 +166,13 @@ public class UserInfoScreen extends Game implements Screen {
 		createNewUser.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Constants.user = "http://coms-309-tc-1.misc.iastate.edu:8080/newUser?name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText(); 
+				Constants.user = "name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText(); 
+				try {
+					JsonParser.sendHTML("newUser",Constants.user);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		

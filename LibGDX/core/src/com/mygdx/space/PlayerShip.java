@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import util.Constants;
+import util.*;
 public class PlayerShip implements Ship{
 
 private Texture texture;
@@ -176,7 +176,13 @@ Texture shotTexture;
 		sprite.setAlpha(0);
 		sprite.setPosition(0, 0);
 		
-		String scoreSend = "http://coms-309-tc-1.misc.iastate.edu:8080/newScore?score=" + Space.score + "&name=" + Constants.user;
+		String scoreSend = "id=9&score=" + Space.score + "&name=" + Constants.user;
+		try {
+			JsonParser.sendHTML("newScore", scoreSend);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean isAlive()
