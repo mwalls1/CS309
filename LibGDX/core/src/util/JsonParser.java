@@ -1,9 +1,11 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -60,6 +62,36 @@ public class JsonParser {
 		}
 		rd.close();
 		return result.toString();
+	}
+	
+	public static boolean sendUser(String para) throws Exception{
+		String urlToSend = "http://coms-309-tc-1.misc.iastate.edu:8080/newUser?";
+		URL url = new URL(urlToSend);
+		String urlParameters = para;
+		byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
+		HttpURLConnection conn =  (HttpURLConnection) url.openConnection();
+        conn.setDoOutput(true);
+		conn.setRequestMethod("POST");
+		try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+            wr.write(postData);
+        }
+		StringBuilder content;
+		try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(conn.getInputStream()))) {
+
+            String line;
+            content = new StringBuilder();
+
+            while ((line = in.readLine()) != null) {
+                content.append(line);
+                content.append(System.lineSeparator());
+            }
+        }
+
+        System.out.println(content.toString());
+		conn.disconnect();
+
+		return true;
 	}
 	
 }
