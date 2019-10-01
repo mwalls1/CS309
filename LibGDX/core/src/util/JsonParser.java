@@ -64,8 +64,8 @@ public class JsonParser {
 		return result.toString();
 	}
 	
-	public static boolean sendUser(String para) throws Exception{
-		String urlToSend = "http://coms-309-tc-1.misc.iastate.edu:8080/newUser?";
+	public static boolean sendHTML(String methurd, String para) throws Exception{
+		String urlToSend = "http://coms-309-tc-1.misc.iastate.edu:8080/" + methurd + "?";
 		URL url = new URL(urlToSend);
 		String urlParameters = para;
 		byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
