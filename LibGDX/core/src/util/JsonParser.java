@@ -10,7 +10,7 @@ import java.util.Arrays;
 import com.mygdx.userInfo.userInfo;
 public class JsonParser {
 	
-	public ArrayList<userInfo> parse(String s){
+	public static ArrayList<userInfo> parse(String s){
 		ArrayList<userInfo> users = new ArrayList<userInfo>();
 		s = s.substring(2, s.length()-2);
 		
