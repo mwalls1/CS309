@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -28,6 +29,7 @@ public class UserInfoScreen extends Game implements Screen {
 	private TextButtonStyle textButtonStyle;
 	private BitmapFont font;
 	private Game game;
+	private boolean loggedIn = false;
 
 	public UserInfoScreen(Game game) {
 		this.game = game;
@@ -88,7 +90,11 @@ public class UserInfoScreen extends Game implements Screen {
 
 		final TextButton backButton = new TextButton("Back", skin, "default");
 		final TextButton createUserButton = new TextButton("Create User", skin, "default");
-
+		final TextButton loginButton = new TextButton("Log In", skin, "default");
+		final TextField usernameTextField = new TextField("Username", skin);
+		final TextField passwordTextField = new TextField("Password", skin);
+		final TextButton loginWithUsernamePassword = new TextButton("Enter", skin, "default");
+		final TextButton createNewUser = new TextButton("New User", skin, "default");
 		/*
 		 * BACK BUTTON 
 		 */
@@ -98,7 +104,6 @@ public class UserInfoScreen extends Game implements Screen {
 		backButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				// Do some stuff when clicked
 				dispose();
 				game.setScreen(new MainScreen(game));
 			}
@@ -111,9 +116,67 @@ public class UserInfoScreen extends Game implements Screen {
 		createUserButton.setHeight(Constants.BUTTON_HEIGHT);
 		createUserButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - Constants.BUTTON_OFFSET);
 
+		loginButton.setWidth(Constants.BUTTON_WIDTH);
+		loginButton.setHeight(Constants.BUTTON_HEIGHT);
+		loginButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 2*Constants.BUTTON_OFFSET);
+		loginButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				// Do some stuff when clicked
+				dispose();
+				loggedIn = true;
+				create();
+			}
+		});
+	
+		usernameTextField.setWidth(Constants.BUTTON_WIDTH);
+		usernameTextField.setHeight(Constants.BUTTON_HEIGHT);
+		usernameTextField.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
+		usernameTextField.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				usernameTextField.setText("");
+			
+			}
+		});
+		
+		
+		
+		passwordTextField.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				passwordTextField.setText("");
+				passwordTextField.setPasswordMode(true);
+			}
+		});
+		
+		passwordTextField.setWidth(Constants.BUTTON_WIDTH);
+		passwordTextField.setHeight(Constants.BUTTON_HEIGHT);
+		passwordTextField.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 4*Constants.BUTTON_OFFSET);
+		passwordTextField.setPasswordCharacter('*');
+		
+		loginWithUsernamePassword.setHeight(Constants.BUTTON_HEIGHT);
+		loginWithUsernamePassword.setWidth(Gdx.graphics.getWidth()/8);
+		loginWithUsernamePassword.setPosition(Gdx.graphics.getWidth() / 2 + 150f, Gdx.graphics.getHeight() / 2 - 4*Constants.BUTTON_OFFSET);
+	
+		createNewUser.setHeight(Constants.BUTTON_HEIGHT);
+		createNewUser.setWidth(Gdx.graphics.getWidth()/8);
+		createNewUser.setPosition(Gdx.graphics.getWidth() / 2 + 150f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
+		if (!loggedIn) {
+			usernameTextField.setVisible(false);
+			passwordTextField.setVisible(false);
+			loginWithUsernamePassword.setVisible(false);
+			createNewUser.setVisible(false);
+		}
+		
+		
 		stage.addActor(backButton);
 		stage.addActor(createUserButton);
-
+		stage.addActor(loginButton);
+		stage.addActor(usernameTextField);
+		stage.addActor(passwordTextField);
+		stage.addActor(loginWithUsernamePassword);
+		stage.addActor(createNewUser);
 		Gdx.input.setInputProcessor(stage);
 		
 
