@@ -1,4 +1,4 @@
-package com.mygdx.userInfo;
+package com.mygdx.objects;
 
 /**
  * This is the entity class which holds the properties of each user and
@@ -9,11 +9,11 @@ package com.mygdx.userInfo;
  *
  */
 
-public class userInfo {
+public class score {
 	
 	private Integer id;
+	private Integer score;
 	private String name;
-	private String password;
 	
 	public Integer getId() {
 		return id;
@@ -21,8 +21,8 @@ public class userInfo {
 	public String getName() {
 		return name;
 	}
-	public String getPassword() {
-		return password;
+	public Integer getScore() {
+		return score;
 	}
 	public void setId(Integer idnum) {
 		id = idnum;
@@ -30,8 +30,8 @@ public class userInfo {
 	public void setName(String name1) {
 		name = name1;
 	}
-	public void setPassword(String pass) {
-		password = pass;
+	public void setScore(Integer sc) {
+		score = sc;
 	}
   
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Game;
@@ -18,9 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.userInfo.*;
+import com.mygdx.objects.*;
 
 import util.Constants;
+import util.JsonParser;
 
 public class LeaderboardScreen extends Game implements Screen {
 //	private SpriteBatch batch;
@@ -74,19 +76,6 @@ public class LeaderboardScreen extends Game implements Screen {
 		stage.dispose();
 	}
 
-	public static String getHTML(String urlToRead) throws Exception {
-		StringBuilder result = new StringBuilder();
-		URL url = new URL(urlToRead);
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		String line;
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		rd.close();
-		return result.toString();
-	}
 
 	@Override
 	public void create() {
@@ -101,13 +90,14 @@ public class LeaderboardScreen extends Game implements Screen {
 		
 		try {
 //			String s = "[{\"id\":29,\"name\":\"tay2\",\"password\":\"newpass\"},{\"id\":28,\"name\":\"tay\",\"password\":\"newpass\"},{\"id\":14,\"name\":\"name3\",\"password\":\"newpass\"},{\"id\":6,\"name\":\"taylor\",\"password\":\"pw\"},{\"id\":15,\"name\":\"name1\",\"password\":\"newpass\"},{\"id\":13,\"name\":\"name2\",\"password\":\"newpass\"}]";
-			String s2 = getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUsers");
-//			List<userInfo> users = jsonToUserInfo(s);
+			String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getScores");
 			String userString = "";
-//			for (userInfo user : users) {
-//				userString.concat(user.getName()+"\n");
-//			}
-			textField = new TextArea(s2, skin, "default");
+			ArrayList<score> scores = JsonParser.parseScore(s2);
+			System.out.println(scores.get(0).getScore());
+			for (score sc : scores) {
+				userString = userString.concat(sc.getName()+":"+sc.getScore()+"\n");
+			}
+			textField = new TextArea(userString, skin, "default");
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -157,11 +147,5 @@ public class LeaderboardScreen extends Game implements Screen {
 		stage.addActor(refresh);
 
 	}
-//	public List<userInfo> jsonToUserInfo(String s) throws JsonProcessingException, IOException{
-////		ObjectMapper mapper = new ObjectMapper();
-//		List<userInfo> users = (List<userInfo>) new ObjectMapper().reader()
-////			      .withType(new TypeReference<List<userInfo>>() {})
-//			      .readValues(s);
-//		return users;
-//	}
+
 }
