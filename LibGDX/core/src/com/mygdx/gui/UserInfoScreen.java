@@ -30,7 +30,7 @@ public class UserInfoScreen extends Game implements Screen {
 	private BitmapFont font;
 	private Game game;
 	private boolean loggedIn = false;
-
+	public String user = "default";
 	public UserInfoScreen(Game game) {
 		this.game = game;
 		create();
@@ -162,6 +162,14 @@ public class UserInfoScreen extends Game implements Screen {
 		createNewUser.setHeight(Constants.BUTTON_HEIGHT);
 		createNewUser.setWidth(Gdx.graphics.getWidth()/8);
 		createNewUser.setPosition(Gdx.graphics.getWidth() / 2 + 150f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
+		createNewUser.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Constants.user = "http://coms-309-tc-1.misc.iastate.edu:8080/newUser?name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText(); 
+			}
+		});
+		
+		
 		if (!loggedIn) {
 			usernameTextField.setVisible(false);
 			passwordTextField.setVisible(false);
@@ -180,6 +188,10 @@ public class UserInfoScreen extends Game implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		
 
+	}
+	public String getUser()
+	{
+		return user;
 	}
 
 }

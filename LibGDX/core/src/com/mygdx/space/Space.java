@@ -24,7 +24,7 @@ public class Space extends Game implements Screen{
 	private Level level;
 	private int levelNum = 1;
 	private Ship[] enemies;
-	public static double score = 0;
+	public static Integer score = 0;
 	public static double shotsTaken = 0;
 	public static double shotsLanded = 0;
 	private PlayerShip player;
