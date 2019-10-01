@@ -1,0 +1,8 @@
+package com.example.demo.score;
+
+import javax.persistence.*;
+
+@Entity
+public class score {
+
+}

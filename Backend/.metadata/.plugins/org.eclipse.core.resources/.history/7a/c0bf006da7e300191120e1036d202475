@@ -1,0 +1,38 @@
+package com.example.demo.leaderboardSpace;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class leaderboardSpaceController {
+
+	@Autowired
+	private leaderboardSpaceRepository leaderboardRepo;
+	
+	/**
+	 * Return all instances in the table
+	 * @return
+	 */
+	@GetMapping("/getLeaderboardSpace")
+	public List<leaderboardSpace> getLeaderboardSpace(){
+		return leaderboardRepo.findAll();
+	}
+	
+	// Update a Note
+	@PutMapping("/updateLeaderboardSpace/{name}")
+	public Note updateNote(@PathVariable(value = "id") Long noteId,
+	                                        @Valid @RequestBody Note noteDetails) {
+
+	    Note note = noteRepository.findById(noteId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
+
+	    note.setTitle(noteDetails.getTitle());
+	    note.setContent(noteDetails.getContent());
+
+	    Note updatedNote = noteRepository.save(note);
+	    return updatedNote;
+	}
+}

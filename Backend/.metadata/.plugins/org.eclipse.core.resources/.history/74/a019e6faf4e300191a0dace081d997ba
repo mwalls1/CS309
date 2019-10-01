@@ -1,0 +1,26 @@
+package com.example.demo.score;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class scoreController {
+	@Autowired
+	private scoreRepository scoreRepo;
+	
+	@GetMapping("getScores")
+	public List<score> getScores(){
+		return scoreRepo.findAll();
+	}
+	
+	@PostMapping("/newScore")
+	public String saveScore(Integer id, Integer score, String name) {
+		score s = new score(id, score, name);
+		scoreRepo.save(s);
+		return "New score of " + s.getScore() + " added to user " + s.getName();
+	}
+}
