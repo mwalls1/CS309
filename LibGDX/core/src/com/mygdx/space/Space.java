@@ -1,20 +1,24 @@
 package com.mygdx.space;
 
 import java.util.Random;
-	
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.gui.MainScreen;
+
+import util.Constants;
 
 public class Space extends Game implements Screen{
 	private SpriteBatch batch;
@@ -31,13 +35,19 @@ public class Space extends Game implements Screen{
 	private boolean shotPressed;
 	private  Random rand = new Random();	
 	private final int LAST_LEVEL = 7;
+	private Stage stage;
 	private double accuracy;
 	private Asteroid asteroid;
 	private int asteroidSpeedY;
 	private int asteroidSpeedX;
+	private TextButton exitButton;
+	private TextButton retryButton;
 	public static int asteroidsShot;
+	private Skin skin;
 	public static int enemiesKilled;
 	public boolean paused;
+	public static boolean gameOver;
+
 	
 	
 	/**
@@ -146,6 +156,13 @@ public class Space extends Game implements Screen{
 	    	 batch.end(); //Stop drawing
 	    	 dispose(); //Dispose unused textures
 	     }
+	     
+	     if (gameOver)
+	     {
+	    	 stage.act();
+	    	 stage.draw();
+	    	 
+	     }
 	}
 
 	@Override
@@ -185,6 +202,7 @@ public class Space extends Game implements Screen{
 	 * Describes button functionality and position
 	 */
 	public void create() {
+		gameOver = false;
 		font = new BitmapFont();
 		asteroidsShot = 0;
 		enemiesKilled = 0;
@@ -195,6 +213,41 @@ public class Space extends Game implements Screen{
 		player = new PlayerShip();
 		sprite = player.getSprite();
 		level = new Level(levelNum, player);
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		stage = new Stage();
+		
+		exitButton = new TextButton("Exit", skin, "default");
+		retryButton = new TextButton("Retry", skin, "default");
+		
+		exitButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 2*Constants.BUTTON_OFFSET);
+		retryButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
+		
+		exitButton.setHeight(Constants.BUTTON_HEIGHT);
+		retryButton.setHeight(Constants.BUTTON_HEIGHT);
+		exitButton.setWidth(Constants.BUTTON_WIDTH);
+		retryButton.setWidth(Constants.BUTTON_WIDTH);
+		
+		
+		stage.addActor(exitButton);
+		stage.addActor(retryButton);
+		Gdx.input.setInputProcessor(stage);
+		
+		exitButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				dispose();
+				game.setScreen(new MainScreen(game));
+			}
+		});
+		
+		retryButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				dispose();
+				game.setScreen(new Space(game));
+			}
+		});
+
 		
 	}
 	/*

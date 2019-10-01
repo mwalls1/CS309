@@ -175,7 +175,7 @@ Texture shotTexture;
 		alive = false;
 		sprite.setAlpha(0);
 		sprite.setPosition(0, 0);
-		
+		Space.gameOver = true;
 		String scoreSend = "id=9&score=" + Space.score + "&name=" + Constants.user;
 		try {
 			JsonParser.sendHTML("newScore", scoreSend);
