@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import util.Constants;
 public class PlayerShip implements Ship{
 
 private Texture texture;
@@ -173,6 +175,8 @@ Texture shotTexture;
 		alive = false;
 		sprite.setAlpha(0);
 		sprite.setPosition(0, 0);
+		
+		String scoreSend = "http://coms-309-tc-1.misc.iastate.edu:8080/newScore?score=" + Space.score + "&name=" + Constants.user;
 	}
 	
 	public boolean isAlive()

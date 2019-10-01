@@ -22,9 +22,9 @@ public class Space extends Game implements Screen{
 	private Game game;
 	private Sprite sprite;
 	private Level level;
-	private int levelNum = 5;
+	private int levelNum = 1;
 	private Ship[] enemies;
-	public static double score = 0;
+	public static Integer score = 0;
 	public static double shotsTaken = 0;
 	public static double shotsLanded = 0;
 	private PlayerShip player;
@@ -37,7 +37,7 @@ public class Space extends Game implements Screen{
 	private int asteroidSpeedX;
 	public static int asteroidsShot;
 	public static int enemiesKilled;
-	public boolean  paused;
+	public boolean paused;
 	
 	
 	/**
