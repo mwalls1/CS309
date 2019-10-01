@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.userInfo.*;
+import com.mygdx.objects.*;
 
 import util.Constants;
 import util.JsonParser;
@@ -92,9 +92,10 @@ public class LeaderboardScreen extends Game implements Screen {
 //			String s = "[{\"id\":29,\"name\":\"tay2\",\"password\":\"newpass\"},{\"id\":28,\"name\":\"tay\",\"password\":\"newpass\"},{\"id\":14,\"name\":\"name3\",\"password\":\"newpass\"},{\"id\":6,\"name\":\"taylor\",\"password\":\"pw\"},{\"id\":15,\"name\":\"name1\",\"password\":\"newpass\"},{\"id\":13,\"name\":\"name2\",\"password\":\"newpass\"}]";
 			String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getScores");
 			String userString = "";
-			ArrayList<userInfo> users = JsonParser.parse(s2);
-			for (userInfo user : users) {
-				userString = userString.concat(user.getName()+"\n");
+			ArrayList<score> scores = JsonParser.parseScore(s2);
+			System.out.println(scores.get(0).getScore());
+			for (score sc : scores) {
+				userString = userString.concat(sc.getName()+":"+sc.getScore()+"\n");
 			}
 			textField = new TextArea(userString, skin, "default");
 		
