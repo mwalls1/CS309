@@ -3,7 +3,6 @@ package com.mygdx.space;
 
 import com.badlogic.gdx.Gdx;
 public class Level {
-private int level;
 private Ship[] enemies;
 	/**
 	 * Creates new level
@@ -12,7 +11,6 @@ private Ship[] enemies;
 	 */
 	public Level(int level, Ship ship)
 	{
-		this.level = level;
 		initLevel(level, ship);
 	}
 	
@@ -53,18 +51,17 @@ private Ship[] enemies;
 		}
 		else if (levelNum == 5)
 		{
-			enemies = new Ship[30];
+			enemies = new Ship[29];
 			for (int i = 0; i<10; i++) enemies[i] = new Goon(i*100+200, Gdx.graphics.getHeight()-80,5);
-			for (int j = 10; j<20; j++) enemies[j] = new Goon((j-10)*100+250, Gdx.graphics.getHeight()-130,5);
-			for (int k = 20; k<30; k++) enemies[k] =  new Ram((k-20)*100+200);
+			for (int j = 10; j<19; j++) enemies[j] = new Goon((j-10)*100+250, Gdx.graphics.getHeight()-130,5);
+			for (int k = 19; k<29; k++) enemies[k] =  new Ram((k-20)*100+200);
 		}
 		else if (levelNum == 6)
 		{
-			enemies = new Ship[35];
+			enemies = new Ship[21];
 			for (int i = 0; i<10; i++) enemies[i] = new Goon(i*100+200, Gdx.graphics.getHeight()-80,8);
-			for (int j = 10; j<19; j++) enemies[j] = new Goon((j-10)*100+250, Gdx.graphics.getHeight()-130,8);
-			for (int k = 19; k<34; k++) enemies[k] = new Ram((k-20)*100+200);
-			enemies[34] = new Captain(ship.getX(), Gdx.graphics.getHeight()-50);
+			for (int k = 10; k<20; k++) enemies[k] = new Ram((k-10)*100+200);
+			enemies[20] = new Captain(ship.getX(), Gdx.graphics.getHeight()-50);
 		}
 		
 	}

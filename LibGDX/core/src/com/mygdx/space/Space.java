@@ -26,7 +26,7 @@ public class Space extends Game implements Screen{
 	private Game game;
 	private Sprite sprite;
 	private Level level;
-	private int levelNum = 1;
+	private int levelNum = 6;
 	private Ship[] enemies;
 	public static Integer score = 0;
 	public static double shotsTaken = 0;
@@ -38,8 +38,6 @@ public class Space extends Game implements Screen{
 	private Stage stage;
 	private double accuracy;
 	private Asteroid asteroid;
-	private int asteroidSpeedY;
-	private int asteroidSpeedX;
 	private TextButton exitButton;
 	private TextButton retryButton;
 	public static int asteroidsShot;
@@ -90,8 +88,6 @@ public class Space extends Game implements Screen{
 		 
 		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) { //Handles logic for streak of hitting asteroids
 			asteroid = new Asteroid(asteroidsShot, levelNum);
-			asteroidSpeedY = rand.nextInt(1)-2; 
-			asteroidSpeedX = rand.nextInt(1)+1;
 		}
 		 
 		 if (asteroid.isIntact()) //Move asteroid as long as it is intact

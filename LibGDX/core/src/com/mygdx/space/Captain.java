@@ -50,7 +50,7 @@ private int health;
 		sprite.rotate(180); //Sprite was drawn facing the wrong way because I'm dumb, so I rotated it
 		shotTexture = new Texture("shot.png"); //Texture for ship's fire
 		shotSprite = new Sprite(shotTexture);
-		health = 2;
+		health = 5;
 		
 	}
 	
@@ -86,7 +86,7 @@ private int health;
 		
 		if (shotFired) //If shot has already been fired, move shot further down view port
 			{
-			 shotSprite.translateY(-8);
+			 shotSprite.translateY(-7);
 			 shotSprite.draw(batch);
 			}
 		

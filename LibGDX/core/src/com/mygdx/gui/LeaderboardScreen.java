@@ -1,18 +1,11 @@
 package com.mygdx.gui;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-//import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.objects.*;
-
 import util.Constants;
 import util.JsonParser;
 
@@ -42,7 +34,7 @@ public class LeaderboardScreen extends Game implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
+		Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, Constants.alpha);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		stage.act();
 		stage.draw();

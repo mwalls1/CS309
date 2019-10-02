@@ -4,29 +4,17 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import util.Constants;
 
 public class OptionsScreen extends Game implements Screen{
-	private SpriteBatch batch;
-	private OrthographicCamera camera;
 	private Skin skin;
 	private Stage stage;
-	private Viewport viewport;
-	private TextureAtlas atlas;
-	private TextButtonStyle textButtonStyle;
-	private BitmapFont font;
 	private Game game;
 	
 	
@@ -44,7 +32,7 @@ public class OptionsScreen extends Game implements Screen{
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		 Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
+		 Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
 	     stage.draw();
@@ -85,24 +73,18 @@ public class OptionsScreen extends Game implements Screen{
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
-		batch = new SpriteBatch();
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
 
         final TextButton backButton = new TextButton("Back", skin, "default");
-        final TextButton leaderboardButton = new TextButton("Public Game", skin, "default");
-        final TextButton optionsButton = new TextButton("Private Game", skin, "default");
+        final TextButton colorButton = new TextButton("Change Background", skin, "default");
         
         backButton.setWidth(Constants.BUTTON_WIDTH);
-        leaderboardButton.setWidth(Constants.BUTTON_WIDTH);
-        optionsButton.setWidth(Constants.BUTTON_WIDTH);
-        
+        colorButton.setWidth(Constants.BUTTON_WIDTH);
         backButton.setHeight(Constants.BUTTON_HEIGHT);
-        leaderboardButton.setHeight(Constants.BUTTON_HEIGHT);
-        optionsButton.setHeight(Constants.BUTTON_HEIGHT);
-        
-        backButton.setPosition(Gdx.graphics.getWidth() /2 - 100f, Gdx.graphics.getHeight()/2);
-       
+        colorButton.setHeight(Constants.BUTTON_HEIGHT);
+        backButton.setPosition(Gdx.graphics.getWidth() /2 - backButton.getWidth()/2, Gdx.graphics.getHeight()/2);
+       colorButton.setPosition(Gdx.graphics.getWidth() /2 - backButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
@@ -111,11 +93,22 @@ public class OptionsScreen extends Game implements Screen{
             	game.setScreen(new MainScreen(game));
             }
         });
-       
+        colorButton.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	Constants.red = (float)Math.random();
+            	Constants.blue = (float)Math.random();
+            	Constants.green = (float)Math.random();
+            	Constants.alpha = (float)Math.random();
+            	create();
+            }
+        });
+
         
         
         
         stage.addActor(backButton);
+        stage.addActor(colorButton);
         
         Gdx.input.setInputProcessor(stage);
 
