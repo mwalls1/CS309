@@ -1,6 +1,9 @@
 package com.mygdx.games;
 
 import com.mygdx.gui.*;
+
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -76,6 +79,8 @@ public class GameTest extends Game implements Screen{
 	private OrthogonalTiledMapRenderer renderer;
 	private Hazard hazard;
 	private Enemy zombie;
+	public ArrayList<Bullet> shots = new ArrayList<Bullet>();
+	public ArrayList<Enemy> zombies = new ArrayList<Enemy>();
 	public GameTest(Game game)
 	{
 		this.game = game;
@@ -99,8 +104,8 @@ public class GameTest extends Game implements Screen{
 		player = new Player();
 		blade = new Texture(Gdx.files.internal("blade.png"));
 		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
-		hazard = new Hazard(blade,100,100, camera);
-		zombie = new Enemy(zom, 30, 30, camera);
+		hazard = new Hazard(blade,14*16-5,12*16, camera);
+		zombies.add(new Enemy(zom, 30, 30, camera));
 		shape = new ShapeRenderer();
 		create();
 	}
@@ -141,16 +146,25 @@ public class GameTest extends Game implements Screen{
 				 batch.draw(runRight.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
 		 }
 		 hazard.render(batch);
-		 zombie.render(batch, player, collision);
-		 font.draw(batch, "Health: "+player.hp, 0, 20);
+		 for(Enemy zomb : zombies)
+		 {
+			 zomb.render(batch, player, collision);
+		 }
+		 font.draw(batch, "Health: "+player.hp, player.getX()-200, player.getY()-100);
+		 font.draw(batch, "Mouse X, Y: "+Gdx.input.getX()+", "+Gdx.input.getY(), player.getX()-200, player.getY()-120);
+		 font.draw(batch, "Player X, Y: "+player.getX()+", "+player.getY(), player.getX()-200, player.getY()-80);
+		 for(int i = 0; i < Player.numBullets; i++)
+		 {
+			 if(shots.get(i).active)
+				 shots.get(i).render(batch, collision, zombies);
+		 }
 		 batch.end();
 		 elapsed += Gdx.graphics.getDeltaTime();
 		 hazard.checkCollision(player);
 		 hazard.drawRect();
-	     player.update(collision);
+	     player.update(collision, shots, camera);
 	     player.render(shape, camera);
 		 hazard.update();
-		 zombie.drawVision();
 	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
 	    	 dispose();

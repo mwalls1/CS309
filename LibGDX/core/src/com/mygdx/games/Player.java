@@ -1,7 +1,11 @@
 package com.mygdx.games;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -15,6 +19,8 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Player {
     public int x,y;
@@ -24,12 +30,16 @@ public class Player {
     public int hp;
     public SpriteBatch batch;
     public Sprite sprite;
-    public Texture knuckles;
+    public Texture dagger;
     public boolean isMoving;
     public int direction;
     public float midX;
     public float midY;
     public boolean isRunning;
+    public Vector3 mouseCords;
+    public int totalBullets;
+    public static int numBullets;
+    public ArrayList<Bullet> shots = new ArrayList<Bullet>();
     public Player(){
     	sprite = new Sprite();
     	direction = 1;
@@ -39,13 +49,16 @@ public class Player {
         width = 14;
         height = 14;
         area = width*height;
-        x = 32;
-        y = 32;
+        x = 22*16;
+        y = 4*16;
         dx = 3;
         dy = 3;
+        numBullets = 0;
+        totalBullets = 0;
         sprite.setSize(width,height);
         midX = (2*x+width)/2;
         midY = (2*y+height)/2;
+        dagger = new Texture(Gdx.files.internal("dagger.png"));
     }
     public void render(ShapeRenderer shape, OrthographicCamera camera){
         //sprite.setPosition(x, y);
@@ -57,7 +70,7 @@ public class Player {
 
     }
 
-	public void update(TiledMapTileLayer walls) {
+	public void update(TiledMapTileLayer walls, ArrayList<Bullet> a, OrthographicCamera camera) {
 		float tileW = walls.getTileWidth();
 		float tileH = walls.getTileHeight();
 		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S)
@@ -129,6 +142,23 @@ public class Player {
 
 		} else
 			isMoving = false;
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+		{
+			mouseCords = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+			camera.unproject(mouseCords);
+			if(numBullets<2)
+			{
+				a.add(0,new Bullet(dagger, midX-3, midY-3, mouseCords.x, mouseCords.y));
+				numBullets++;
+				totalBullets++;
+			}
+			else if(totalBullets>2)
+			{
+				totalBullets--;
+				a.remove(2);
+			}
+		}
+			
 	}
     public void setPos(int x1, int y1){
         x = x1;
