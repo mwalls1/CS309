@@ -155,6 +155,7 @@ public class Space extends Game implements Screen{
 	     
 	     if (gameOver)
 	     {
+	    	 Gdx.input.setCursorCatched(false);
 	    	 stage.act();
 	    	 stage.draw();
 	    	 
@@ -191,6 +192,7 @@ public class Space extends Game implements Screen{
 	public void dispose() {
 		for (int i = 0; i<enemies.length; i++) enemies[i].dispose();
 		stage.dispose();
+		
 	}
 	
 
@@ -199,6 +201,7 @@ public class Space extends Game implements Screen{
 	 * Describes button functionality and position
 	 */
 	public void create() {
+		Gdx.input.setCursorCatched(true);
 		gameOver = false;
 		font = new BitmapFont();
 		asteroidsShot = 0;
