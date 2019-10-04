@@ -51,6 +51,15 @@ public class Asteroid {
 	 * Numerical representation for golden asteroid
 	 */
 	public static final int GOLDEN = 3;
+	/*
+	 * Direction for movement
+	 */
+	private boolean directionSelect;
+	
+	/*
+	 * Selects between move left or right
+	 */
+	private int dir;
 	
 	/**
 	 * Creates an asteroid object
@@ -71,6 +80,20 @@ public Asteroid(int type, int levelNum)
 	intact = true;
 	sprite = new Sprite(texture);
 	sprite.setPosition(0, rand.nextInt(Gdx.graphics.getHeight()/2) + 300); //Sets initial position off-screen
+	
+	directionSelect = new Random().nextBoolean();
+	
+	if (directionSelect)
+	{
+		dir = 1;
+		sprite.setPosition(0, rand.nextInt(Gdx.graphics.getHeight()/2) + 300); 
+	}
+	
+	else if (!directionSelect)
+	{
+		dir = -1;
+		sprite.setPosition(Gdx.graphics.getWidth(), rand.nextInt(Gdx.graphics.getHeight()/2) + 300); 
+	}
 	
 	
 }
@@ -160,5 +183,10 @@ public void destroy()
 	texture.dispose();
 	Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	
+}
+
+public int getDir()
+{
+	return dir;
 }
 }

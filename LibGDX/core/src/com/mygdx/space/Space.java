@@ -93,7 +93,7 @@ public class Space extends Game implements Screen{
 		 if (asteroid.isIntact()) //Move asteroid as long as it is intact
 		 {
 			 asteroid.draw(batch);
-			 asteroid.move(1, 0);
+			 asteroid.move(asteroid.getDir(), 0);
 			
 		 }
 	     for (int i = 0; i < enemies.length; i++) 
@@ -191,7 +191,6 @@ public class Space extends Game implements Screen{
 	 */
 	public void dispose() {
 		for (int i = 0; i<enemies.length; i++) enemies[i].dispose();
-		stage.dispose();
 		
 	}
 	
