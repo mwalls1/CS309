@@ -154,6 +154,7 @@ private int health;
 		sprite.setPosition(0, 0);
 		Space.score += 50;
 		texture.dispose();
+		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	}
 
 	@Override

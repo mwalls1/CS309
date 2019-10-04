@@ -129,6 +129,7 @@ public class Ram implements Ship{
 		sprite.setPosition(0, 0);
 		sprite.setAlpha(0);
 		damagedTexture.dispose();
+		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	}
 
 	@Override

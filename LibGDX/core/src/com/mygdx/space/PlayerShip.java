@@ -89,10 +89,24 @@ Texture shotTexture;
 			shotTwo.setPosition(sprite.getX(), sprite.getY()+30); //Set position for second shot sprite
 		}
 		
-		if (shotOne.getY() > Gdx.graphics.getHeight()) shotOneFired = false; //If shot one off screen
-		if (shotTwo.getY() > Gdx.graphics.getHeight()) shotTwoFired = false; //If shot two off
-		if (shotOne.getX() < 1) shotOneFired = false; //If shot one off screen (moved here when collided with ship)
-		if (shotTwo.getX() < 1) shotTwoFired = false; //If shot two off screen (moved here when collided with ship)
+		if (shotOne.getY() > Gdx.graphics.getHeight())
+			{
+			Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
+			shotOneFired = false; //If shot one off screen
+			}
+		if (shotTwo.getY() > Gdx.graphics.getHeight())
+			{
+			Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
+			shotTwoFired = false; //If shot two off
+			}
+		if (shotOne.getX() < 1) {
+			Space.accuracy = Space.shotsLanded/Space.shotsTaken; //Calculates accuracy, used to avoid division by zero
+			shotOneFired = false; //If shot one off screen (moved here when collided with ship)
+		}
+		if (shotTwo.getX() < 1) {
+			Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
+			shotTwoFired = false; //If shot two off screen (moved here when collided with ship)
+		}
 		
 		if (shotOneFired)  //If shot one fired, continue its movement upward
 			{

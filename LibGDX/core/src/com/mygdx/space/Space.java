@@ -26,7 +26,7 @@ public class Space extends Game implements Screen{
 	private Game game;
 	private Sprite sprite;
 	private Level level;
-	private int levelNum = 6;
+	private int levelNum = 1;
 	private Ship[] enemies;
 	public static Integer score = 0;
 	public static double shotsTaken = 0;
@@ -36,7 +36,7 @@ public class Space extends Game implements Screen{
 	private  Random rand = new Random();	
 	private final int LAST_LEVEL = 7;
 	private Stage stage;
-	private double accuracy;
+	public static double accuracy;
 	private Asteroid asteroid;
 	private TextButton exitButton;
 	private TextButton retryButton;
@@ -125,10 +125,10 @@ public class Space extends Game implements Screen{
 	    	}
 	    }
 	     
-	    accuracy = 0;
-	    if (shotsLanded != 0 && shotsTaken != 0) accuracy = shotsLanded/shotsTaken; //Calculates accuracy, used to avoid division by zero
+	   if (shotsTaken ==0 || shotsLanded == 0) accuracy = 0;
 	    
-	     font.draw(batch, "Score\n" + score + "\nStage: "+ levelNum + "\nAccuracy: " + accuracy, 100, 200); //Draws player info
+	    double accToDisplay = accuracy * 100;
+	     font.draw(batch, "Score\n" + score + "\nStage: "+ levelNum + "\nAccuracy: " + (int)accToDisplay + "%\n" + Gdx.graphics.getFramesPerSecond() + " FPS", 100, 200); //Draws player info
 	     batch.end(); //Stop drawing
 		
 	     if (isComplete()) //If level has been finished
@@ -190,6 +190,7 @@ public class Space extends Game implements Screen{
 	 */
 	public void dispose() {
 		for (int i = 0; i<enemies.length; i++) enemies[i].dispose();
+		stage.dispose();
 	}
 	
 
@@ -271,6 +272,8 @@ public class Space extends Game implements Screen{
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE) && paused) resume();
 		
 	}
+	
+	
 
 	/*
 	 * Checks if level is complete

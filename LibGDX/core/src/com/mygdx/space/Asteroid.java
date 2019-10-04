@@ -158,6 +158,7 @@ public void destroy()
 	if (type == LARGE) Space.score += 15*levelNum;
 	if (type == GOLDEN) Space.score += 300*levelNum;
 	texture.dispose();
+	Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	
 }
 }

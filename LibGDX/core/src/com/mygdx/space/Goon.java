@@ -178,6 +178,7 @@ public class Goon implements Ship{
 		Space.score += 10;
 		Space.enemiesKilled++;
 		texture.dispose(); //Free memory held by texture for destroyed ship
+		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	}
 	/**
 	 * Returns whether or not ship has been shot down
