@@ -23,8 +23,9 @@ private Ship[] enemies;
 	{
 		if (levelNum == 0) //Debug level
 		{
-			enemies = new Ship[1];
-			enemies[0] = new Captain(ship.getX(), Gdx.graphics.getHeight()-50);
+			enemies = new Ship[10];
+			for (int k = 0; k<10; k++) enemies[k] = new Ram((k)*100+200);
+			
 		}
 		if (levelNum == 1)
 		{
@@ -59,9 +60,9 @@ private Ship[] enemies;
 		else if (levelNum == 6)
 		{
 			enemies = new Ship[21];
-			for (int i = 0; i<10; i++) enemies[i] = new Goon(i*100+200, Gdx.graphics.getHeight()-80,8);
+			for (int i = 0; i<10; i++) enemies[i] = new Goon(i*100+200, Gdx.graphics.getHeight()-120,8);
 			for (int k = 10; k<20; k++) enemies[k] = new Ram((k-10)*100+200);
-			enemies[20] = new Captain(ship.getX(), Gdx.graphics.getHeight()-50);
+			enemies[20] = new Captain(ship.getX(), Gdx.graphics.getHeight()-60);
 		}
 		
 	}

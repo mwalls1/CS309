@@ -76,6 +76,7 @@ Texture shotTexture;
 	 * Shots become inactive when traveling off-screen and when colliding with an object
 	 */
 	public void shoot(SpriteBatch batch) {
+		if (!alive) return;
 		if (!shotOneFired && Gdx.input.isKeyPressed(Keys.SPACE)) //If shot one not fired and fire button is pressed
 		{
 			shotOneFired = true; //Shot one has been fired
@@ -100,11 +101,11 @@ Texture shotTexture;
 			shotTwoFired = false; //If shot two off
 			}
 		if (shotOne.getX() < 1) {
-			Space.accuracy = Space.shotsLanded/Space.shotsTaken; //Calculates accuracy, used to avoid division by zero
+			//Space.accuracy = Space.shotsLanded/Space.shotsTaken; //Calculates accuracy, used to avoid division by zero
 			shotOneFired = false; //If shot one off screen (moved here when collided with ship)
 		}
 		if (shotTwo.getX() < 1) {
-			Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
+			//Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 			shotTwoFired = false; //If shot two off screen (moved here when collided with ship)
 		}
 		

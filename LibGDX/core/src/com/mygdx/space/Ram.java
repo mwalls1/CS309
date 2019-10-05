@@ -1,5 +1,7 @@
 package com.mygdx.space;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,11 +14,14 @@ public class Ram implements Ship{
 	private boolean alive;
 	private int health;
 	private boolean shotFired;
+	private Random rand;
+	private float speed;
 	/*
 	 * Creates new ship at default position; used for debugging
 	 */
 	public Ram()
 	{
+		rand = new Random();
 		texture = new Texture("enemy2.png");
 		damagedTexture = new Texture("enemy2damaged.png");
 		
@@ -24,13 +29,14 @@ public class Ram implements Ship{
 		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()-50);
 		alive = true;
 		health = 4;
-		shotFired = false;
+		speed = rand.nextInt();
 	}
 	/*
 	 * Creates new ship at a given x position
 	 */
 	public Ram(float xPos)
 	{
+		rand = new Random();
 		texture = new Texture("enemy2.png");
 		damagedTexture = new Texture("enemy2damaged.png");
 		
@@ -39,6 +45,7 @@ public class Ram implements Ship{
 		alive = true;
 		health = 4;
 		shotFired = false;
+		speed = rand.nextFloat()+2;
 	}
 	
 	@Override
@@ -62,24 +69,24 @@ public class Ram implements Ship{
 	 * Instead of firing shots, this ship charges downward
 	 */
 	public void shoot(SpriteBatch batch) {
-		if (!shotFired)
-		{
-			shotFired = true;
-			//shotSprite.setPosition(sprite.getX(), sprite.getY()-30);
-		}
-		
-		
-		if (sprite.getY() < 1)
-			{
-			shotFired = false;
-			sprite.setY(Gdx.graphics.getHeight());
-			}
-		
-		if (shotFired) 
-			{
-			 sprite.translateY(Gdx.graphics.getHeight()/-400);
-			 sprite.draw(batch);
-			}
+//		if (!shotFired)
+//		{
+//			shotFired = true;
+//			//shotSprite.setPosition(sprite.getX(), sprite.getY()-30);
+//		}
+//		
+//		
+//		if (sprite.getY() < 1)
+//			{
+//			shotFired = false;
+//			sprite.setY(Gdx.graphics.getHeight());
+//			}
+//		
+//		if (shotFired) 
+//			{
+//			 sprite.translateY(-5);
+//			 sprite.draw(batch);
+//			}
 	}
 
 	@Override
@@ -93,7 +100,7 @@ public class Ram implements Ship{
 				float x = sprite.getX();
 				float y = sprite.getY();
 				texture.dispose();
-				sprite = new Sprite(damagedTexture);
+				sprite.setTexture(damagedTexture);
 				sprite.setPosition(x, y);
 			}
 			else if(health == 0) destroy();
@@ -112,8 +119,13 @@ public class Ram implements Ship{
 
 	@Override
 	public void move() {
-		// TODO Auto-generated method stub
+		sprite.translateY(-1*speed);
+		System.out.println(speed);
 		
+		if (sprite.getY() < 1)
+			{
+			sprite.setY(Gdx.graphics.getHeight());
+			}
 	}
 
 	@Override
@@ -130,6 +142,7 @@ public class Ram implements Ship{
 		sprite.setAlpha(0);
 		damagedTexture.dispose();
 		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
+		dispose();
 	}
 
 	@Override
@@ -140,11 +153,12 @@ public class Ram implements Ship{
 	@Override
 	public boolean isShotFired() {
 		// TODO Auto-generated method stub
-		return shotFired;
+		return true;
 	}
 
 	public void dispose()
 	{
+		texture.dispose();
 		//Wow, look! Nothing!
 	}
 	

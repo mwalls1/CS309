@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import util.Constants;
+
 public class Goon implements Ship{
 /**
  * Sprite of ship
@@ -53,7 +55,6 @@ public class Goon implements Ship{
 		shotTexture = new Texture("shot.png");
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 100);
-		sprite.setScale(100);
 		alive = true;
 		xOrigin = sprite.getX();
 		shotSprite = new Sprite(shotTexture);
@@ -83,7 +84,7 @@ public class Goon implements Ship{
 		if (sprite.getX() > xOrigin + 50 || sprite.getX() > Gdx.graphics.getWidth()-100) dir = -1; //Reached bound of this side, reverse direction
 		else if (sprite.getX() < xOrigin - 50 || sprite.getX() < 90) dir = 1; //Reached bound of this side, reverse direction
 		
-		sprite.translateX(dir*5);
+		sprite.translateX(dir*3);
 		
 		
 		

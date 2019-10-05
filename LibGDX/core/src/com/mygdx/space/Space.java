@@ -128,7 +128,7 @@ public class Space extends Game implements Screen{
 	   if (shotsTaken ==0 || shotsLanded == 0) accuracy = 0;
 	    
 	    double accToDisplay = accuracy * 100;
-	     font.draw(batch, "Score\n" + score + "\nStage: "+ levelNum + "\nAccuracy: " + (int)accToDisplay + "%\n" + Gdx.graphics.getFramesPerSecond() + " FPS", 100, 200); //Draws player info
+	     font.draw(batch, "Score\n" + score + "\nStage: "+ levelNum + "\nAccuracy: " + (int)accToDisplay + "%\n" + Gdx.graphics.getFramesPerSecond() + " FPS", 20, 200); //Draws player info
 	     batch.end(); //Stop drawing
 		
 	     if (isComplete()) //If level has been finished

@@ -80,7 +80,6 @@ public Asteroid(int type, int levelNum)
 	intact = true;
 	sprite = new Sprite(texture);
 	sprite.setPosition(0, rand.nextInt(Gdx.graphics.getHeight()/2) + 300); //Sets initial position off-screen
-	
 	directionSelect = new Random().nextBoolean();
 	
 	if (directionSelect)
