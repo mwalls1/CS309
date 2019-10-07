@@ -1,8 +1,10 @@
 package com.mygdx.games;
 
 import com.mygdx.gui.*;
+import com.mygdx.objects.score;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -32,12 +34,14 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import util.Constants;
+import util.JsonParser;
 
 public class GameTest extends Game implements Screen{
 	private SpriteBatch batch;
@@ -48,6 +52,7 @@ public class GameTest extends Game implements Screen{
 	private TextureAtlas atlas;
 	private TextButtonStyle textButtonStyle;
 	private BitmapFont font;
+	Scanner scan;
 	private Game game;
 	private float offset = Gdx.graphics.getHeight() / 10;
 	private int daWayx;
@@ -96,6 +101,15 @@ public class GameTest extends Game implements Screen{
 		zombies.add(new Zombie(zom, 30, 30, camera));
 		wizards.add(new Wizard(wiz, 300, 300, camera));
 		shape = new ShapeRenderer();
+		try {
+			String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
+			scan = new Scanner(s2);
+			player2.setPos(scan.nextInt(), scan.nextInt());
+			scan.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		create();
 	}
 	@Override
@@ -108,6 +122,21 @@ public class GameTest extends Game implements Screen{
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 		if (player.hp > 0) {
+			try {
+				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
+				scan = new Scanner(s2);
+				player2.setPos(scan.nextInt(), scan.nextInt());
+				scan.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				JsonParser.sendHTML("updatePos", "id=46&xpos="+player.getX()+"&ypos="+player.getY());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
@@ -130,6 +159,7 @@ public class GameTest extends Game implements Screen{
 					player.getY() - 120);
 			font.draw(batch, "Player X, Y: " + player.getX() + ", " + player.getY(), player.getX() - 200,
 					player.getY() - 80);
+			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), player.getX() - 200, player.getY() - 60);
 			for (int i = 0; i < Player.numBullets; i++) {
 				if (shots.get(i).active)
 					shots.get(i).render(batch, collision, zombies, wizards);
@@ -140,7 +170,7 @@ public class GameTest extends Game implements Screen{
 					bolts.render(batch, collision, player);
 			}
 			player.update(collision, shots, camera,batch);
-			player2.update(collision, shots, camera,batch);
+			player2.update(batch);
 			batch.end();
 			elapsed += Gdx.graphics.getDeltaTime();
 			hazard.checkCollision(player);

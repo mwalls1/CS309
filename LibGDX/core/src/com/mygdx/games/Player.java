@@ -198,6 +198,22 @@ public class Player {
 		}
 			
 	}
+	public void update(SpriteBatch batch) {
+		if (!isMoving) {
+			if (direction == 0) {
+				batch.draw(idleLeft.getKeyFrame(elapsed, true), x, y);
+			} else {
+				batch.draw(idleRight.getKeyFrame(elapsed, true), x, y);
+			}
+		}
+		if (isMoving) {
+			if (direction == 0)
+				batch.draw(runLeft.getKeyFrame(elapsed, true), x, y);
+			else
+				batch.draw(runRight.getKeyFrame(elapsed, true), x, y);
+		}
+			
+	}
     public void setPos(int x1, int y1){
         x = x1;
         y = y1;

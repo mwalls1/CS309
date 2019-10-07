@@ -10,12 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-<<<<<<< LibGDX/core/src/com/mygdx/gui/MainScreen.java
 
-=======
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.games.*;
->>>>>>> LibGDX/core/src/com/mygdx/gui/MainScreen.java
 import util.Constants;
 
 public class MainScreen extends Game implements Screen{
@@ -46,12 +43,11 @@ public class MainScreen extends Game implements Screen{
 	 */
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-<<<<<<< LibGDX/core/src/com/mygdx/gui/MainScreen.java
 		 Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this
 	     stage.act(); //Starts button functionality
 	     stage.draw(); //Draws buttons
-=======
+
 		  Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
@@ -60,7 +56,6 @@ public class MainScreen extends Game implements Screen{
 	     {
 	    	 Gdx.app.exit();
 	     }
->>>>>>> LibGDX/core/src/com/mygdx/gui/MainScreen.java
 	}
 
 	@Override
