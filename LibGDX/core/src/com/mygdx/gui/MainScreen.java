@@ -2,6 +2,7 @@ package com.mygdx.gui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,7 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+<<<<<<< LibGDX/core/src/com/mygdx/gui/MainScreen.java
 
+=======
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.games.*;
+>>>>>>> LibGDX/core/src/com/mygdx/gui/MainScreen.java
 import util.Constants;
 
 public class MainScreen extends Game implements Screen{
@@ -40,10 +46,21 @@ public class MainScreen extends Game implements Screen{
 	 */
 	public void render(float delta) {
 		// TODO Auto-generated method stub
+<<<<<<< LibGDX/core/src/com/mygdx/gui/MainScreen.java
 		 Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this
 	     stage.act(); //Starts button functionality
 	     stage.draw(); //Draws buttons
+=======
+		  Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
+	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	     stage.act();
+	     stage.draw();
+	     if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+	     {
+	    	 Gdx.app.exit();
+	     }
+>>>>>>> LibGDX/core/src/com/mygdx/gui/MainScreen.java
 	}
 
 	@Override
