@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
-public class Enemy {
+public class Zombie {
     public int x,y;
     public float width, height;
     public Sprite sprite;
@@ -30,7 +30,8 @@ public class Enemy {
 	public int tileW = 16;
 	public int tileH = 16;
 	float[] vertices = new float[8];
-    public Enemy(Texture texture, int x1, int y1, OrthographicCamera cam){
+	public boolean active;
+    public Zombie(Texture texture, int x1, int y1, OrthographicCamera cam){
     	sprite = new Sprite(texture);
     	width = sprite.getWidth();
     	height = sprite.getHeight();
@@ -39,21 +40,35 @@ public class Enemy {
     	y = y1;
     	endX = x+width;
     	endY = y+height;
+    	active = true;
     	startX = x1;
     	startY = y1;
     	shape = new ShapeRenderer();
     	sprite.setPosition(x, y);
     	camera = cam;
-    	midX = (x + endX)/2;
-    	midY = (y + endY)/2;
+    	midX = (2*x + width)/2;
+    	midY = (2*y + height)/2;
+    	vertices[0] = x+3;
+    	vertices[1] = y;
+    	vertices[2] = x+width-3;
+    	vertices[3] = y;
+    	vertices[4] = x+width-3;
+    	vertices[5] = y+height;
+    	vertices[6] = x+3;
+    	vertices[7] = y+height;
+    	poly1 = new Polygon();
+    	poly1.setVertices(vertices);
+    	poly1.setOrigin(midX, midY);
     	vision = new Circle(midX, midY, 64);
     	
     }
     public void render(SpriteBatch batch, Player player, TiledMapTileLayer walls){
-    	sprite.draw(batch);
-    	sprite.setX(x);
-    	sprite.setY(y);
-    	update(player, walls);
+    	if(active) {
+    		sprite.draw(batch);
+    		sprite.setX(x);
+    		sprite.setY(y);
+    		update(player, walls);
+    	}
     	
     }
 
@@ -88,9 +103,6 @@ public class Enemy {
         x = x1;
         y = y1;
     }
-	public void drawVision()
-	{
-	}
     public void checkCollision(Player player)
     {
     	int midX = (player.x*2+player.width)/2;
@@ -107,7 +119,7 @@ public class Enemy {
     	vert[7] = player.y+player.height;
     	play.setVertices(vert);
     	play.setOrigin(midX, midY);
-    	if(Intersector.overlapConvexPolygons(poly1, play))
+    	if(active && Intersector.overlapConvexPolygons(poly1, play))
     	{
     		player.hp -= 1;
     	}

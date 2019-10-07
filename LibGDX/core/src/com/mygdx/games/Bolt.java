@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Bullet {
+public class Bolt {
     public float x,y;
     public int dx, dy;
     public int width, height;
@@ -36,7 +36,9 @@ public class Bullet {
     public Vector2 pos2;
     public Vector2 dir;
     public boolean active;
-    public Bullet(Texture texture, float x1, float y1, float x2, float y2){
+    public float sX;
+    public float sY;
+    public Bolt(Texture texture, float x1, float y1, float x2, float y2){
     	pos1 = new Vector2(x1,y1);
     	pos2 = new Vector2(x2,y2);
     	dir = pos2.sub(pos1);
@@ -50,28 +52,31 @@ public class Bullet {
     	x = x1;
     	y=y1;
     	active = true;
-    	//set the center of the sprite to be where the bullet starts
-    	//set the x and y of the sprite
+    	sX = x1;
+    	sY = y1;
     }
-    public void render(SpriteBatch batch, TiledMapTileLayer walls, ArrayList<Enemy> zombies) {
+    public void render(SpriteBatch batch, TiledMapTileLayer walls, Player player) {
     	sprite.draw(batch);
-    	update(walls, zombies);
+    	update(walls, player);
     	}
 
-	public void update(TiledMapTileLayer walls, ArrayList<Enemy> zombies) {
-		if(walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
+	public void update(TiledMapTileLayer walls, Player player) {
+		if(active && walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
 			x+=dir.x*3;
 		else
 		{
 			active = false;
-			Player.numBullets--;
 		}
-		if(walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
+		if(active && walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
 			y+=dir.y*3;
 		else
 		{
 			active = false;
-			Player.numBullets--;
+		}
+		if(Intersector.overlaps(sprite.getBoundingRectangle(), player.sprite.getBoundingRectangle()))
+		{
+			player.hp -= 25;
+			active = false;
 		}
 		sprite.setX(x);
 		sprite.setY(y);

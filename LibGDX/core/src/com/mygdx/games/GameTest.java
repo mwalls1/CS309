@@ -59,18 +59,11 @@ public class GameTest extends Game implements Screen{
 	private CharSequence str;
 	private Sound theway;
 	private Player player;
+	private Player player2;
 	private ShapeRenderer shape;
 	private int height;
 	private int width;
 	private Sprite knuckles;
-	private Animation<TextureRegion> runLeft;
-	private Animation<TextureRegion> runRight;
-	private Animation<TextureRegion> idleLeft;
-	private Animation<TextureRegion> idleRight;
-	private TextureAtlas rLeft;
-	private TextureAtlas rRight;
-	private TextureAtlas iLeft;
-	private TextureAtlas iRight;
 	private float elapsed = 0;
 	private TiledMap map;
 	private TiledMapTileLayer terrain;
@@ -78,34 +71,30 @@ public class GameTest extends Game implements Screen{
 	private TiledMapTileLayer collision;
 	private OrthogonalTiledMapRenderer renderer;
 	private Hazard hazard;
-	private Enemy zombie;
-	public ArrayList<Bullet> shots = new ArrayList<Bullet>();
-	public ArrayList<Enemy> zombies = new ArrayList<Enemy>();
+	public ArrayList<Knife> shots = new ArrayList<Knife>();
+	public ArrayList<Bolt> enemyShots = new ArrayList<Bolt>();
+	public ArrayList<Zombie> zombies = new ArrayList<Zombie>();
+	public ArrayList<Wizard> wizards = new ArrayList<Wizard>();
 	public GameTest(Game game)
 	{
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-		camera = new OrthographicCamera(1920/4, 1080/4);
-		map = new TmxMapLoader().load("dungeon2.tmx");
+		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
+		map = new TmxMapLoader().load("dungeon3.tmx");
 		MapLayers mapLayers = map.getLayers();
 		terrain = (TiledMapTileLayer) mapLayers.get("floor");
 		walls = (TiledMapTileLayer) mapLayers.get("walls");
 		collision = (TiledMapTileLayer) mapLayers.get("blockage");
-		rLeft = new TextureAtlas(Gdx.files.internal("runLeft.atlas"));
-		rRight = new TextureAtlas(Gdx.files.internal("runRight.atlas"));
-		iRight = new TextureAtlas(Gdx.files.internal("idleRight.atlas"));
-		iLeft = new TextureAtlas(Gdx.files.internal("idleLeft.atlas"));
-		runLeft = new Animation<TextureRegion>(1/10f, rLeft.getRegions());
-		runRight = new Animation<TextureRegion>(1/10f, rRight.getRegions());
-		idleLeft = new Animation<TextureRegion>(1/5f, iLeft.getRegions());
-		idleRight = new Animation<TextureRegion>(1/5f, iRight.getRegions());
-		player = new Player();
+		player = new Player(22*16,50);
+		player2 = new Player(22*16,100);
 		blade = new Texture(Gdx.files.internal("blade.png"));
 		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
+		Texture wiz = new Texture(Gdx.files.internal("wizard.png"));
 		hazard = new Hazard(blade,14*16-5,12*16, camera);
-		zombies.add(new Enemy(zom, 30, 30, camera));
+		zombies.add(new Zombie(zom, 30, 30, camera));
+		wizards.add(new Wizard(wiz, 300, 300, camera));
 		shape = new ShapeRenderer();
 		create();
 	}
@@ -118,53 +107,58 @@ public class GameTest extends Game implements Screen{
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		 Gdx.gl.glClearColor(0,0,0,0);
-	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	     stage.act();
-	     stage.draw();
-	     camera.update();
-		 renderer.setView(camera);
-		 renderer.render();
-		 batch.setProjectionMatrix(camera.combined);
-		 batch.begin();
-		if(!player.isMoving)
-		 {
-			 if(player.direction==0)
-			 {
-				 batch.draw(idleLeft.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
-			 }
-			 else
-			 {
-				 batch.draw(idleRight.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
-			 }
-		 }
-		 if(player.isMoving)
-		 {
-			 if(player.direction==0)
-				 batch.draw(runLeft.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
-			 else
-				 batch.draw(runRight.getKeyFrame(elapsed,true), camera.position.x, camera.position.y);
-		 }
-		 hazard.render(batch);
-		 for(Enemy zomb : zombies)
-		 {
-			 zomb.render(batch, player, collision);
-		 }
-		 font.draw(batch, "Health: "+player.hp, player.getX()-200, player.getY()-100);
-		 font.draw(batch, "Mouse X, Y: "+Gdx.input.getX()+", "+Gdx.input.getY(), player.getX()-200, player.getY()-120);
-		 font.draw(batch, "Player X, Y: "+player.getX()+", "+player.getY(), player.getX()-200, player.getY()-80);
-		 for(int i = 0; i < Player.numBullets; i++)
-		 {
-			 if(shots.get(i).active)
-				 shots.get(i).render(batch, collision, zombies);
-		 }
-		 batch.end();
-		 elapsed += Gdx.graphics.getDeltaTime();
-		 hazard.checkCollision(player);
-		 hazard.drawRect();
-	     player.update(collision, shots, camera);
-	     player.render(shape, camera);
-		 hazard.update();
+		if (player.hp > 0) {
+			Gdx.gl.glClearColor(0, 0, 0, 0);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			stage.act();
+			stage.draw();
+			camera.update();
+			renderer.setView(camera);
+			renderer.render();
+			batch.setProjectionMatrix(camera.combined);
+			batch.begin();
+			hazard.render(batch);
+			for (Zombie zomb : zombies) {
+				zomb.render(batch, player, collision);
+				zomb.checkCollision(player);
+			}
+			for (Wizard wiz : wizards) {
+				wiz.render(batch, player, collision, enemyShots, elapsed);
+			}
+			font.draw(batch, "Health: " + player.hp, player.getX() - 200, player.getY() - 100);
+			font.draw(batch, "Mouse X, Y: " + Gdx.input.getX() + ", " + Gdx.input.getY(), player.getX() - 200,
+					player.getY() - 120);
+			font.draw(batch, "Player X, Y: " + player.getX() + ", " + player.getY(), player.getX() - 200,
+					player.getY() - 80);
+			for (int i = 0; i < Player.numBullets; i++) {
+				if (shots.get(i).active)
+					shots.get(i).render(batch, collision, zombies, wizards);
+			}
+			for(Bolt bolts: enemyShots)
+			{
+				if(bolts.active)
+					bolts.render(batch, collision, player);
+			}
+			player.update(collision, shots, camera,batch);
+			player2.update(collision, shots, camera,batch);
+			batch.end();
+			elapsed += Gdx.graphics.getDeltaTime();
+			hazard.checkCollision(player);
+			hazard.drawRect();
+			player.render(shape, camera);
+			player2.render();
+			hazard.update();
+		}
+		else
+		{
+			batch.begin();
+			Gdx.gl.glClearColor(0, 0, 0, 0);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			font.draw(batch, "Game Over", player.x-40, player.y);
+			font.draw(batch, "Press Esc to Exit", player.x-40, player.y-20);
+			batch.end();
+			
+		}
 	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
 	    	 dispose();
