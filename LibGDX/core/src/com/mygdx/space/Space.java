@@ -45,6 +45,7 @@ public class Space extends Game implements Screen{
 	public static int enemiesKilled;
 	public boolean paused;
 	public static boolean gameOver;
+	private boolean isPaused;
 
 	
 	
@@ -56,7 +57,7 @@ public class Space extends Game implements Screen{
 	public Space(Game game)
 	{
 		this.game = game;
-			}
+	}
 	/**
 	 * From screen interface, called when this screen is set
 	 */
@@ -70,12 +71,9 @@ public class Space extends Game implements Screen{
 	 */
 	public void render(float delta) {
 		handleInput(delta); //Get input from keyboard
-		if (paused) return;
-		// TODO Auto-generated method stub
+		batch = new SpriteBatch();
 		 Gdx.gl.glClearColor((float)4/255, (float)7/255, (float)40/255, 1); //Color of background
-	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this
-	     batch = new SpriteBatch();
-	     
+	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this	     
 	     
 	     enemies = level.getShips(); //Array of enemy ships determined by current level
 	     
@@ -84,7 +82,7 @@ public class Space extends Game implements Screen{
 	     if (Gdx.input.isKeyPressed(Keys.R)) create(); //Reset; for debugging only
 	     player.draw(batch);
 	     
-		 enemies[rand.nextInt(enemies.length)].shoot(batch);
+		 enemies[rand.nextInt(enemies.length)].shoot(batch); //Chooses a random enemy to attempt to fire every frame
 		 
 		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) { //Handles logic for streak of hitting asteroids
 			asteroid = new Asteroid(asteroidsShot, levelNum);
@@ -153,12 +151,21 @@ public class Space extends Game implements Screen{
 	    	 dispose(); //Dispose unused textures
 	     }
 	     
-	     if (gameOver)
+	     if (gameOver || isPaused)
 	     {
 	    	 Gdx.input.setCursorCatched(false);
+	    	 retryButton.setVisible(true);
+	    	 exitButton.setVisible(true);
 	    	 stage.act();
 	    	 stage.draw();
 	    	 
+	     }
+	     else if (!isPaused && !gameOver)
+	     {
+	    	 //Gdx.input.setCursorCatched(true);
+	    	 Gdx.input.setCursorPosition(Gdx.graphics.getWidth(), 0);
+	    	 retryButton.setVisible(false);
+	    	 exitButton.setVisible(false);
 	     }
 	}
 
@@ -200,7 +207,8 @@ public class Space extends Game implements Screen{
 	 * Describes button functionality and position
 	 */
 	public void create() {
-		Gdx.input.setCursorCatched(true);
+		
+		isPaused = false;
 		gameOver = false;
 		font = new BitmapFont();
 		asteroidsShot = 0;
@@ -218,8 +226,8 @@ public class Space extends Game implements Screen{
 		exitButton = new TextButton("Exit", skin, "default");
 		retryButton = new TextButton("Retry", skin, "default");
 		
-		exitButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 2*Constants.BUTTON_OFFSET);
-		retryButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
+		exitButton.setPosition(Gdx.graphics.getWidth() /2 - Constants.BUTTON_WIDTH/2, Gdx.graphics.getHeight() / 2 - 2*Constants.BUTTON_OFFSET);
+		retryButton.setPosition(Gdx.graphics.getWidth() / 2 - Constants.BUTTON_WIDTH/2, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
 		
 		exitButton.setHeight(Constants.BUTTON_HEIGHT);
 		retryButton.setHeight(Constants.BUTTON_HEIGHT);
@@ -234,6 +242,7 @@ public class Space extends Game implements Screen{
 		exitButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				if (!exitButton.isVisible()) return;
 				dispose();
 				game.setScreen(new MainScreen(game));
 			}
@@ -242,6 +251,7 @@ public class Space extends Game implements Screen{
 		retryButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				if (!retryButton.isVisible()) return;
 				dispose();
 				game.setScreen(new Space(game));
 			}
@@ -270,8 +280,13 @@ public class Space extends Game implements Screen{
 		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) player.getSprite().translate(0,sprMoveSpeed);
 		if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) && sprite.getY() > 5) player.getSprite().translate(0,-sprMoveSpeed);
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) shotPressed = true;
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE) && !paused) pause();
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE) && paused) resume();
+		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) 
+			{
+				isPaused = !isPaused;
+				
+			}
+		
+		
 		
 	}
 	
