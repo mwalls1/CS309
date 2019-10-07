@@ -1,0 +1,56 @@
+package com.example.demo.userInfo;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * This controller is what reads the instructions and communicates with the database
+ * 
+ * @author Cole Weitzel
+ * @author Taylor Weil
+ *
+ */
+
+@RestController
+public class userInfoController {
+	
+	@Autowired
+	private userInfoRepository users;
+	
+	/**
+	 * Returns all users in the database
+	 * @return
+	 */
+	@GetMapping("/getUsers")
+    public List<userInfo> getUsers() {
+		return users.findAll();
+	}
+	
+    /**
+     * Will add a new user with given name and password
+     * @param name
+     * @param password
+     * @return confirmation that the addition was completed
+     */
+    @PostMapping("/newUser")
+    public String saveUser(String name, String password) {
+    	userInfo u = new userInfo(name, password);
+    	users.save(u);
+        return "New User \""+ u.getName() + "\" created and saved";
+    }
+    
+    /**
+     * Will delete a user given the id number
+     * @param id
+     * @return confirmation that the user was deleted
+     */
+    @DeleteMapping("/deleteUser")
+    public String delete(int id){
+        Optional<userInfo> u = users.findById(id);
+        users.deleteById(id);
+        return "Deleted user with ID: " + id + ".";
+    }
+}

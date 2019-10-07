@@ -1,0 +1,19 @@
+package com.example.demo.leaderboardSpace;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class leaderboardSpaceController {
+
+	@Autowired
+	private leaderboardSpaceRepository leaderboardRepo;
+	
+	@GetMapping("/getLeaderboardSpace")
+	public List<leaderboardSpace> getLeaderboardSpace(){
+		return leaderboardRepo.findAll();
+	}
+}

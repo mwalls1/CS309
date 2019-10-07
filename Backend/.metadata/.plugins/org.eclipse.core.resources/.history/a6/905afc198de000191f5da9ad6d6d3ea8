@@ -1,0 +1,15 @@
+package com.example.demo.userInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * This is an empty public interface that connects to out databases and uses
+ * the properties it inherits from the Jparepository  
+ * @author Cole Weitzel
+ * @author Taylor Weil
+ *
+ */
+@Repository
+public interface userInfoRepository extends JpaRepository<userInfo, Integer> {
+
+}

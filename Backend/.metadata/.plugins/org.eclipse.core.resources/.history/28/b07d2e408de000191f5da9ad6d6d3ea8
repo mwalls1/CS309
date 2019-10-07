@@ -1,0 +1,64 @@
+package com.example.demo.userInfo;
+
+import javax.persistence.*;
+import javax.persistence.Table;
+import javax.validation.constraints.*;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+@Entity
+@Table(name = "userInfo")
+public class userInfo {
+	
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@NotFound(action = NotFoundAction.IGNORE)
+	private Integer id;
+	
+	@NotEmpty
+	@Column(name = "name")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private String name;
+	
+	@NotEmpty
+	@Column(name = "password")
+	@NotFound(action = NotFoundAction.IGNORE)
+	private String password;
+	
+	public userInfo() {}
+	
+	public userInfo(String name, String password) {
+		this.setName(name);
+		this.setPassword(password);
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	public String getName() {
+		return name;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setId(Integer idnum) {
+		id = idnum;
+	}
+	public void setName(String name1) {
+		name = name1;
+	}
+	public void setPassword(String pass) {
+		password = pass;
+	}
+	
+//	@Override
+//    public String toString() {
+//        return new ToStringCreator(this)
+//                .append("id", this.getId())
+//                .append("name", this.getName()).toString();
+//	}    
+
+}
+
