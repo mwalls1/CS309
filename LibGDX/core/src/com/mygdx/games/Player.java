@@ -171,7 +171,7 @@ public class Player {
 		{
 			mouseCords = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 			camera.unproject(mouseCords);
-			if(numBullets<1)
+			if(numBullets<4)
 			{
 				a.add(0,new Knife(dagger, midX-3, midY-3, mouseCords.x, mouseCords.y));
 				numBullets++;

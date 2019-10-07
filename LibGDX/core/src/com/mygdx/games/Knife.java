@@ -45,8 +45,6 @@ public class Knife {
     	dir.nor();
     	sprite = new Sprite(texture);
     	sprite.rotate(dir.angle());
-    	System.out.println("X1, Y1, X2, Y2: "+x1+", "+y1+", "+x2+", "+y2);
-    	System.out.println("Direction Vector:" + dir.x+ ", "+dir.y);
     	sprite.setX(x1);
     	sprite.setY(y1);
     	x = x1;
