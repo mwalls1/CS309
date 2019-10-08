@@ -1,0 +1,37 @@
+package com.example.demo.player;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.userInfo.userInfo;
+
+@RestController
+public class playerController {
+	@Autowired
+	private scoreRepository scoreRepo;
+	
+	@GetMapping("getPlayers")
+	public List<player> getPlayers(){
+		return playerRepo.findAll();
+	}
+	
+	@PostMapping("/newScore")
+	public String savePlayer(Integer xpos, Integer ypos) {
+		player p = new player(xpos, ypos);
+		scoreRepo.save(p);
+		return "New player made at " + p.getXpos() + " added to user " + p.getYpos();
+	}
+	
+//	@DeleteMapping("/deleteUser")
+//	public String delete(Integer id) {
+//		Optional<score> u = scoreRepo.findById(id);
+//        scoreRepo.deleteById(id);
+//        return "Deleted score with ID: " + id + ".";
+//	}
+}

@@ -1,0 +1,27 @@
+package com.example.demo.player;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+public class playerController {
+	@Autowired
+	private playerRepository playerRepo;
+	
+	@GetMapping("getPlayers")
+	public List<player> getPlayers(){
+		return playerRepo.findAll();
+	}
+	
+	@PostMapping("/newScore")
+	public String savePlayer(Integer xpos, Integer ypos) {
+		player p = new player(xpos, ypos);
+		playerRepo.save(p);
+		return "New player made at " + p.getXpos() + " added to user " + p.getYpos();
+	}
+}

@@ -132,7 +132,7 @@ public class GameTest extends Game implements Screen{
 				e.printStackTrace();
 			}
 			try {
-				JsonParser.sendHTML("updatePos", "id=46&xpos="+player.getX()+"&ypos="+player.getY());
+				JsonParser.sendHTML("updatePos", "id=45&xpos="+player.getX()+"&ypos="+player.getY());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

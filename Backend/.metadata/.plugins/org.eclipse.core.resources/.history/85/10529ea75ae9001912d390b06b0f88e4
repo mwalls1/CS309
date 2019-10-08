@@ -1,0 +1,57 @@
+package com.example.demo.lobby;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+public class lobbyController {
+	@Autowired
+	private lobbyRepository lobbyRepo;
+	
+	@GetMapping("getlobbys")
+	public List<lobby> getlobbys(){
+		return lobbyRepo.findAll();
+	}
+	
+	@GetMapping("getLobbyByID")
+	public String getXbyID(Integer id) {
+		Optional<lobby> l = lobbyRepo.findById(id);
+		lobby l1 = l.get();
+		return l1.getPlayer1() + " " + l1.getPlayer2() + " " + l1.getPlayer3() + " " + l1.getPlayer4();
+	}
+	
+	@PostMapping("/newlobby")
+	public String savelobby() {
+		lobby p = new lobby();
+		lobbyRepo.save(p);
+		return "New lobby made";
+	}
+	
+	@PostMapping("/updatePlayer")
+	public String updatePos(Integer id, Integer player, Integer playerId) {
+		Optional<lobby> p = lobbyRepo.findById(id);
+		lobby p1 = p.get();
+		switch(player) {
+		case(1):
+			p1.setPlayer1(playerId);
+			break;
+		case(2):
+			p1.setPlayer2(playerId);
+			break;
+		case(3):
+			p1.setPlayer3(playerId);
+			break;
+		case(4):
+			p1.setPlayer4(playerId);
+		 	break;
+		}
+		lobbyRepo.save(p1);
+		return "Updated player " + player + "to id: " + playerId;
+	}
+}
