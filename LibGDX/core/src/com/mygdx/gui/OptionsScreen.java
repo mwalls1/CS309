@@ -73,7 +73,7 @@ public class OptionsScreen extends Game implements Screen{
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
 
         final TextButton backButton = new TextButton("Back", skin, "default");

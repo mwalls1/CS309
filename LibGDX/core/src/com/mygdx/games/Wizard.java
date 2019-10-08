@@ -65,7 +65,7 @@ public class Wizard {
     	poly1.setVertices(vertices);
     	poly1.setOrigin(midX, midY);
     	vision = new Circle(midX, midY, 64);
-    	bolt = new Texture(Gdx.files.internal("bolt.png"));
+    	bolt = new Texture(Gdx.files.internal("assets/bolt.png"));
     	
     }
     public void render(SpriteBatch batch, Player player, TiledMapTileLayer walls, ArrayList<Bolt> shots, float time){

@@ -24,12 +24,12 @@ Texture shotTexture;
 	public PlayerShip()
 	{
 		alive = true;
-		texture = new Texture("ship.png");
+		texture = new Texture("assets/ship.png");
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, 5);
 		shotOneFired = false;
 		shotTwoFired = false;
-		shotTexture = new Texture("shot.png");
+		shotTexture = new Texture("assets/shot.png");
 		shotOne = new Sprite(shotTexture);
 		shotTwo = new Sprite(shotTexture);
 	}
@@ -40,12 +40,12 @@ Texture shotTexture;
 	public PlayerShip(float xPos)
 	{
 		alive = true;
-		texture = new Texture("ship.png");
+		texture = new Texture("assets/ship.png");
 		sprite = new Sprite(texture);
 		sprite.setPosition(xPos, 5);
 		shotOneFired = false;
 		shotTwoFired = false;
-		Texture shotTexture = new Texture("shot.png");
+		Texture shotTexture = new Texture(Gdx.files.internal("shot.png"));
 		shotOne = new Sprite(shotTexture);
 		shotTwo = new Sprite(shotTexture);
 	}
