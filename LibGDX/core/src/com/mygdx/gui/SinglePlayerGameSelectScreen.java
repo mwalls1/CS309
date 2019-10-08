@@ -9,14 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-<<<<<<< LibGDX/core/src/com/mygdx/gui/SinglePlayerGameSelectScreen.java
-import com.mygdx.space.Space;
-=======
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.games.GameTest;
 import com.mygdx.space.Space;
->>>>>>> LibGDX/core/src/com/mygdx/gui/SinglePlayerGameSelectScreen.java
-
 import util.Constants;
 
 public class SinglePlayerGameSelectScreen extends Game implements Screen{

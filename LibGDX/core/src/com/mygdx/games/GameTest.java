@@ -84,7 +84,6 @@ public class GameTest extends Game implements Screen{
 	public GameTest(Game game)
 	{
 		this.game = game;
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera(1920/4, 1080/4);
