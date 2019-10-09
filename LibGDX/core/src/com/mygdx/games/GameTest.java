@@ -80,6 +80,7 @@ public class GameTest extends Game implements Screen{
 	public ArrayList<Bolt> enemyShots = new ArrayList<Bolt>();
 	public ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	public ArrayList<Wizard> wizards = new ArrayList<Wizard>();
+	public serverThread thread = new serverThread();
 	public GameTest(Game game)
 	{
 		this.game = game;
@@ -87,29 +88,21 @@ public class GameTest extends Game implements Screen{
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
-		map = new TmxMapLoader().load("dungeon3.tmx");
+		map = new TmxMapLoader().load("assets/dungeon3.tmx");
 		MapLayers mapLayers = map.getLayers();
 		terrain = (TiledMapTileLayer) mapLayers.get("floor");
 		walls = (TiledMapTileLayer) mapLayers.get("walls");
 		collision = (TiledMapTileLayer) mapLayers.get("blockage");
 		player = new Player(22*16,50);
 		player2 = new Player(22*16,100);
-		blade = new Texture(Gdx.files.internal("blade.png"));
-		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
-		Texture wiz = new Texture(Gdx.files.internal("wizard.png"));
+		blade = new Texture(Gdx.files.internal("assets/blade.png"));
+		Texture zom = new Texture(Gdx.files.internal("assets/zombie_idle_anim_f0.png"));
+		Texture wiz = new Texture(Gdx.files.internal("assets/wizard.png"));
 		hazard = new Hazard(blade,14*16-5,12*16, camera);
 		zombies.add(new Zombie(zom, 30, 30, camera));
 		wizards.add(new Wizard(wiz, 300, 300, camera));
 		shape = new ShapeRenderer();
-		try {
-			String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
-			scan = new Scanner(s2);
-			player2.setPos(scan.nextInt(), scan.nextInt());
-			scan.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		thread.start();
 		create();
 	}
 	@Override
@@ -122,6 +115,7 @@ public class GameTest extends Game implements Screen{
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 		if (player.hp > 0) {
+<<<<<<< HEAD
 			try {
 				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
 				scan = new Scanner(s2);
@@ -137,6 +131,9 @@ public class GameTest extends Game implements Screen{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+=======
+			thread.run(player, player2);
+>>>>>>> 57a4fd15136f32ccc9f5c1f20ff92698ee3c7354
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
@@ -191,6 +188,7 @@ public class GameTest extends Game implements Screen{
 		}
 	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
+	    	 thread.stop();
 	    	 dispose();
 	    	 game.setScreen(new MainScreen(game));
 	     }
@@ -239,10 +237,9 @@ public class GameTest extends Game implements Screen{
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 		batch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
 	}
-
 }

@@ -220,7 +220,7 @@ public class Space extends Game implements Screen{
 		player = new PlayerShip();
 		sprite = player.getSprite();
 		level = new Level(levelNum, player);
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
 		stage = new Stage();
 		
 		exitButton = new TextButton("Exit", skin, "default");

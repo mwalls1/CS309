@@ -72,7 +72,7 @@ public class LeaderboardScreen extends Game implements Screen {
 	@Override
 	public void create() {
 //		batch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
 		stage = new Stage();
 
 		/*

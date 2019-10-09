@@ -76,14 +76,26 @@ public class Zombie {
 	{
 		if(Math.abs(Math.sqrt(Math.pow(player.midX-midX, 2) + Math.pow(player.midY-midY, 2)))<= 64)
 		{
-				if(x < player.x)
-					x+=1;
-				if(x > player.x)
+			if(x < player.x)
+			{
+				 if(walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH))==null)
+					 x+=1;
+			}
+			if(x > player.x)
+			{
+				if(walls.getCell((int)((x-1)/tileW), (int)(y/tileH))==null)
 					x-=1;
-				if(y < player.y)
+			}
+			if(y < player.y)
+			{
+				if(walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH))==null)
 					y+=1;
-				if(y > player.y)
+			}
+			if(y > player.y)
+			{
+				if(walls.getCell((int)((x)/tileW), (int)((y-6)/tileH))==null)
 					y-=1;
+			}
 		    	midX = (2*x + width)/2;
 		    	midY = (2*y + height)/2;
 		    	vertices[0] = x+3;

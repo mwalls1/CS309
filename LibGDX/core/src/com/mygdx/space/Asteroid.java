@@ -71,10 +71,10 @@ public Asteroid(int type, int levelNum)
 	this.type = type;
 	this.levelNum = levelNum;
 	//Determine texture of asteroid object from given type int
-	if (type == SMALL) texture = new Texture("smallAsteroid.png");
-	else if (type == MEDIUM) texture = new Texture("mediumAsteroid.png");
-	else if (type == LARGE) texture = new Texture("largeAsteroid.png");
-	else if (type == GOLDEN) texture = new Texture("GoldenAsteroid.png");
+	if (type == SMALL) texture = new Texture("assets/smallAsteroid.png");
+	else if (type == MEDIUM) texture = new Texture("assets/mediumAsteroid.png");
+	else if (type == LARGE) texture = new Texture("assets/largeAsteroid.png");
+	else if (type == GOLDEN) texture = new Texture("assets/GoldenAsteroid.png");
 	
 	rand = new Random();
 	intact = true;
@@ -104,10 +104,10 @@ public Asteroid()
 	rand = new Random();
 	type = rand.nextInt(4);
 	
-	if (type == SMALL) texture = new Texture("smallAsteroid.png");
-	else if (type == MEDIUM) texture = new Texture("mediumAsteroid.png");
-	else if (type == LARGE) texture = new Texture("largeAsteroid.png");
-	else if (type == GOLDEN) texture = new Texture("GoldenAsteroid.png");
+	if (type == SMALL) texture = new Texture("assets/smallAsteroid.png");
+	else if (type == MEDIUM) texture = new Texture("assets/mediumAsteroid.png");
+	else if (type == LARGE) texture = new Texture("assets/largeAsteroid.png");
+	else if (type == GOLDEN) texture = new Texture("assets/GoldenAsteroid.png");
 	
 	intact = true;
 	sprite = new Sprite(texture);

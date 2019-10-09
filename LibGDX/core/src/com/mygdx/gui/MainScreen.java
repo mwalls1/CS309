@@ -96,7 +96,7 @@ public class MainScreen extends Game implements Screen{
 	 */
 	public void create() {
 		// TODO Auto-generated method stub
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
 
         final TextButton playButton = new TextButton("Play", skin, "default"); //Creates button with label "play"

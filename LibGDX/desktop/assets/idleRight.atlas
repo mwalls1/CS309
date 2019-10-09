@@ -1,0 +1,33 @@
+
+idleRight.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+knightIdleRight1
+  rotate: false
+  xy: 1, 1
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
+knightIdleRight2
+  rotate: false
+  xy: 19, 1
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
+knightIdleRight3
+  rotate: false
+  xy: 37, 1
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
+knightIdleRight4
+  rotate: false
+  xy: 55, 1
+  size: 16, 28
+  orig: 16, 28
+  offset: 0, 0
+  index: -1
