@@ -77,7 +77,7 @@ public class MultiplayerLobby extends Game implements Screen{
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
         
         
@@ -104,7 +104,7 @@ public class MultiplayerLobby extends Game implements Screen{
                 public void clicked(InputEvent event, float x, float y){
                 	MultiplayerLobby.this.lobbyNumber = num;
                 	String playerString = "";
-                	//try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id=1");} catch (Exception e1) {e1.printStackTrace();}
+                	try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id=1");} catch (Exception e1) {e1.printStackTrace();}
                 	
                 	String[] playerIds = playerString.split(" ");
                 	for (int i =  0; i < MultiplayerLobby.this.players.size(); i++) {

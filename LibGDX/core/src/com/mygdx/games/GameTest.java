@@ -115,7 +115,6 @@ public class GameTest extends Game implements Screen{
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 		if (player.hp > 0) {
-<<<<<<< HEAD
 			try {
 				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
 				scan = new Scanner(s2);
@@ -131,9 +130,7 @@ public class GameTest extends Game implements Screen{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-=======
 			thread.run(player, player2);
->>>>>>> 57a4fd15136f32ccc9f5c1f20ff92698ee3c7354
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
