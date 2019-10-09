@@ -1,6 +1,7 @@
 package com.mygdx.gui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -94,8 +95,8 @@ public class MultiplayerLobby extends Game implements Screen{
         
         ArrayList<TextButton> lobbies = new ArrayList<TextButton>();
         for (int i = 0; i < 5; i++) {
-        	final Integer num = i;
-        	TextButton newLobby = new TextButton("Lobby " + i, skin, "default");
+        	final Integer num = i+1;
+        	TextButton newLobby = new TextButton("Lobby " + (i+1), skin, "default");
         	newLobby.setWidth(Constants.BUTTON_WIDTH);
             newLobby.setHeight(Constants.BUTTON_HEIGHT);
             newLobby.setPosition(0, Gdx.graphics.getHeight()-Constants.BUTTON_HEIGHT-(int)(newLobby.getHeight()*(i+2)*1.2));
@@ -104,11 +105,18 @@ public class MultiplayerLobby extends Game implements Screen{
                 public void clicked(InputEvent event, float x, float y){
                 	MultiplayerLobby.this.lobbyNumber = num;
                 	String playerString = "";
-                	try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id=1");} catch (Exception e1) {e1.printStackTrace();}
-                	
+                	try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="+MultiplayerLobby.this.lobbyNumber);} 
+                	catch (Exception e1) {
+                		System.out.println("Making new lobby "+MultiplayerLobby.this.lobbyNumber);
+            			try {JsonParser.sendHTML("newLobby", "id="+MultiplayerLobby.this.lobbyNumber);}catch (Exception e) {e.printStackTrace();} 
+            			finally { try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="+MultiplayerLobby.this.lobbyNumber);}catch (Exception e2) {e1.printStackTrace();}}}
                 	String[] playerIds = playerString.split(" ");
                 	for (int i =  0; i < MultiplayerLobby.this.players.size(); i++) {
-                		MultiplayerLobby.this.players.get(i).setText(playerIds[i]);
+                		String name = "";
+                		if (!playerIds[i].equals("0")) {
+                			try { name = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUserById?id="+playerIds[i]);} catch (Exception e1) {e1.printStackTrace();}
+                		} else name = "[NONE]";
+                		MultiplayerLobby.this.players.get(i).setText(name);
                 	}
                 }});
             lobbies.add(newLobby);
@@ -116,22 +124,39 @@ public class MultiplayerLobby extends Game implements Screen{
         }
         
         final TextButton backButton = new TextButton("Back", skin, "default");
-
         backButton.setWidth(Constants.BUTTON_WIDTH);
-        
         backButton.setHeight(Constants.BUTTON_HEIGHT);
-        
         backButton.setPosition(0, Gdx.graphics.getHeight()-backButton.getHeight());
-        
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	dispose();
             	game.setScreen(new LobbyScreen(game));
-            }
-        });
-               
+            }});
         stage.addActor(backButton);
+        
+        final TextButton joinLobby = new TextButton("Join Lobby", skin, "default");
+        joinLobby.setWidth(Constants.BUTTON_WIDTH);
+        joinLobby.setHeight(Constants.BUTTON_HEIGHT);
+        joinLobby.setPosition(Constants.BUTTON_WIDTH+3, Gdx.graphics.getHeight()/2);
+        joinLobby.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	String playerString = "0 0 0 0";
+            	System.out.println(MultiplayerLobby.this.lobbyNumber);
+            	try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="+MultiplayerLobby.this.lobbyNumber);} catch (Exception e1) {e1.printStackTrace();}
+            	String[] playerIds = playerString.split(" ");
+            	for (int i = 0; i < 4; i++) {
+            		System.out.println(Arrays.toString(playerIds));
+            		System.out.println(playerIds[i]);
+            		if (playerIds[i].equals("0")){
+            			try {JsonParser.sendHTML("updatePlayer", "id="+MultiplayerLobby.this.lobbyNumber+"&player="+(i+1)+"&playerId="+39);} catch (Exception e) {e.printStackTrace();}
+            		break;
+            		}
+            	}
+            }});
+        stage.addActor(joinLobby);
+        
         
         Gdx.input.setInputProcessor(stage);
 
