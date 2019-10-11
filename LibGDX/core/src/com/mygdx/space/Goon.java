@@ -1,12 +1,10 @@
 package com.mygdx.space;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import util.Constants;
 
 public class Goon implements Ship{
 /**
@@ -46,13 +44,16 @@ public class Goon implements Ship{
 	 */
 	private int shotSpeed = 5;
 	
+	
+	private AssetManager manager;
 	/**
 	 * Creates a new ship at a default position with a default speed, used for debugging
 	 */
 	public Goon()
 	{
-		texture = new Texture("enemy1.png");
-		shotTexture = new Texture("shot.png");
+		manager = new AssetManager();
+		texture = manager.get("assets/enemy1.png", Texture.class);
+		shotTexture = new Texture(Gdx.files.internal("assets/shot.png"));
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 100);
 		alive = true;
@@ -66,10 +67,11 @@ public class Goon implements Ship{
 	 * @param yPos initial y position of ship
 	 * @param shotSpeed how quickly ship's fire travels
 	 */
-	public Goon(float xPos, float yPos, int shotSpeed)
+	public Goon(float xPos, float yPos, int shotSpeed, AssetManager manager)
 	{
-		texture = new Texture("enemy1.png");
-		shotTexture = new Texture("shot.png");
+		
+		texture = manager.get("assets/enemy1.png", Texture.class);
+		shotTexture = new Texture(Gdx.files.internal("assets/shot.png"));
 		sprite = new Sprite(texture);
 		sprite.setPosition(xPos, yPos);
 		alive = true;
@@ -178,7 +180,6 @@ public class Goon implements Ship{
 		sprite.setPosition(0, 0); //Move off screen for deletion
 		Space.score += 10;
 		Space.enemiesKilled++;
-		texture.dispose(); //Free memory held by texture for destroyed ship
 		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	}
 	/**

@@ -3,6 +3,7 @@ package com.mygdx.space;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -66,15 +67,15 @@ public class Asteroid {
 	 * @param type type of asteroid, small, medium, large or golden
 	 * @param levelNum level number for score scaling
 	 */
-public Asteroid(int type, int levelNum)
+public Asteroid(int type, int levelNum, AssetManager manager)
 {
 	this.type = type;
 	this.levelNum = levelNum;
 	//Determine texture of asteroid object from given type int
-	if (type == SMALL) texture = new Texture("smallAsteroid.png");
-	else if (type == MEDIUM) texture = new Texture("mediumAsteroid.png");
-	else if (type == LARGE) texture = new Texture("largeAsteroid.png");
-	else if (type == GOLDEN) texture = new Texture("GoldenAsteroid.png");
+	if (type == SMALL) texture = manager.get("assets/smallAsteroid.png");
+	else if (type == MEDIUM) texture = manager.get("assets/mediumAsteroid.png");
+	else if (type == LARGE) texture = manager.get("assets/largeAsteroid.png");
+	else if (type == GOLDEN) texture = manager.get("assets/goldenAsteroid.png");
 	
 	rand = new Random();
 	intact = true;
@@ -104,10 +105,10 @@ public Asteroid()
 	rand = new Random();
 	type = rand.nextInt(4);
 	
-	if (type == SMALL) texture = new Texture("smallAsteroid.png");
-	else if (type == MEDIUM) texture = new Texture("mediumAsteroid.png");
-	else if (type == LARGE) texture = new Texture("largeAsteroid.png");
-	else if (type == GOLDEN) texture = new Texture("GoldenAsteroid.png");
+	if (type == SMALL) texture = new Texture("assets/smallAsteroid.png");
+	else if (type == MEDIUM) texture = new Texture("assets/mediumAsteroid.png");
+	else if (type == LARGE) texture = new Texture("assets/largeAsteroid.png");
+	else if (type == GOLDEN) texture = new Texture("assets/GoldenAsteroid.png");
 	
 	intact = true;
 	sprite = new Sprite(texture);
@@ -179,7 +180,6 @@ public void destroy()
 	if (type == MEDIUM) Space.score += 30*levelNum;
 	if (type == LARGE) Space.score += 15*levelNum;
 	if (type == GOLDEN) Space.score += 300*levelNum;
-	texture.dispose();
 	Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	
 }

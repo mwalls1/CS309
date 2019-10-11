@@ -1,11 +1,13 @@
 package com.mygdx.space;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import util.*;
+import util.Constants;
+import util.JsonParser;
 public class PlayerShip implements Ship{
 
 private Texture texture;
@@ -21,15 +23,15 @@ Texture shotTexture;
 /**
  * Creates player ship at a default position for debugging
  */
-	public PlayerShip()
+	public PlayerShip(AssetManager manager)
 	{
 		alive = true;
-		texture = new Texture("ship.png");
+		texture = manager.get("assets/ship.png");
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, 5);
 		shotOneFired = false;
 		shotTwoFired = false;
-		shotTexture = new Texture("shot.png");
+		shotTexture = new Texture(Gdx.files.internal("assets/shot.png"));
 		shotOne = new Sprite(shotTexture);
 		shotTwo = new Sprite(shotTexture);
 	}
@@ -37,15 +39,15 @@ Texture shotTexture;
 	/*
 	 * Creates player ship at a given x position
 	 */
-	public PlayerShip(float xPos)
+	public PlayerShip(float xPos, AssetManager manager)
 	{
 		alive = true;
-		texture = new Texture("ship.png");
+		texture = manager.get("assets/ship.png");
 		sprite = new Sprite(texture);
 		sprite.setPosition(xPos, 5);
 		shotOneFired = false;
 		shotTwoFired = false;
-		Texture shotTexture = new Texture("shot.png");
+		Texture shotTexture = manager.get("assets/shot.png");
 		shotOne = new Sprite(shotTexture);
 		shotTwo = new Sprite(shotTexture);
 	}

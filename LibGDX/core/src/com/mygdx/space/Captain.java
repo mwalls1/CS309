@@ -2,6 +2,7 @@ package com.mygdx.space;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -41,14 +42,14 @@ private int health;
  * @param xPos x position for new ship
  * @param yPos y position for new ship
  */
-	public Captain(float xPos, float yPos)
+	public Captain(float xPos, float yPos, AssetManager manager)
 	{
-		texture = new Texture("enemy3.png"); //Texture for ship
+		texture = manager.get("assets/enemy3.png"); //Texture for ship
 		sprite = new Sprite(texture);
 		alive = true;
 		sprite.setPosition(xPos, yPos);
 		sprite.rotate(180); //Sprite was drawn facing the wrong way because I'm dumb, so I rotated it
-		shotTexture = new Texture("shot.png"); //Texture for ship's fire
+		shotTexture = manager.get("assets/shot.png"); //Texture for ship's fire
 		shotSprite = new Sprite(shotTexture);
 		health = 5;
 		
@@ -153,7 +154,6 @@ private int health;
 		alive = false;
 		sprite.setPosition(0, 0);
 		Space.score += 50;
-		texture.dispose();
 		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
 	}
 

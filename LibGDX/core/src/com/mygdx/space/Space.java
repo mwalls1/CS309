@@ -7,7 +7,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -46,7 +48,7 @@ public class Space extends Game implements Screen{
 	public boolean paused;
 	public static boolean gameOver;
 	private boolean isPaused;
-
+	private AssetManager manager;
 	
 	
 	/**
@@ -85,7 +87,7 @@ public class Space extends Game implements Screen{
 		 enemies[rand.nextInt(enemies.length)].shoot(batch); //Chooses a random enemy to attempt to fire every frame
 		 
 		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) { //Handles logic for streak of hitting asteroids
-			asteroid = new Asteroid(asteroidsShot, levelNum);
+			asteroid = new Asteroid(asteroidsShot, levelNum, manager);
 		}
 		 
 		 if (asteroid.isIntact()) //Move asteroid as long as it is intact
@@ -133,7 +135,7 @@ public class Space extends Game implements Screen{
 	     {
 	    	 asteroidsShot = 0; //Reset asteroid streak counter
 	    	 enemiesKilled = 0; //Reset kill count per level
-	    	 asteroid = new Asteroid(asteroidsShot, levelNum); //Creates new asteroids for new level
+	    	 asteroid = new Asteroid(asteroidsShot, levelNum, manager); //Creates new asteroids for new level
 	    	 batch.begin(); //Start drawing
 	    	 int scoreAdded = (int)accuracy * 1000; 
 	    	 //TODO get this line to work 
@@ -146,7 +148,7 @@ public class Space extends Game implements Screen{
 	    	 shotsLanded = 0; //Reset for accuracy calculation
 	    	 //TODO implement real game exiting
 	    	 if (levelNum == LAST_LEVEL) game.setScreen(new MainScreen(game)); //Exits game if won
-	    	 level = new Level(levelNum, player); //Create new level
+	    	 level = new Level(levelNum, player, manager); //Create new level
 	    	 batch.end(); //Stop drawing
 	    	 dispose(); //Dispose unused textures
 	     }
@@ -207,7 +209,8 @@ public class Space extends Game implements Screen{
 	 * Describes button functionality and position
 	 */
 	public void create() {
-		
+		manager = new AssetManager();
+		loadAssets();
 		isPaused = false;
 		gameOver = false;
 		font = new BitmapFont();
@@ -216,11 +219,11 @@ public class Space extends Game implements Screen{
 		score = 0;
 		shotsLanded = 0;
 		shotsTaken = 0;
-		asteroid = new Asteroid(asteroidsShot, levelNum);
-		player = new PlayerShip();
+		asteroid = new Asteroid(asteroidsShot, levelNum, manager);
+		player = new PlayerShip(manager);
 		sprite = player.getSprite();
-		level = new Level(levelNum, player);
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		level = new Level(levelNum, player, manager);
+		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
 		stage = new Stage();
 		
 		exitButton = new TextButton("Exit", skin, "default");
@@ -290,7 +293,23 @@ public class Space extends Game implements Screen{
 		
 	}
 	
-	
+	private void loadAssets()
+	{
+		manager.load("assets/enemy1.png", Texture.class);
+		manager.load("assets/enemy2.png", Texture.class);
+		manager.load("assets/enemy2damaged.png", Texture.class);
+		manager.load("assets/enemy3.png", Texture.class);
+		manager.load("assets/enemy4.png", Texture.class);
+		manager.load("assets/goldenAsteroid.png", Texture.class);
+		manager.load("assets/largeAsteroid.png", Texture.class);
+		manager.load("assets/mediumAsteroid.png", Texture.class);
+		manager.load("assets/smallAsteroid.png", Texture.class);
+		manager.load("assets/ship.png", Texture.class);
+		manager.load("assets/shot.png", Texture.class);
+		
+		
+		manager.finishLoading();
+	}
 
 	/*
 	 * Checks if level is complete

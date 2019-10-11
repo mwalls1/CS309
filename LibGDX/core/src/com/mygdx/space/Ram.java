@@ -3,6 +3,7 @@ package com.mygdx.space;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,11 +20,11 @@ public class Ram implements Ship{
 	/*
 	 * Creates new ship at default position; used for debugging
 	 */
-	public Ram()
+	public Ram(AssetManager manager)
 	{
 		rand = new Random();
-		texture = new Texture("enemy2.png");
-		damagedTexture = new Texture("enemy2damaged.png");
+		texture = manager.get("assets/enemy2.png");
+		damagedTexture = manager.get("assets/enemy2damaged.png");
 		
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()-50);
@@ -34,11 +35,11 @@ public class Ram implements Ship{
 	/*
 	 * Creates new ship at a given x position
 	 */
-	public Ram(float xPos)
+	public Ram(float xPos, AssetManager manager)
 	{
 		rand = new Random();
-		texture = new Texture("enemy2.png");
-		damagedTexture = new Texture("enemy2damaged.png");
+		texture = manager.get("assets/enemy2.png");
+		damagedTexture = manager.get("assets/enemy2damaged.png");
 		
 		sprite = new Sprite(texture);
 		sprite.setPosition(xPos, Gdx.graphics.getHeight());
@@ -99,7 +100,6 @@ public class Ram implements Ship{
 			if (health == 2) {
 				float x = sprite.getX();
 				float y = sprite.getY();
-				texture.dispose();
 				sprite.setTexture(damagedTexture);
 				sprite.setPosition(x, y);
 			}
@@ -140,9 +140,7 @@ public class Ram implements Ship{
 		Space.enemiesKilled++;
 		sprite.setPosition(0, 0);
 		sprite.setAlpha(0);
-		damagedTexture.dispose();
 		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
-		dispose();
 	}
 
 	@Override
@@ -158,7 +156,6 @@ public class Ram implements Ship{
 
 	public void dispose()
 	{
-		texture.dispose();
 		//Wow, look! Nothing!
 	}
 	
