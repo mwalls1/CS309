@@ -78,23 +78,48 @@ public class Zombie {
 		{
 			if(x < player.x)
 			{
-				 if(walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH))==null)
-					 x+=1;
+					 if(walls.getCell((int)((x+width+1)/tileW), (int)(y/tileH))!=null)
+						 x=x;
+					 else if(walls.getCell((int)((x+width+1)/tileW), (int)((y+height)/tileH))!=null )
+						 x=x;
+					 else
+					 {
+						x+=1;
+					 }
+
 			}
 			if(x > player.x)
 			{
-				if(walls.getCell((int)((x-1)/tileW), (int)(y/tileH))==null)
+				if(walls.getCell((int)((x-1)/tileW), (int)(y/tileH))!=null)
+					x=x;
+				else if(walls.getCell((int)((x-1)/tileW), (int)((y+height)/tileH))!=null)
+					x=x;
+				else
+				{
 					x-=1;
+				}
 			}
 			if(y < player.y)
 			{
-				if(walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH))==null)
+				if(walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH))!=null)
+					y=y;
+				else if(walls.getCell((int)((x+width)/tileW), (int)((y+height+1)/tileH))!=null )
+					y=y;
+				else
+				{
 					y+=1;
+				}
 			}
 			if(y > player.y)
 			{
-				if(walls.getCell((int)((x)/tileW), (int)((y-6)/tileH))==null)
+				if(walls.getCell((int)((x)/tileW), (int)((y-6)/tileH))!=null)
+					y=y;
+				else if(walls.getCell((int)((x+width)/tileW), (int)((y-6)/tileH))!=null)
+					y=y;
+				else
+				{
 					y-=1;
+				}
 			}
 		    	midX = (2*x + width)/2;
 		    	midY = (2*y + height)/2;
@@ -134,6 +159,7 @@ public class Zombie {
     	if(active && Intersector.overlapConvexPolygons(poly1, play))
     	{
     		player.hp -= 1;
+    		System.out.println("Hit by zombie.");
     	}
     }
 

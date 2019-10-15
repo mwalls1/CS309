@@ -45,8 +45,6 @@ public class Bolt {
     	dir.nor();
     	sprite = new Sprite(texture);
     	sprite.rotate(dir.angle());
-    	System.out.println("X1, Y1, X2, Y2: "+x1+", "+y1+", "+x2+", "+y2);
-    	System.out.println("Direction Vector:" + dir.x+ ", "+dir.y);
     	sprite.setX(x1);
     	sprite.setY(y1);
     	x = x1;
@@ -62,13 +60,13 @@ public class Bolt {
 
 	public void update(TiledMapTileLayer walls, Player player) {
 		if(active && walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
-			x+=dir.x*3;
+			x+=dir.x*2;
 		else
 		{
 			active = false;
 		}
 		if(active && walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
-			y+=dir.y*3;
+			y+=dir.y*2;
 		else
 		{
 			active = false;
@@ -76,6 +74,7 @@ public class Bolt {
 		if(Intersector.overlaps(sprite.getBoundingRectangle(), player.sprite.getBoundingRectangle()))
 		{
 			player.hp -= 25;
+			System.out.println("Hit by bolt.");
 			active = false;
 		}
 		sprite.setX(x);

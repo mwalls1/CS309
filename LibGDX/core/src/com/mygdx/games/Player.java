@@ -30,7 +30,7 @@ public class Player {
     public int dx, dy;
     public int width, height;
     public double area;
-    public int hp;
+    public float hp;
     public Sprite sprite;
     public Texture dagger;
     public boolean isMoving;
@@ -51,7 +51,9 @@ public class Player {
 	public float elapsed;
 	private TextureAtlas iLeft;
 	private TextureAtlas iRight;
+	public int numCoins;
     public Player(int spawnX, int spawnY){
+		numCoins = 0;
     	sprite = new Sprite();
     	direction = 1;
     	elapsed = 0;
@@ -171,7 +173,7 @@ public class Player {
 		{
 			mouseCords = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
 			camera.unproject(mouseCords);
-			if(numBullets<4)
+			if(numBullets<1)
 			{
 				a.add(0,new Knife(dagger, midX-3, midY-3, mouseCords.x, mouseCords.y));
 				numBullets++;

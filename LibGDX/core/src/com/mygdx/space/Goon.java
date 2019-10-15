@@ -68,8 +68,8 @@ public class Goon implements Ship{
 	 */
 	public Goon(float xPos, float yPos, int shotSpeed)
 	{
-		texture = new Texture("enemy1.png");
-		shotTexture = new Texture("shot.png");
+		texture = new Texture("assets/enemy1.png");
+		shotTexture = new Texture("assets/dshot.png");
 		sprite = new Sprite(texture);
 		sprite.setPosition(xPos, yPos);
 		alive = true;

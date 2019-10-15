@@ -37,7 +37,7 @@ public class Ram implements Ship{
 	public Ram(float xPos)
 	{
 		rand = new Random();
-		texture = new Texture("enemy2.png");
+		texture = new Texture("assets/enemy2.png");
 		damagedTexture = new Texture("enemy2damaged.png");
 		
 		sprite = new Sprite(texture);

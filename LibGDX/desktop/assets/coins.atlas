@@ -1,0 +1,33 @@
+
+coins.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+coin1
+  rotate: false
+  xy: 1, 1
+  size: 6, 7
+  orig: 6, 7
+  offset: 0, 0
+  index: -1
+coin2
+  rotate: false
+  xy: 9, 1
+  size: 4, 7
+  orig: 4, 7
+  offset: 0, 0
+  index: -1
+coin4
+  rotate: false
+  xy: 15, 1
+  size: 4, 7
+  orig: 4, 7
+  offset: 0, 0
+  index: -1
+coin3
+  rotate: false
+  xy: 21, 1
+  size: 2, 7
+  orig: 2, 7
+  offset: 0, 0
+  index: -1

@@ -1,8 +1,10 @@
 package com.mygdx.games;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -11,7 +13,8 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 public class Hazard {
-    public int x,y;
+    float x;
+	public float y;
     public float width, height;
     public Sprite sprite;
     public Texture hazardTexture;
@@ -23,13 +26,17 @@ public class Hazard {
 	public Polygon poly2;
 	public float endX;
 	public float endY;
+	private float elapsed = 0;
+	private float print = 0;
+	private float numHP = .5f;
+	private BitmapFont font = new BitmapFont();
     public Hazard(Texture texture, int x1, int y1, OrthographicCamera cam){
     	sprite = new Sprite(texture);
     	width = sprite.getWidth();
     	height = sprite.getHeight();
-    	sprite.setCenter(width/2, height/2);
-    	x = x1;
-    	y = y1;
+    	sprite.setCenter(x1, y1);
+    	x = x1-width/2+2;
+    	y = y1-height/2+2;
     	endX = x+width;
     	endY = y+height;
     	shape = new ShapeRenderer();
@@ -60,6 +67,7 @@ public class Hazard {
     	
     }
     public void render(SpriteBatch batch){
+    	elapsed+=Gdx.graphics.getDeltaTime();
     	sprite.draw(batch);
     	
     }
@@ -76,7 +84,7 @@ public class Hazard {
         x = x1;
         y = y1;
     }
-    public void checkCollision(Player player)
+    public void checkCollision(Player player, SpriteBatch batch)
     {
     	int midX = (player.x*2+player.width)/2;
     	int midY = (player.y*2+player.height);
@@ -94,19 +102,32 @@ public class Hazard {
     	play.setOrigin(midX, midY);
     	if(Intersector.overlapConvexPolygons(poly1, play))
     	{
-    		player.hp -= 1;
+    		System.out.println("Hit by blade.");
+    		player.hp -= .5f;
+    		font.getData().setScale(.5f);
+    		font.draw(batch, "-"+numHP+" HP", player.getX(), player.getY() +30);
+    		print = elapsed;
+    		numHP+=.5f;
+    		
     	}
     	else if(Intersector.overlapConvexPolygons(poly2, play))
     	{
-    		player.hp -= 1;
+    		System.out.println("Hit by blade.");
+    		player.hp -= .5f;
+    		font.getData().setScale(.5f);
+    		font.draw(batch, "-"+numHP+" HP", player.getX(), player.getY() +30);
+    		print = elapsed;
+    		numHP+=.5f;
     	}
+    	else
+    		numHP=1;
     	
     }
 
-    public int getX(){
+    public float getX(){
         return x;
     }
-    public int getY(){
+    public float getY(){
         return y;
     }
 }
