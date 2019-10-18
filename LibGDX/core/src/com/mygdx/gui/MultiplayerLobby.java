@@ -150,8 +150,8 @@ public class MultiplayerLobby extends Game implements Screen{
             		System.out.println(Arrays.toString(playerIds));
             		System.out.println(playerIds[i]);
             		if (playerIds[i].equals("0")){
-            			try {JsonParser.sendHTML("updatePlayer", "id="+MultiplayerLobby.this.lobbyNumber+"&player="+(i+1)+"&playerId="+39);} catch (Exception e) {e.printStackTrace();}
-            		break;
+            			try {JsonParser.sendHTML("updatePlayer", "id="+MultiplayerLobby.this.lobbyNumber+"&player="+(i+1)+"&playerId="+Constants.userID);} catch (Exception e) {e.printStackTrace();}
+            			break;
             		}
             	}
             }});

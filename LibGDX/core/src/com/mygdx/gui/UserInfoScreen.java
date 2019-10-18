@@ -108,8 +108,8 @@ public class UserInfoScreen extends Game implements Screen {
 		loginButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				// Do some stuff when clicked
-				dispose();
+				
+            	dispose();
 				loggedIn = true;
 				create();
 			}
@@ -145,15 +145,25 @@ public class UserInfoScreen extends Game implements Screen {
 		loginWithUsernamePassword.setWidth(Gdx.graphics.getWidth()/8);
 		loginWithUsernamePassword.setPosition(Gdx.graphics.getWidth() / 2 + 150f, Gdx.graphics.getHeight() / 2 - 4*Constants.BUTTON_OFFSET);
 	
+		loginWithUsernamePassword.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+		System.out.println(usernameTextField.getText());
+		System.out.println(passwordTextField.getText());
+    	try { Constants.userID = Integer.parseInt(JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/userLogin?user="+usernameTextField.getText()+"&pass="+passwordTextField.getText()));} catch (Exception e1) {e1.printStackTrace();}
+		System.out.println(Constants.userID);
+		}});
+		
+		
 		createNewUser.setHeight(Constants.BUTTON_HEIGHT);
 		createNewUser.setWidth(Gdx.graphics.getWidth()/8);
 		createNewUser.setPosition(Gdx.graphics.getWidth() / 2 + 150f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
 		createNewUser.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Constants.user = "name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText(); 
+				//Constants.user = "name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText(); 
 				try {
-					JsonParser.sendHTML("newUser",Constants.user);
+					JsonParser.sendHTML("newUser","name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
