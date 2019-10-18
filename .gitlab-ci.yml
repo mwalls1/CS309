@@ -4,6 +4,7 @@ stages:
   - mavenbuild
   - maventest
   - autodeploy
+  - gradlebuild
 
 # tags: "shell" should match with the tag name provided to runner, for spring runner should execute in shell.
 # Notice that in petclinic project, the spring project is in root of master, if yours is in folder then cd to that folder.
@@ -42,3 +43,15 @@ autoDeploy:
     - sudo mv target/*.jar /var/www/serverjar/gsix-backend.jar
     - sudo systemctl stop system-web-demo
     - sudo systemctl start system-web-demo
+
+# To build android projects
+# Notice that we cd into Android_test folder which contains all Android files before building apk.    
+# Ensure the tag matches with the tag created for Android runner
+# Android runner should have docker as executor.
+android-build:
+  stage: androidbuild
+  tags:
+   - spring_tag
+  script:
+    - cd LibGDX
+    - ./gradlew assemble
