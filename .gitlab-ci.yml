@@ -49,7 +49,7 @@ autoDeploy:
 # Ensure the tag matches with the tag created for Android runner
 # Android runner should have docker as executor.
 android-build:
-  stage: androidbuild
+  stage: gradlebuild
   tags:
    - spring_tag
   script:
