@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -77,6 +78,10 @@ public class LobbyScreen extends Game implements Screen{
         final TextButton privateGameButton = new TextButton("Private Game", skin, "default");
         final TextButton publicGameButton = new TextButton("Public Game", skin, "default");
         final TextButton singlePlayerButton = new TextButton("Single Player", skin, "default");
+        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
+        userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
+		userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
         
         backButton.setWidth(Constants.BUTTON_WIDTH);
         privateGameButton.setWidth(Constants.BUTTON_WIDTH);
@@ -87,6 +92,10 @@ public class LobbyScreen extends Game implements Screen{
         privateGameButton.setHeight(Constants.BUTTON_HEIGHT);
         publicGameButton.setHeight(Constants.BUTTON_HEIGHT);
         singlePlayerButton.setHeight(Constants.BUTTON_HEIGHT);
+        
+        userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
+		userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
         
         backButton.setPosition(Gdx.graphics.getWidth() /2 - backButton.getWidth()/2, Gdx.graphics.getHeight()/2);
         privateGameButton.setPosition(Gdx.graphics.getWidth() /2 - privateGameButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
@@ -129,7 +138,8 @@ public class LobbyScreen extends Game implements Screen{
         stage.addActor(privateGameButton);
         stage.addActor(publicGameButton);
         stage.addActor(singlePlayerButton);
-        
+        stage.addActor(userInfoLabel);
+
         Gdx.input.setInputProcessor(stage);
 
 	}

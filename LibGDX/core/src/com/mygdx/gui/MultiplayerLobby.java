@@ -80,9 +80,7 @@ public class MultiplayerLobby extends Game implements Screen{
 		// TODO Auto-generated method stub
         skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
-        
-        
-        
+                
         players = new ArrayList<Label>();
         for (int i = 0; i < 4; i++) {
         	Label p = new Label("Player " + i, skin, "default");
@@ -122,7 +120,12 @@ public class MultiplayerLobby extends Game implements Screen{
             lobbies.add(newLobby);
             stage.addActor(lobbies.get(i));
         }
-        
+
+        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
+        userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
+		userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
+		
         final TextButton backButton = new TextButton("Back", skin, "default");
         backButton.setWidth(Constants.BUTTON_WIDTH);
         backButton.setHeight(Constants.BUTTON_HEIGHT);
@@ -156,7 +159,8 @@ public class MultiplayerLobby extends Game implements Screen{
             	}
             }});
         stage.addActor(joinLobby);
-        
+        stage.addActor(userInfoLabel);
+
         
         Gdx.input.setInputProcessor(stage);
 

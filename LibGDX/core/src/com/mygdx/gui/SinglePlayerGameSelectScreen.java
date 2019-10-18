@@ -6,16 +6,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
-import com.mygdx.space.Space;
-
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.games.GameTest;
 import com.mygdx.space.Space;
-
 
 import util.Constants;
 
@@ -167,9 +163,14 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         		
         	}
         });
+        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");//Displays the user's name 
+	     userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
+	 	 userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+	 	 userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
         
       
-      
+	    stage.addActor(userInfoLabel);
+
         
         Gdx.input.setInputProcessor(stage);
 

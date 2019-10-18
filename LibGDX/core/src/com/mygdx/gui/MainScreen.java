@@ -7,18 +7,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.games.*;
 import util.Constants;
 
 public class MainScreen extends Game implements Screen{
-	private Skin skin;
+	private static Skin skin;
 	private Stage stage;
 	private Game game;
+	
 	/**
 	 * Main screen with play, options and leaderboard buttons
 	 * @param game game object, we use Game's setScreen() method to switch between different screens
@@ -103,6 +103,7 @@ public class MainScreen extends Game implements Screen{
         final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default"); //Creates button with label "leaderboards"
         final TextButton optionsButton = new TextButton("Options", skin, "default"); //Creates button with label "options"
         final TextButton userInfoButton = new TextButton("User Info", skin, "default");//Creates button with label "User Info"
+        
       
         //Three lines below this set the widths of buttons using the constant widths
         playButton.setWidth(Constants.BUTTON_WIDTH); 
@@ -121,6 +122,11 @@ public class MainScreen extends Game implements Screen{
         leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - leaderboardButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
         optionsButton.setPosition(Gdx.graphics.getWidth() /2 - optionsButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*2);
         userInfoButton.setPosition(Gdx.graphics.getWidth() /2 - userInfoButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*3);
+        
+        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");//Displays the user's name 
+	     userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
+	 	 userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+	 	 userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
         
         playButton.addListener(new ClickListener(){ //This tells button what to do when clicked
             @Override 
@@ -163,6 +169,7 @@ public class MainScreen extends Game implements Screen{
         stage.addActor(leaderboardButton);
         stage.addActor(optionsButton);
         stage.addActor(userInfoButton);
+        stage.addActor(userInfoLabel);
         
         Gdx.input.setInputProcessor(stage);
 

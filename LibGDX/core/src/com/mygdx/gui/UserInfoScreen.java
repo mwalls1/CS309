@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -81,6 +82,8 @@ public class UserInfoScreen extends Game implements Screen {
 		final TextField passwordTextField = new TextField("Password", skin);
 		final TextButton loginWithUsernamePassword = new TextButton("Enter", skin, "default");
 		final TextButton createNewUser = new TextButton("New User", skin, "default");
+		final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
+		final Label wrongPass = new Label("Incorect Password or Username", skin, "default"); //TODO change font color to red
 		/*
 		 * BACK BUTTON 
 		 */
@@ -148,11 +151,22 @@ public class UserInfoScreen extends Game implements Screen {
 		loginWithUsernamePassword.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-		System.out.println(usernameTextField.getText());
-		System.out.println(passwordTextField.getText());
-    	try { Constants.userID = Integer.parseInt(JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/userLogin?user="+usernameTextField.getText()+"&pass="+passwordTextField.getText()));} catch (Exception e1) {e1.printStackTrace();}
-		System.out.println(Constants.userID);
-		}});
+				Integer newUserID = -1;
+				try { newUserID = Integer.parseInt(JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/userLogin?user="+usernameTextField.getText()+"&pass="+passwordTextField.getText()));} catch (Exception e1) {e1.printStackTrace();}
+				if (newUserID != -1){
+					Constants.userID = newUserID;
+					Constants.user = usernameTextField.getText();
+					userInfoLabel.setText("HI GUYS: " + Constants.user);
+					usernameTextField.setText("");
+					passwordTextField.setText("");
+					wrongPass.setVisible(false);
+
+				}
+				else {
+					wrongPass.setVisible(true);
+				}
+				
+			}});
 		
 		
 		createNewUser.setHeight(Constants.BUTTON_HEIGHT);
@@ -170,7 +184,13 @@ public class UserInfoScreen extends Game implements Screen {
 				}
 			}
 		});
-		
+		userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
+		userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
+		wrongPass.setWidth(Constants.BUTTON_WIDTH);
+		wrongPass.setHeight(Constants.BUTTON_HEIGHT);
+		wrongPass.setPosition(passwordTextField.getX(), passwordTextField.getY()-passwordTextField.getHeight());
+		wrongPass.setVisible(false);
 		
 		if (!loggedIn) {
 			usernameTextField.setVisible(false);
@@ -187,6 +207,8 @@ public class UserInfoScreen extends Game implements Screen {
 		stage.addActor(passwordTextField);
 		stage.addActor(loginWithUsernamePassword);
 		stage.addActor(createNewUser);
+		stage.addActor(userInfoLabel);
+		stage.addActor(wrongPass);
 		Gdx.input.setInputProcessor(stage);
 		
 

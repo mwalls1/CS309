@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -99,6 +100,11 @@ public class LeaderboardScreen extends Game implements Screen {
 		textField.setHeight(Gdx.graphics.getHeight());
 		textField.setPosition(Gdx.graphics.getWidth() / 2 - Constants.BUTTON_WIDTH / 2, 0);
 
+		final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
+        userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
+		userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
+		
 		/*
 		 * BACK BUTTON
 		 */
@@ -137,6 +143,7 @@ public class LeaderboardScreen extends Game implements Screen {
 		stage.addActor(backButton);
 		stage.addActor(textField);
 		stage.addActor(refresh);
+        stage.addActor(userInfoLabel);
 
 	}
 
