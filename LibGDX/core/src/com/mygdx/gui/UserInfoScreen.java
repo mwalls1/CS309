@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.Input.Keys;
 
 import util.Constants;
 import util.JsonParser;
@@ -18,6 +19,8 @@ public class UserInfoScreen extends Game implements Screen {
 	private Skin skin;
 	private Stage stage;
 	private Game game;
+	private boolean userSelected;
+	private TextField passwordTextField;
 	private boolean loggedIn = false;
 	public String user = "default";
 	public UserInfoScreen(Game game) {
@@ -36,8 +39,14 @@ public class UserInfoScreen extends Game implements Screen {
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
 		stage.act();
 		stage.draw();
+		if (Gdx.input.isKeyJustPressed(Keys.TAB) && userSelected) {
+			passwordTextField.setText("");
+			passwordTextField.setPasswordMode(true);
+			
+		}
 	}
 
 	@Override
@@ -78,7 +87,7 @@ public class UserInfoScreen extends Game implements Screen {
 		final TextButton createUserButton = new TextButton("Create User", skin, "default");
 		final TextButton loginButton = new TextButton("Log In", skin, "default");
 		final TextField usernameTextField = new TextField("Username", skin);
-		final TextField passwordTextField = new TextField("Password", skin);
+		passwordTextField = new TextField("Password", skin);
 		final TextButton loginWithUsernamePassword = new TextButton("Enter", skin, "default");
 		final TextButton createNewUser = new TextButton("New User", skin, "default");
 		/*
@@ -121,6 +130,7 @@ public class UserInfoScreen extends Game implements Screen {
 		usernameTextField.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				userSelected = true;
 				usernameTextField.setText("");
 			
 			}

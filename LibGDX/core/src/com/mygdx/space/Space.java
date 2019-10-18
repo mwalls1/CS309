@@ -295,17 +295,17 @@ public class Space extends Game implements Screen{
 	
 	private void loadAssets()
 	{
-		manager.load("assets/enemy1.png", Texture.class);
-		manager.load("assets/enemy2.png", Texture.class);
-		manager.load("assets/enemy2damaged.png", Texture.class);
-		manager.load("assets/enemy3.png", Texture.class);
-		manager.load("assets/enemy4.png", Texture.class);
-		manager.load("assets/goldenAsteroid.png", Texture.class);
-		manager.load("assets/largeAsteroid.png", Texture.class);
-		manager.load("assets/mediumAsteroid.png", Texture.class);
-		manager.load("assets/smallAsteroid.png", Texture.class);
-		manager.load("assets/ship.png", Texture.class);
-		manager.load("assets/shot.png", Texture.class);
+		manager.load("enemy1.png", Texture.class);
+		manager.load("enemy2.png", Texture.class);
+		manager.load("enemy2damaged.png", Texture.class);
+		manager.load("enemy3.png", Texture.class);
+		manager.load("enemy4.png", Texture.class);
+		manager.load("goldenAsteroid.png", Texture.class);
+		manager.load("largeAsteroid.png", Texture.class);
+		manager.load("mediumAsteroid.png", Texture.class);
+		manager.load("smallAsteroid.png", Texture.class);
+		manager.load("ship.png", Texture.class);
+		manager.load("shot.png", Texture.class);
 		
 		
 		manager.finishLoading();

@@ -11,7 +11,6 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new MyGdxGame(), config);
 		config.forceExit = true;
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
 	}
 }
