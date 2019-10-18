@@ -1,1 +1,13 @@
+.settings/*
+.classpath
+.idea
+*.iml
+/target
+_site/
+*.log
+*.gz
+*.swp
+.mvn/
 /bin/
+/.metadata/
+*.metadata/*
