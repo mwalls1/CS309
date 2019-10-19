@@ -79,6 +79,7 @@ public class OptionsScreen extends Game implements Screen{
 
         final TextButton backButton = new TextButton("Back", skin, "default");
         final TextButton colorButton = new TextButton("Change Background", skin, "default");
+        final TextButton screenMode = new TextButton("Change Screenmode", skin, "default");
         
         backButton.setWidth(Constants.BUTTON_WIDTH);
         colorButton.setWidth(Constants.BUTTON_WIDTH);
@@ -102,6 +103,12 @@ public class OptionsScreen extends Game implements Screen{
             	Constants.green = (float)Math.random();
             	Constants.alpha = (float)Math.random();
             	create();
+            }
+        });
+        screenMode.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	
             }
         });
         final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");//Displays the user's name 
