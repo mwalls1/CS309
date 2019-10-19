@@ -5,6 +5,7 @@ stages:
   - maventest
   - autodeploy
   - gradlebuild
+  - gradletests
 
 # tags: "shell" should match with the tag name provided to runner, for spring runner should execute in shell.
 # Notice that in petclinic project, the spring project is in root of master, if yours is in folder then cd to that folder.
@@ -59,3 +60,16 @@ gradle-build:
   script:
     - cd LibGDX
     - ./gradlew assemble
+    
+# To run Android unit tests.   
+unitTests:
+  image: javiersantos/android-ci:latest
+  stage: gradletests
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./LibGDX/gradlew
+  tags:
+   - gradle_tag
+  script:
+    - cd LibGDX
+    - ./gradlew test
