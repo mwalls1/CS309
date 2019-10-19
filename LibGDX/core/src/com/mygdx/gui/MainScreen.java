@@ -106,16 +106,16 @@ public class MainScreen extends Game implements Screen{
         
       
         //Three lines below this set the widths of buttons using the constant widths
-        playButton.setWidth(Constants.BUTTON_WIDTH); 
-        leaderboardButton.setWidth(Constants.BUTTON_WIDTH);
-        optionsButton.setWidth(Constants.BUTTON_WIDTH);
-        userInfoButton.setWidth(Constants.BUTTON_WIDTH);
+        playButton.setWidth(Gdx.graphics.getWidth() / 3); 
+        leaderboardButton.setWidth(Gdx.graphics.getWidth() / 3);
+        optionsButton.setWidth(Gdx.graphics.getWidth() / 3);
+        userInfoButton.setWidth(Gdx.graphics.getWidth() / 3);
         
         //Set the heights using constant height
-        playButton.setHeight(Constants.BUTTON_HEIGHT);
-        leaderboardButton.setHeight(Constants.BUTTON_HEIGHT);
-        optionsButton.setHeight(Constants.BUTTON_HEIGHT);
-        userInfoButton.setHeight(Constants.BUTTON_HEIGHT);
+        playButton.setHeight(Gdx.graphics.getHeight() / 20);
+        leaderboardButton.setHeight(Gdx.graphics.getHeight() / 20);
+        optionsButton.setHeight(Gdx.graphics.getHeight() / 20);
+        userInfoButton.setHeight(Gdx.graphics.getHeight() / 20);
         
         //Sets positions for buttons
         playButton.setPosition(Gdx.graphics.getWidth() /2 - playButton.getWidth()/2, Gdx.graphics.getHeight()/2);
@@ -124,8 +124,8 @@ public class MainScreen extends Game implements Screen{
         userInfoButton.setPosition(Gdx.graphics.getWidth() /2 - userInfoButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*3);
         
         final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");//Displays the user's name 
-	     userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
-	 	 userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+	     userInfoLabel.setWidth(Gdx.graphics.getWidth() / 3);
+	 	 userInfoLabel.setHeight(Gdx.graphics.getHeight() / 20);
 	 	 userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
         
         playButton.addListener(new ClickListener(){ //This tells button what to do when clicked

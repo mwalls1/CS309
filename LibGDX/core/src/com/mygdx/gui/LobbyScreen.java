@@ -79,22 +79,22 @@ public class LobbyScreen extends Game implements Screen{
         final TextButton publicGameButton = new TextButton("Public Game", skin, "default");
         final TextButton singlePlayerButton = new TextButton("Single Player", skin, "default");
         final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
-        userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
-		userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+        userInfoLabel.setWidth(Gdx.graphics.getWidth() / 3);
+		userInfoLabel.setHeight(Gdx.graphics.getHeight() / 20);
 		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
         
-        backButton.setWidth(Constants.BUTTON_WIDTH);
-        privateGameButton.setWidth(Constants.BUTTON_WIDTH);
-        publicGameButton.setWidth(Constants.BUTTON_WIDTH);
-        singlePlayerButton.setWidth(Constants.BUTTON_WIDTH);
+        backButton.setWidth(Gdx.graphics.getWidth() / 3);
+        privateGameButton.setWidth(Gdx.graphics.getWidth() / 3);
+        publicGameButton.setWidth(Gdx.graphics.getWidth() / 3);
+        singlePlayerButton.setWidth(Gdx.graphics.getWidth() / 3);
         
-        backButton.setHeight(Constants.BUTTON_HEIGHT);
-        privateGameButton.setHeight(Constants.BUTTON_HEIGHT);
-        publicGameButton.setHeight(Constants.BUTTON_HEIGHT);
-        singlePlayerButton.setHeight(Constants.BUTTON_HEIGHT);
+        backButton.setHeight(Gdx.graphics.getHeight() / 20);
+        privateGameButton.setHeight(Gdx.graphics.getHeight() / 20);
+        publicGameButton.setHeight(Gdx.graphics.getHeight() / 20);
+        singlePlayerButton.setHeight(Gdx.graphics.getHeight() / 20);
         
-        userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
-		userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
+        userInfoLabel.setWidth(Gdx.graphics.getWidth() / 3);
+		userInfoLabel.setHeight(Gdx.graphics.getHeight() / 20);
 		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
         
         backButton.setPosition(Gdx.graphics.getWidth() /2 - backButton.getWidth()/2, Gdx.graphics.getHeight()/2);

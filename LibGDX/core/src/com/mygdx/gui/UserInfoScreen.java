@@ -190,6 +190,7 @@ public class UserInfoScreen extends Game implements Screen {
 		wrongPass.setWidth(Constants.BUTTON_WIDTH);
 		wrongPass.setHeight(Constants.BUTTON_HEIGHT);
 		wrongPass.setPosition(passwordTextField.getX(), passwordTextField.getY()-passwordTextField.getHeight());
+		wrongPass.setColor(255,0,0,1);
 		wrongPass.setVisible(false);
 		
 		if (!loggedIn) {
