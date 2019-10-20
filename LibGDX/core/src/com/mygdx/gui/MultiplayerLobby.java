@@ -10,14 +10,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -27,10 +28,16 @@ import util.JsonParser;
 public class MultiplayerLobby extends Game implements Screen{
 	private Skin skin;
 	private Stage stage;
+//	private Stage tableStage;
 	private Game game;
     
     Integer lobbyNumber = 0;
     ArrayList<Label> players;
+    Label lobbyLabel;
+    Label topVoteLabel;
+    Label secondVoteLabel;
+    Label thirdVoteLabel;
+    Label fourthVoteLabel;    
 	
 	
 	public MultiplayerLobby(Game game)
@@ -40,7 +47,11 @@ public class MultiplayerLobby extends Game implements Screen{
 	}
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+//		Gdx.input.setInputProcessor(multiplexer);
+//		InputMultiplexer multiplexer = new InputMultiplexer();
+//		multiplexer.addProcessor(stage);
+//		multiplexer.addProcessor(gameplayInputProcessor);
+//		Gdx.input.setInputProcessor(mutliplexer);
 	}
 	
 	@Override
@@ -48,14 +59,14 @@ public class MultiplayerLobby extends Game implements Screen{
 		 Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
+//	     tableStage.act();
 	     stage.draw();
+//	     tableStage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		create();
-		System.out.println(Gdx.graphics.getWidth());
-		System.out.println(Gdx.graphics.getWidth() / 3);
 	}
 
 	@Override
@@ -88,13 +99,11 @@ public class MultiplayerLobby extends Game implements Screen{
 	public void create() {
         skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
-                
-        Label lobbyLabel = new Label("", skin, "default");
-        lobbyLabel.setAlignment(Align.center);
+        
     	Table table = new Table();
     	table.setWidth(Gdx.graphics.getWidth()/2);
         table.setHeight(Gdx.graphics.getHeight()*3/5);
-        table.setPosition(Gdx.graphics.getWidth() / 4 +3, Gdx.graphics.getHeight()/5+5);
+        table.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight()/5+5);
         Pixmap labelColor = new Pixmap((int)table.getWidth(), (int)table.getHeight(), Pixmap.Format.RGB888);
         labelColor.setColor(Color.DARK_GRAY);
         labelColor.fill();
@@ -102,7 +111,7 @@ public class MultiplayerLobby extends Game implements Screen{
         //Creates new players inside of table
         players = new ArrayList<Label>();
         for (int i = 0; i < 4; i++) {
-        	Label.LabelStyle style = new Label.LabelStyle();
+//        	Label.LabelStyle style = new Label.LabelStyle();
         	Color white = new Color(255,255,0,1);
         	Label p = new Label("Player " + i, skin, "default");
 //        	p.setAlignment(Align.center);
@@ -118,6 +127,31 @@ public class MultiplayerLobby extends Game implements Screen{
         }
         table.pad(10);
         stage.addActor(table);
+        
+        Table voteTable = new Table();
+        voteTable.setWidth(Gdx.graphics.getWidth()/4);
+        voteTable.setHeight(Gdx.graphics.getHeight()*3/5);
+        voteTable.setPosition(Gdx.graphics.getWidth()*3/4, Gdx.graphics.getHeight()/5+5);
+        //Adds labels for votes
+        topVoteLabel = new Label("Top Vote",skin,"default");
+        topVoteLabel.setFontScale(1.3f);
+        secondVoteLabel = new Label("Second Vote",skin,"default");
+        thirdVoteLabel = new Label("Third Vote",skin,"default");
+        fourthVoteLabel = new Label("Fourth Vote",skin,"default");
+        voteTable.add(topVoteLabel).row();
+        voteTable.add(secondVoteLabel).row();
+        voteTable.add(thirdVoteLabel).row();
+        voteTable.add(fourthVoteLabel).row();
+        voteTable.pad(10);
+        stage.addActor(voteTable);
+        
+        
+        lobbyLabel = new Label("", skin, "default");
+        lobbyLabel.setAlignment(Align.center);
+        lobbyLabel.setWidth(table.getWidth());
+        lobbyLabel.setFontScale(2);
+        lobbyLabel.setPosition(table.getX(), table.getY()+table.getHeight()-lobbyLabel.getHeight()*lobbyLabel.getFontScaleY());
+        stage.addActor(lobbyLabel);
         
         ArrayList<TextButton> lobbies = new ArrayList<TextButton>();
         for (int i = 0; i < 18; i++) {
@@ -145,7 +179,8 @@ public class MultiplayerLobby extends Game implements Screen{
         userInfoLabel.setWidth(Gdx.graphics.getWidth() / 3);
 		userInfoLabel.setHeight(Gdx.graphics.getHeight() / 20);
 		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
-		
+        stage.addActor(userInfoLabel);
+
         final TextButton backButton = new TextButton("Back", skin, "default");
         backButton.setWidth(Gdx.graphics.getWidth() / 4);
         backButton.setHeight(Gdx.graphics.getHeight() / 20);
@@ -160,9 +195,10 @@ public class MultiplayerLobby extends Game implements Screen{
         stage.addActor(backButton);
         
         final TextButton joinLobby = new TextButton("Join Lobby", skin, "default");
-        joinLobby.setWidth(Gdx.graphics.getWidth() / 3);
+        joinLobby.setWidth(Gdx.graphics.getWidth() / 2);
         joinLobby.setHeight(Gdx.graphics.getHeight() / 10);
-        joinLobby.setPosition(Gdx.graphics.getWidth() / 4+3,Gdx.graphics.getHeight()/40);
+        joinLobby.setPosition(Gdx.graphics.getWidth() / 4,Gdx.graphics.getHeight()/40);
+        stage.addActor(joinLobby);
         //When the join lobby button is clicked
         joinLobby.addListener(new ClickListener(){
             @Override 
@@ -181,12 +217,75 @@ public class MultiplayerLobby extends Game implements Screen{
             		}
             	}
             }});
-        stage.addActor(joinLobby);
-        stage.addActor(userInfoLabel);
-
         
-        Gdx.input.setInputProcessor(stage);
+		final Table playerTable = new Table();
+		int width = Gdx.graphics.getWidth()*8/10;
+		int height = Gdx.graphics.getHeight()*8/10;
+		playerTable.setHeight(height);
+		playerTable.setWidth(width);
+		playerTable.setPosition(width/10, height/10);
+        int radius = 8;
+		Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(51, 51, 51, 0.8f);
+        pixmap.fillCircle(radius, radius, radius);
+        pixmap.fillCircle(width - radius, radius, radius);
+        pixmap.fillCircle(width - radius, height - radius, radius);
+        pixmap.fillCircle(radius, height - radius, radius);
+        pixmap.fillRectangle(0, radius, width, height - (radius * 2));
+        pixmap.fillRectangle(radius, 0, width - (radius * 2), height);
+		playerTable.setBackground(new Image(new Texture(pixmap)).getDrawable());
+		playerTable.setVisible(false);
+//		playerTable.padLeft(30).padRight(30).padTop(30).padBottom(30);
+		for (int rowNum = 1; rowNum <= 5; rowNum++) {
+			playerTable.row().colspan(5).expand();
+			for (int colNum = 1; colNum <= 5; colNum++) {
+				final TextButton g = new TextButton("Game "+colNum*rowNum,skin,"default"); //Will refrence database to see if game is valid and display name
+				g.setColor(Color.CYAN);
+				g.addListener(new ClickListener(){
+		            @Override 
+		            public void clicked(InputEvent event, float x, float y){
+		            	playerTable.setVisible(false);
+		            	for (Actor a : stage.getActors()) {
+		        			a.setTouchable(Touchable.enabled);
+		        		}
+		            	System.out.println("id="+MultiplayerLobby.this.lobbyNumber+"&playerId="+(Constants.userID)+"&vote="+g.getText().toString().split(" ")[1]);
+            			try {JsonParser.sendHTML("vote", "id="+MultiplayerLobby.this.lobbyNumber+"&playerId="+(Constants.userID)+"&vote="+g.getText().toString().split(" ")[1]);} catch (Exception e) {e.printStackTrace();}
+            			refreshNames();
+		            }});
+				playerTable.add(g);
+			}
+		}
+		playerTable.row();	
+		TextButton closeGameSelect = new TextButton("close",skin,"default");
+		closeGameSelect.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	playerTable.setVisible(false);
+            	for (Actor a : stage.getActors()) {
+        			a.setTouchable(Touchable.enabled);
+        		}
+            }});
+		playerTable.add(closeGameSelect).height(25).width(100).align(Align.center).bottom();
+        
+        final TextButton selectGame = new TextButton("Select Game", skin, "default");
+        selectGame.setWidth(Gdx.graphics.getWidth() / 4);
+        selectGame.setHeight(Gdx.graphics.getHeight() / 20);
+        selectGame.setPosition(Gdx.graphics.getWidth()*3/4, joinLobby.getY());
+        selectGame.addListener(new ClickListener(){
+        	@Override
+        	public void clicked(InputEvent event, float x, float y) {
+        		for (Actor a : stage.getActors()) {
+        			a.setTouchable(Touchable.disabled);
+        		}
+        		playerTable.setVisible(true);
+        		playerTable.setTouchable(Touchable.enabled);
+        	}});
+        refreshNames();
 
+        stage.addActor(selectGame);
+        stage.addActor(playerTable);
+
+        Gdx.input.setInputProcessor(stage);
 	}
 	
 	private void refreshNames(){
@@ -203,5 +302,46 @@ public class MultiplayerLobby extends Game implements Screen{
     		} else name = "[NONE]";
     		MultiplayerLobby.this.players.get(i).setText(name);
 	     }
+	     lobbyLabel.setText("Lobby " + lobbyNumber);
+	     if (lobbyNumber == 0) lobbyLabel.setText("Click on a lobby to view");
+	   
+	     String voteString = "0 0 0 0";
+	     int[][] votes = {{0,0},{0,0},{0,0},{0,0}};
+	     try { voteString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPlayerVotes?id="+MultiplayerLobby.this.lobbyNumber);}catch (Exception e1) {e1.printStackTrace();}
+	     String[] voteStringArr = voteString.split(" ");
+	     for (String vote : voteStringArr) {
+		     for (int[] voteList : votes) { 
+			    	 if (!vote.equals("0")) {
+		    			 if (vote.equals(voteList[0]+"")) {
+		    				 voteList[1]++;
+		    				 break;
+		    			 }
+	    			 else if (voteList[0] == 0) {
+	    				 voteList[0] = (int)Integer.parseInt(vote);
+	    				 voteList[1]++;
+	    				 break;
+	    			 }
+	    		 }
+	    	 }
+	     }
+	     for (int[] arr : votes) {
+	    	 System.out.println(Arrays.toString(arr));
+	     }
+	     int[][] sortedVotes = new int[4][2];
+	     for (int i = 0; i < 4; i++) {
+	    	 int[] largest = {0,0};
+	    	 for (int j = 0; j < 4; j++) {
+	    		 if (votes[j][1] > largest[1]) {
+	    			 largest = votes[j].clone();
+	    			 votes[j][1] = 0;
+	    		 }
+	    	 }
+	    	 sortedVotes[i] = largest.clone();
+			 System.out.println(Arrays.toString(largest));
+	     }
+	     topVoteLabel.setText("Game "+sortedVotes[0][0]+" ("+sortedVotes[0][1]+")");
+	     secondVoteLabel.setText("Game "+sortedVotes[1][0]+" ("+sortedVotes[1][1]+")");
+	     thirdVoteLabel.setText("Game "+sortedVotes[2][0]+" ("+sortedVotes[2][1]+")");
+	     fourthVoteLabel.setText("Game "+sortedVotes[3][0]+" ("+sortedVotes[3][1]+")");
 	}
 }
