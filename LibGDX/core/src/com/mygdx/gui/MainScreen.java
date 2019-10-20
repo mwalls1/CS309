@@ -42,7 +42,7 @@ public class MainScreen extends Game implements Screen{
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 
-		  Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
+		 Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     stage.act();
 	     stage.draw();

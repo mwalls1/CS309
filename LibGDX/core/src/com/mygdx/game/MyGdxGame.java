@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.mygdx.games.GameTest;
 import com.mygdx.gui.MainScreen;
 import com.mygdx.maptest.MapTest;
+import com.mygdx.goFish.*;
 
 public class MyGdxGame extends Game {
 	private Game game = this;
