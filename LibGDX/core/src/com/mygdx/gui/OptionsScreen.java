@@ -77,6 +77,31 @@ public class OptionsScreen extends Game implements Screen{
         skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
 
+        //User Info Name and sign in/ sign out button at the top of the screen
+        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
+        final TextButton userSignButton= new TextButton("singin/out",skin,"default");
+        userSignButton.setHeight(Gdx.graphics.getHeight() / 40);
+        userSignButton.setPosition(Gdx.graphics.getWidth()-userSignButton.getWidth(), Gdx.graphics.getHeight()-userSignButton.getHeight());
+        if (Constants.userID == 0) userSignButton.setText("Sign In");
+        else userSignButton.setText("Sign Out");
+        userSignButton.addListener(new ClickListener(){ //When Sign in/Sing out is pressed in the top right
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	if(Constants.userID == 0) { //If no one is signed in
+            		dispose();
+                	game.setScreen(new UserInfoScreen(game));
+            	}
+            	else { //If a user is currently signed in
+            		Constants.userID = 0;
+            		Constants.user = "Temporary User";
+            		create();
+            	}
+            }});
+		userInfoLabel.setHeight(userSignButton.getHeight());
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth()-userSignButton.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
+        stage.addActor(userInfoLabel);
+        stage.addActor(userSignButton);
+        
         final TextButton backButton = new TextButton("Back", skin, "default");
         final TextButton colorButton = new TextButton("Change Background", skin, "default");
         final TextButton screenMode = new TextButton("Change Screenmode", skin, "default");
@@ -110,17 +135,11 @@ public class OptionsScreen extends Game implements Screen{
             public void clicked(InputEvent event, float x, float y){
             	
             }
-        });
-        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");//Displays the user's name 
-	     userInfoLabel.setWidth(Constants.BUTTON_WIDTH);
-	 	 userInfoLabel.setHeight(Constants.BUTTON_HEIGHT);
-	 	 userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
-        
-        
+        });        
+       
         
         stage.addActor(backButton);
         stage.addActor(colorButton);
-        stage.addActor(userInfoLabel);
 
         
         Gdx.input.setInputProcessor(stage);

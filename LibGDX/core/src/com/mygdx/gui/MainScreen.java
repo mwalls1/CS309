@@ -103,30 +103,54 @@ public class MainScreen extends Game implements Screen{
         final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default"); //Creates button with label "leaderboards"
         final TextButton optionsButton = new TextButton("Options", skin, "default"); //Creates button with label "options"
         final TextButton userInfoButton = new TextButton("User Info", skin, "default");//Creates button with label "User Info"
+        final TextButton quitGameButton = new TextButton("Exit Game", skin, "default");
         
       
         //Three lines below this set the widths of buttons using the constant widths
         playButton.setWidth(Gdx.graphics.getWidth() / 3); 
-        leaderboardButton.setWidth(Gdx.graphics.getWidth() / 3);
-        optionsButton.setWidth(Gdx.graphics.getWidth() / 3);
-        userInfoButton.setWidth(Gdx.graphics.getWidth() / 3);
+        leaderboardButton.setWidth(playButton.getWidth());
+        optionsButton.setWidth(playButton.getWidth());
+        userInfoButton.setWidth(playButton.getWidth());
+        quitGameButton.setWidth(playButton.getWidth());
         
         //Set the heights using constant height
-        playButton.setHeight(Gdx.graphics.getHeight() / 20);
-        leaderboardButton.setHeight(Gdx.graphics.getHeight() / 20);
-        optionsButton.setHeight(Gdx.graphics.getHeight() / 20);
-        userInfoButton.setHeight(Gdx.graphics.getHeight() / 20);
+        playButton.setHeight(Gdx.graphics.getHeight() / 15);
+        leaderboardButton.setHeight(playButton.getHeight());
+        optionsButton.setHeight(playButton.getHeight());
+        userInfoButton.setHeight(playButton.getHeight());
+        quitGameButton.setHeight(playButton.getHeight());
         
         //Sets positions for buttons
-        playButton.setPosition(Gdx.graphics.getWidth() /2 - playButton.getWidth()/2, Gdx.graphics.getHeight()/2);
-        leaderboardButton.setPosition(Gdx.graphics.getWidth() /2 - leaderboardButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
-        optionsButton.setPosition(Gdx.graphics.getWidth() /2 - optionsButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*2);
-        userInfoButton.setPosition(Gdx.graphics.getWidth() /2 - userInfoButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*3);
+        playButton.setPosition(Gdx.graphics.getWidth()/20, Gdx.graphics.getHeight()/3);
+        leaderboardButton.setPosition(playButton.getX(),playButton.getY() - leaderboardButton.getHeight());
+        optionsButton.setPosition(playButton.getX(),leaderboardButton.getY() - optionsButton.getHeight());
+        userInfoButton.setPosition(playButton.getX(),optionsButton.getY() - userInfoButton.getHeight());
+        quitGameButton.setPosition(playButton.getX(),userInfoButton.getY() - quitGameButton.getHeight());
         
-        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");//Displays the user's name 
-	     userInfoLabel.setWidth(Gdx.graphics.getWidth() / 3);
-	 	 userInfoLabel.setHeight(Gdx.graphics.getHeight() / 20);
-	 	 userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
+        //User Info Name and sign in/ sign out button at the top of the screen
+        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
+        final TextButton userSignButton= new TextButton("singin/out",skin,"default");
+        userSignButton.setHeight(Gdx.graphics.getHeight() / 40);
+        userSignButton.setPosition(Gdx.graphics.getWidth()-userSignButton.getWidth(), Gdx.graphics.getHeight()-userSignButton.getHeight());
+        if (Constants.userID == 0) userSignButton.setText("Sign In");
+        else userSignButton.setText("Sign Out");
+        userSignButton.addListener(new ClickListener(){ //When Sign in/Sing out is pressed in the top right
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	if(Constants.userID == 0) { //If no one is signed in
+            		dispose();
+                	game.setScreen(new UserInfoScreen(game));
+            	}
+            	else { //If a user is currently signed in
+            		Constants.userID = 0;
+            		Constants.user = "Temporary User";
+            		create();
+            	}
+            }});
+		userInfoLabel.setHeight(userSignButton.getHeight());
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth()-userSignButton.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
+        stage.addActor(userInfoLabel);
+        stage.addActor(userSignButton);
         
         playButton.addListener(new ClickListener(){ //This tells button what to do when clicked
             @Override 
@@ -157,10 +181,17 @@ public class MainScreen extends Game implements Screen{
         userInfoButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	//Do some stuff when clicked
             	dispose();
             	game.setScreen(new UserInfoScreen(game));
             	
+            }
+        });
+        
+        quitGameButton.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	dispose();
+            	Gdx.app.exit();
             }
         });
         
@@ -169,7 +200,7 @@ public class MainScreen extends Game implements Screen{
         stage.addActor(leaderboardButton);
         stage.addActor(optionsButton);
         stage.addActor(userInfoButton);
-        stage.addActor(userInfoLabel);
+        stage.addActor(quitGameButton);
         
         Gdx.input.setInputProcessor(stage);
 
