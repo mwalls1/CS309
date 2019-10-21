@@ -117,4 +117,9 @@ public class Player {
 		return result;
 	}
 	
+	public ArrayList<Card> getHand()
+	{
+		return hand;
+	}
+	
 }

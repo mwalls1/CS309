@@ -9,21 +9,22 @@ public class GoFish{
 	private Player p2;
 	private Player p3;
 	private Player p4;
-	private AssetManager mananger;
-	private int deckIterator;
-	private Deck deck;
+	private AssetManager manager;
+	private static int deckIterator;
+	private static Deck deck;
 	
-	public GoFish(int seed) 
-	{
-		AssetManager manager = new AssetManager();
-		deckIterator = 0;
-		deck = new Deck(seed, manager);
-		p1 = new Player("p1");
-		p2 = new Player("p2");
-		p3 = new Player("p3");
-		p4 = new Player("p4");
-		
-	}
+	
+//	public GoFish(int seed, Player p1, Player p2, Player p3, Player p4, AssetManager manager) 
+//	{
+//		this.manager = manager;
+//		deckIterator = 0;
+//		deck = new Deck(seed, manager);
+//		this.p1 = p1;
+//		this.p2 = p2;
+//		this.p3 = p3;
+//		this.p4 = p4;
+//		
+//	}
 	
 	public Player getPlayer(int player)
 	{
@@ -34,7 +35,7 @@ public class GoFish{
 		else return new Player("Not a player");
 	}
 	
-	public void play(Player currentPlayer, Player otherPlayer, String rank)
+	public static void play(Player currentPlayer, Player otherPlayer, String rank)
 	{
 		if (otherPlayer.hasCard(rank)) {
 			Card toMove = otherPlayer.getCard(otherPlayer.getIndexOfCardTaken());
@@ -44,7 +45,7 @@ public class GoFish{
 		else currentPlayer.addCard(fish());
 	}
 	
-	public Card fish() {
+	public static Card fish() {
 		deckIterator++;
 		return deck.getCard(deckIterator-1);
 	}
@@ -60,5 +61,10 @@ public class GoFish{
 		
 		return result;
 		
+	}
+	
+	public static Deck getDeck()
+	{
+		return deck;
 	}
 }
