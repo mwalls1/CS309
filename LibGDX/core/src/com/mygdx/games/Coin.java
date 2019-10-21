@@ -87,10 +87,10 @@ public class Coin {
 			play.setVertices(vert);
 			play.setOrigin(midX, midY);
 			if (Intersector.overlapConvexPolygons(poly1, play)) {
-				System.out.println("Coin grabbed.");
 				player.numCoins++;
 				active = false;
 				respawn = elapsed;
+				player.hp++;
 			}
     	}
     }

@@ -102,25 +102,13 @@ public class Hazard {
     	play.setOrigin(midX, midY);
     	if(Intersector.overlapConvexPolygons(poly1, play))
     	{
-    		System.out.println("Hit by blade.");
     		player.hp -= .5f;
-    		font.getData().setScale(.5f);
-    		font.draw(batch, "-"+numHP+" HP", player.getX(), player.getY() +30);
-    		print = elapsed;
-    		numHP+=.5f;
     		
     	}
     	else if(Intersector.overlapConvexPolygons(poly2, play))
     	{
-    		System.out.println("Hit by blade.");
     		player.hp -= .5f;
-    		font.getData().setScale(.5f);
-    		font.draw(batch, "-"+numHP+" HP", player.getX(), player.getY() +30);
-    		print = elapsed;
-    		numHP+=.5f;
     	}
-    	else
-    		numHP=1;
     	
     }
 

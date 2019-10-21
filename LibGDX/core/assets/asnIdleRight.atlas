@@ -1,0 +1,33 @@
+
+asnIdleRight.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+idleRight0
+  rotate: false
+  xy: 1, 1
+  size: 12, 16
+  orig: 12, 16
+  offset: 0, 0
+  index: -1
+idleRight1
+  rotate: false
+  xy: 15, 2
+  size: 12, 15
+  orig: 12, 15
+  offset: 0, 0
+  index: -1
+idleRight3
+  rotate: false
+  xy: 29, 2
+  size: 12, 15
+  orig: 12, 15
+  offset: 0, 0
+  index: -1
+idleRight2
+  rotate: false
+  xy: 43, 3
+  size: 12, 14
+  orig: 12, 14
+  offset: 0, 0
+  index: -1

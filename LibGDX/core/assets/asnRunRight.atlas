@@ -1,0 +1,33 @@
+
+asnRunRight.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+runRight1
+  rotate: false
+  xy: 1, 2
+  size: 13, 16
+  orig: 13, 16
+  offset: 0, 0
+  index: -1
+runRight0
+  rotate: false
+  xy: 16, 2
+  size: 12, 16
+  orig: 12, 16
+  offset: 0, 0
+  index: -1
+runRight2
+  rotate: false
+  xy: 30, 1
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+runRight3
+  rotate: false
+  xy: 44, 2
+  size: 12, 16
+  orig: 12, 16
+  offset: 0, 0
+  index: -1

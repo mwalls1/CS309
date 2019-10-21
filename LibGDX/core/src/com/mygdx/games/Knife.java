@@ -55,12 +55,12 @@ public class Knife {
     	//set the center of the sprite to be where the bullet starts
     	//set the x and y of the sprite
     }
-    public void render(SpriteBatch batch, TiledMapTileLayer walls, ArrayList<Zombie> zombies, ArrayList<Wizard> wizards) {
+    public void render(SpriteBatch batch, TiledMapTileLayer walls, ArrayList<Zombie> zombies, ArrayList<Dragon> wizards, ArrayList<Assassin> assassins) {
     	sprite.draw(batch);
-    	update(walls, zombies, wizards);
+    	update(walls, zombies, wizards, assassins);
     	}
 
-	public void update(TiledMapTileLayer walls, ArrayList<Zombie> zombies, ArrayList<Wizard> wizards) {
+	public void update(TiledMapTileLayer walls, ArrayList<Zombie> zombies, ArrayList<Dragon> wizards, ArrayList<Assassin> assassins) {
 		if(active && walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
 			x+=dir.x*3;
 		else
@@ -77,23 +77,35 @@ public class Knife {
 		}
 		for(Zombie enemy: zombies)
 		{
-			if(Intersector.overlaps(sprite.getBoundingRectangle(), enemy.sprite.getBoundingRectangle()))
+			if(enemy.active&&Intersector.overlaps(sprite.getBoundingRectangle(), enemy.sprite.getBoundingRectangle()))
 			{
 				enemy.active = false;
 				active = false;
 				Player.numBullets-=1;
+				Player.numEnemies-=1;
 			}
 		}
-		for(Wizard wiz: wizards)
+		for(Dragon wiz: wizards)
 		{
-			if(Intersector.overlaps(sprite.getBoundingRectangle(), wiz.sprite.getBoundingRectangle()))
+			if(wiz.active&&Intersector.overlaps(sprite.getBoundingRectangle(), wiz.sprite.getBoundingRectangle()))
 			{
 				wiz.active = false;
 				active = false;
 				Player.numBullets-=1;
+				Player.numEnemies-=1;
 			}
 		}
-		if(Math.abs(Math.sqrt(Math.pow(x-sX, 2) + Math.pow(y-sY, 2)))>= 64)
+		for(Assassin asn: assassins)
+		{
+			if(asn.active&&Intersector.overlaps(sprite.getBoundingRectangle(), asn.sprite.getBoundingRectangle()))
+			{
+				asn.active = false;
+				active = false;
+				Player.numBullets-=1;
+				Player.numEnemies-=1;
+			}
+		}
+		if(Math.abs(Math.sqrt(Math.pow(x-sX, 2) + Math.pow(y-sY, 2)))>= 128)
 		{
 			Player.numBullets-=1;
 			active  =false;

@@ -52,6 +52,7 @@ public class Player {
 	private TextureAtlas iLeft;
 	private TextureAtlas iRight;
 	public int numCoins;
+	public static int numEnemies = 45;
     public Player(int spawnX, int spawnY){
 		numCoins = 0;
     	sprite = new Sprite();
@@ -65,8 +66,8 @@ public class Player {
         area = width*height;
         x = spawnX;
         y = spawnY;
-        dx = 3;
-        dy = 3;
+        dx = 2;
+        dy = 2;
         numBullets = 0;
         totalBullets = 0;
         sprite.setSize(width,height);

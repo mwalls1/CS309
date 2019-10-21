@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
-public class Wizard {
+public class Dragon {
     public int x,y;
     public float width, height;
     public Sprite sprite;
@@ -35,7 +35,7 @@ public class Wizard {
 	public int tileH = 16;
 	float[] vertices = new float[8];
 	public boolean active;
-    public Wizard(Texture texture, int x1, int y1, OrthographicCamera cam){
+    public Dragon(Texture texture, int x1, int y1, OrthographicCamera cam){
     	startTime = 0;
     	sprite = new Sprite(texture);
     	width = sprite.getWidth();

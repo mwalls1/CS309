@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -38,6 +39,10 @@ public class Bolt {
     public boolean active;
     public float sX;
     public float sY;
+	private float elapsed = 0;
+	private float print = 0;
+	private float numHP = 25f;
+	private BitmapFont font = new BitmapFont();
     public Bolt(Texture texture, float x1, float y1, float x2, float y2){
     	pos1 = new Vector2(x1,y1);
     	pos2 = new Vector2(x2,y2);
@@ -55,10 +60,10 @@ public class Bolt {
     }
     public void render(SpriteBatch batch, TiledMapTileLayer walls, Player player) {
     	sprite.draw(batch);
-    	update(walls, player);
+    	update(walls, player, batch);
     	}
 
-	public void update(TiledMapTileLayer walls, Player player) {
+	public void update(TiledMapTileLayer walls, Player player, SpriteBatch batch) {
 		if(active && walls.getCell((int)((x+dir.x*3)/16), (int)((y+dir.y*3)/16))==null)
 			x+=dir.x*2;
 		else
@@ -73,8 +78,7 @@ public class Bolt {
 		}
 		if(Intersector.overlaps(sprite.getBoundingRectangle(), player.sprite.getBoundingRectangle()))
 		{
-			player.hp -= 25;
-			System.out.println("Hit by bolt.");
+			player.hp -= 5;
 			active = false;
 		}
 		sprite.setX(x);

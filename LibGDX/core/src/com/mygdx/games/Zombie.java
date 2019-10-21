@@ -159,7 +159,6 @@ public class Zombie {
     	if(active && Intersector.overlapConvexPolygons(poly1, play))
     	{
     		player.hp -= 1;
-    		System.out.println("Hit by zombie.");
     	}
     }
 
