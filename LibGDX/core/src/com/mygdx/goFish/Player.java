@@ -13,6 +13,7 @@ public class Player {
 	{
 		this.name = name;
 		score = 0;
+		hand = new ArrayList<Card>();
 	}
 	
 	public void addCard(Card card)

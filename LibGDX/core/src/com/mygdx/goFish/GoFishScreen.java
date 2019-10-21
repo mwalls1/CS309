@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.Cards.Card;
+import com.mygdx.Cards.Deck;
 
 import util.Constants;
 
@@ -27,6 +28,8 @@ private Skin skin;
 private SpriteBatch batch;
 private String selectedRank;
 private Player selectedPlayer;
+private int deckIterator;
+private Deck deck;
 
 private Player p1;
 private Player p2;
@@ -53,6 +56,7 @@ private GoFish cardGame;
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     batch.begin();
 	     for (int i = 0; i<handSprites.length; i++) handSprites[i].draw(batch);
+	     batch.end();
 	     stage.act();
 	     stage.draw();
 		
@@ -91,6 +95,7 @@ private GoFish cardGame;
 	public void create()
 	{
 		manager = new AssetManager();
+		deck = new Deck(1, manager);
 		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 	    stage = new Stage();
@@ -100,6 +105,12 @@ private GoFish cardGame;
 		p4 = new Player("p4");
 		
 		
+		p1.addCard(new Card(manager));
+		p1.addCard(new Card(manager));
+		generateHandSprites();
+		
+		
+		deal();
 		
 		//Initialize buttons
 		final TextButton button1 = new TextButton("Aces", skin, "default");
@@ -362,7 +373,36 @@ private GoFish cardGame;
 		ArrayList<Card> hand = p1.getHand();
 		handSprites = new Sprite[hand.size()];
 		
-		for (int i = 0; i<handSprites.length; i++) handSprites[i] = hand.get(i).getSprite();
+		for (int i = 0; i<handSprites.length; i++) 
+		{
+			Sprite temp = hand.get(i).getSprite();
+			//temp.setScale(0.3f);
+			temp.setSize(temp.getWidth()*0.3f, temp.getHeight()*0.3f);
+			temp.setPosition(60*i, 10);
+			
+			
+			handSprites[i] = temp;
+		}
+		
+	}
+	
+	private void play(Player currentPlayer, Player otherPlayer, String rank)
+	{
+		if (otherPlayer.hasCard(rank)) {
+			Card toMove = otherPlayer.getCard(otherPlayer.getIndexOfCardTaken());
+			currentPlayer.addCard(toMove); //Add other player's card to current player's hand
+			otherPlayer.removeCard(toMove); //Remove the card that was taken by current player
+		}
+		else currentPlayer.addCard(fish());
+	}
+	
+	private Card fish() {
+		deckIterator++;
+		return deck.getCard(deckIterator-1);
+	}
+	
+	private void deal()
+	{
 		
 	}
 }
