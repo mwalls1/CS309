@@ -150,7 +150,6 @@ public class GameTest extends Game implements Screen{
 		if(player.numCoins==50 && player.numEnemies == 0)
 			gameOver = true;
 			//thread.run(player, player2);
-		if (player.hp > 0) {
 			/*try {
 				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
 				scan = new Scanner(s2);
@@ -242,7 +241,6 @@ public class GameTest extends Game implements Screen{
 	    	 dispose();
 	    	 game.setScreen(new MainScreen(game));
 	     }
-	}
 	}
 
 	@Override
