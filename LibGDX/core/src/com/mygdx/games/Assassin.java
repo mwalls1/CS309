@@ -81,11 +81,11 @@ public class Assassin {
     	poly1.setVertices(vertices);
     	poly1.setOrigin(midX, midY);
     	vision = new Circle(midX, midY, 64);
-    	bolt = new Texture(Gdx.files.internal("assets/dagger.png"));
-		rLeft = new TextureAtlas(Gdx.files.internal("assets/asnRunLeft.atlas"));
-		rRight = new TextureAtlas(Gdx.files.internal("assets/asnRunRight.atlas"));
-		iRight = new TextureAtlas(Gdx.files.internal("assets/asnIdleRight.atlas"));
-		iLeft = new TextureAtlas(Gdx.files.internal("assets/asnIdleLeft.atlas"));
+    	bolt = new Texture(Gdx.files.internal("dagger.png"));
+		rLeft = new TextureAtlas(Gdx.files.internal("asnRunLeft.atlas"));
+		rRight = new TextureAtlas(Gdx.files.internal("asnRunRight.atlas"));
+		iRight = new TextureAtlas(Gdx.files.internal("asnIdleRight.atlas"));
+		iLeft = new TextureAtlas(Gdx.files.internal("asnIdleLeft.atlas"));
 		runLeft = new Animation<TextureRegion>(1/10f, rLeft.getRegions());
 		runRight = new Animation<TextureRegion>(1/10f, rRight.getRegions());
 		idleLeft = new Animation<TextureRegion>(1/5f, iLeft.getRegions());

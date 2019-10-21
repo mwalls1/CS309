@@ -1,8 +1,5 @@
 package com.mygdx.games;
 
-import com.mygdx.gui.*;
-import com.mygdx.objects.score;
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -11,38 +8,21 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.gui.MainScreen;
 
-import util.Constants;
 import util.JsonParser;
 
 public class GameTest extends Game implements Screen{
@@ -82,17 +62,17 @@ public class GameTest extends Game implements Screen{
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
-		map = new TmxMapLoader().load("assets/dungeon3.tmx");
+		map = new TmxMapLoader().load("dungeon3.tmx");
 		MapLayers mapLayers = map.getLayers();
 		terrain = (TiledMapTileLayer) mapLayers.get("floor");
 		walls = (TiledMapTileLayer) mapLayers.get("walls");
 		collision = (TiledMapTileLayer) mapLayers.get("blockage");
 		player = new Player(847, 54);
 		player2 = new Player(847,54);
-		blade = new Texture(Gdx.files.internal("assets/blade.png"));
-		Texture zom = new Texture(Gdx.files.internal("assets/zombie_idle_anim_f0.png"));
-		Texture wiz = new Texture(Gdx.files.internal("assets/wizard.png"));
-		Texture asn = new Texture(Gdx.files.internal("assets/daway.png"));
+		blade = new Texture(Gdx.files.internal("blade.png"));
+		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
+		Texture wiz = new Texture(Gdx.files.internal("wizard.png"));
+		Texture asn = new Texture(Gdx.files.internal("daway.png"));
 		hazards.add(new Hazard(blade,872,240, camera));
 		hazards.add(new Hazard(blade,869,718, camera));
 		hazards.add(new Hazard(blade,639,737, camera));

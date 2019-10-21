@@ -84,7 +84,7 @@ public class MultiplayerLobby extends Game implements Screen{
 	}
 	@Override
 	public void create() {
-        skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
         
     	Table table = new Table();

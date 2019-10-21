@@ -79,7 +79,7 @@ public class UserInfoScreen extends Game implements Screen {
 
 	@Override
 	public void create() {
-		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		stage = new Stage();
 
 		final TextButton createUserButton = new TextButton("Create User", skin, "default");

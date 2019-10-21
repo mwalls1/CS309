@@ -73,11 +73,11 @@ public class Player {
         sprite.setSize(width,height);
         midX = (2*x+width)/2;
         midY = (2*y+height)/2;
-        dagger = new Texture(Gdx.files.internal("assets/dagger.png"));
-		rLeft = new TextureAtlas(Gdx.files.internal("assets/runLeft.atlas"));
-		rRight = new TextureAtlas(Gdx.files.internal("assets/runRight.atlas"));
-		iRight = new TextureAtlas(Gdx.files.internal("assets/idleRight.atlas"));
-		iLeft = new TextureAtlas(Gdx.files.internal("assets/idleLeft.atlas"));
+        dagger = new Texture(Gdx.files.internal("dagger.png"));
+		rLeft = new TextureAtlas(Gdx.files.internal("runLeft.atlas"));
+		rRight = new TextureAtlas(Gdx.files.internal("runRight.atlas"));
+		iRight = new TextureAtlas(Gdx.files.internal("idleRight.atlas"));
+		iLeft = new TextureAtlas(Gdx.files.internal("idleLeft.atlas"));
 		runLeft = new Animation<TextureRegion>(1/10f, rLeft.getRegions());
 		runRight = new Animation<TextureRegion>(1/10f, rRight.getRegions());
 		idleLeft = new Animation<TextureRegion>(1/5f, iLeft.getRegions());

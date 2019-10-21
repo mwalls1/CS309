@@ -48,7 +48,7 @@ public class Coin {
         endX = x+width;
         endY = y+height;
         active = true;
-        coins = new TextureAtlas(Gdx.files.internal("assets/coins.atlas"));
+        coins = new TextureAtlas(Gdx.files.internal("coins.atlas"));
         coin = new Animation<TextureRegion>(1/5f, coins.getRegions());
         poly1 = new Polygon();
     	poly1.setVertices(vertices);

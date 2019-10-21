@@ -73,7 +73,7 @@ public class LeaderboardScreen extends Game implements Screen {
 	@Override
 	public void create() {
 //		batch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		stage = new Stage();
 
 		//User Info Name and sign in/ sign out button at the top of the screen
