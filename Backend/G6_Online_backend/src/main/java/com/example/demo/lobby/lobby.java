@@ -21,12 +21,35 @@ public class lobby {
 
 	@Column(name = "player4")
 	private Integer player4;
+	
+	@Column(name = "seed")
+	private Integer seed;
+	
+	@Column(name = "p1game")
+	private Integer p1game;
+	
+	@Column(name = "p2game")
+	private Integer p2game;
+	
+	@Column(name = "p3game")
+	private Integer p3game;
+	
+	@Column(name = "p4game")
+	private Integer p4game;
 
+	@Column(name = "playerReadyStatus")
+	private Integer playerReadyStatus;
 	public lobby() {
 		this.player1 = 0;
 		this.player2 = 0;
 		this.player3 = 0;
 		this.player4 = 0;
+		this.seed = 0;
+		this.p1game = 0;
+		this.p1game = 0;
+		this.p1game = 0;
+		this.p1game = 0;
+		this.playerReadyStatus = 0;
 	}
 	
 	public Integer getId() {
@@ -49,6 +72,23 @@ public class lobby {
 		return player4;
 	}
 
+	public String getPlayerGameVote() {
+		String val = "";
+		if (p1game != null) val += p1game + " ";
+		else val += "0 ";
+		if (p2game != null) val += p2game + " ";
+		else val += "0 ";
+		if (p3game != null) val += p3game + " ";
+		else val += "0 ";
+		if (p4game != null) val += p4game + " ";
+		else val += "0";
+		return val;
+	}
+	
+	public Integer getReadyStatus() {
+		return playerReadyStatus;
+	}
+	
 	public void setPlayer1(Integer id) {
 		this.player1 = id;
 	}
@@ -67,5 +107,22 @@ public class lobby {
 	
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public void setPlayerOneVote(Integer vote) {
+		this.p1game = vote;
+	}
+	public void setPlayerTwoVote(Integer vote) {
+		this.p2game = vote;
+	}
+	public void setPlayerThreeVote(Integer vote) {
+		this.p3game = vote;
+	}
+	public void setPlayerFourVote(Integer vote) {
+		this.p4game = vote;
+	}
+	
+	public void setReadyStatus(Integer ready) {
+		this.playerReadyStatus = ready;
 	}
 }

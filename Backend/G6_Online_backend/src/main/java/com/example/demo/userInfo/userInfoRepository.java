@@ -16,8 +16,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface userInfoRepository extends JpaRepository<userInfo, Integer> {
 
-//	userInfo getUserInfoById(int id);
+	userInfo getUserInfoById(int id);
 
-//	List<userInfo> getUserInfoList();
+	List<userInfo> getUserInfoList();
 
 }

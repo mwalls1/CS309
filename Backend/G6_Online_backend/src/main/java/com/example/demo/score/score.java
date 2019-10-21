@@ -28,6 +28,13 @@ public class score {
 		this.name = name;
 		this.userID = userID;
 	}
+	
+	public score(Integer id, Integer score, String name, Integer userID) {
+		this.setId(id);
+		this.setScore(score);
+		this.setName(name);
+		this.setUserID(userID);
+	}
 
 	public Integer getId() {
 		return id;

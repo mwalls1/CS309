@@ -54,6 +54,56 @@ public class lobbyController {
 		return "Updated player " + player + " to id: " + playerId;
 	}
 	
+	@PostMapping("/vote")
+	public String vote(Integer id, Integer playerId, Integer vote) {
+		lobby l = lobbyRepo.findById(id).get();
+		if (l.getPlayer1() == playerId) l.setPlayerOneVote(vote);
+		else if (l.getPlayer2() == playerId) l.setPlayerTwoVote(vote);
+		else if (l.getPlayer3() == playerId) l.setPlayerThreeVote(vote);
+		else if (l.getPlayer4() == playerId) l.setPlayerFourVote(vote);
+		else return "fail";
+		lobbyRepo.save(l);
+		return "Vote casted";
+	}
+	
+	@PostMapping("/readyUp")
+	public String readyUp(Integer id, Integer playerId) {
+		lobby l = lobbyRepo.findById(id).get();
+		if(l.getReadyStatus() == null) l.setReadyStatus(1);
+		try {
+		if (l.getPlayer1() == playerId) {
+			if (l.getReadyStatus()%2 == 0) l.setReadyStatus(l.getReadyStatus()/2);
+			else if (l.getReadyStatus()%2 != 0) l.setReadyStatus(l.getReadyStatus()*2);
+			lobbyRepo.save(l);
+			return "Set player 1 ready status";}
+		if (l.getPlayer2() == playerId) {
+			if (l.getReadyStatus()%3 == 0) l.setReadyStatus(l.getReadyStatus()/3);
+			else if (l.getReadyStatus()%3 != 0) l.setReadyStatus(l.getReadyStatus()*3);
+			lobbyRepo.save(l);
+			return "Set player 2 ready status";}
+		if (l.getPlayer3() == playerId) {
+			if (l.getReadyStatus()%5 == 0) l.setReadyStatus(l.getReadyStatus()/5);
+			else if (l.getReadyStatus()%5 != 0) l.setReadyStatus(l.getReadyStatus()*5);
+			lobbyRepo.save(l);
+			return "Set player 3 ready status";}
+		if (l.getPlayer4() == playerId) {
+			if (l.getReadyStatus()%7 == 0) l.setReadyStatus(l.getReadyStatus()/7);
+			else if (l.getReadyStatus()%7 != 0) l.setReadyStatus(l.getReadyStatus()*7);
+			lobbyRepo.save(l);
+			return "Set player 4 ready status";}
+		}catch (Exception e) {return e.toString();}
+		lobbyRepo.save(l);
+		return "No player updated";
+	}
+	
+	@PostMapping("/readyDown")
+	public String readDown(Integer id) {
+		lobby l = lobbyRepo.findById(id).get();
+		l.setReadyStatus(1);
+		lobbyRepo.save(l);
+		return "Lobby ready cleared";
+	}
+	
 	@PutMapping("/cleanLobbies")
 	public String cleanLobbies() {
 		List<lobby> lobbies = lobbyRepo.findAll();
@@ -64,5 +114,17 @@ public class lobbyController {
 		}
 		
 		return "Lobbies Cleaned";
+	}
+	
+	@GetMapping("/getReadyStatus")
+	public String getReadyStatus(Integer id) {
+		try {
+		return lobbyRepo.findById(id).get().getReadyStatus() + "";
+		}catch (Exception e) {return e.toString();}
+	}
+	
+	@GetMapping("/getPlayerVotes")
+	public String getPlayerVotes(Integer id) {
+		return lobbyRepo.findById(id).get().getPlayerGameVote();
 	}
 }

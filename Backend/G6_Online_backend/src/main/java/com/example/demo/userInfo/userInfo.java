@@ -36,9 +36,19 @@ public class userInfo {
 //	@NotFound(action = NotFoundAction.IGNORE)
 	private String password;
 	
-	public userInfo() {}
+	public userInfo() {
+		this.setName("default");
+		this.setPassword("default");
+	}
 	
 	public userInfo(String name, String password) {
+		this.setName(name);
+		this.setPassword(password);
+	}
+	
+	// used for testing Mockito
+	public userInfo(Integer id, String name, String password) {
+		this.setId(id);
 		this.setName(name);
 		this.setPassword(password);
 	}
