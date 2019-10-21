@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -73,33 +74,60 @@ public class LobbyScreen extends Game implements Screen{
         skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
 
+        //User Info Name and sign in/ sign out button at the top of the screen
+        final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
+        final TextButton userSignButton= new TextButton("singin/out",skin,"default");
+        userSignButton.setHeight(Gdx.graphics.getHeight() / 40);
+        userSignButton.setPosition(Gdx.graphics.getWidth()-userSignButton.getWidth(), Gdx.graphics.getHeight()-userSignButton.getHeight());
+        if (Constants.userID == 0) userSignButton.setText("Sign In");
+        else userSignButton.setText("Sign Out");
+        userSignButton.addListener(new ClickListener(){ //When Sign in/Sing out is pressed in the top right
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	if(Constants.userID == 0) { //If no one is signed in
+            		dispose();
+                	game.setScreen(new UserInfoScreen(game));
+            	}
+            	else { //If a user is currently signed in
+            		Constants.userID = 0;
+            		Constants.user = "Temporary User";
+            		create();
+            	}
+            }});
+		userInfoLabel.setHeight(userSignButton.getHeight());
+		userInfoLabel.setPosition(Gdx.graphics.getWidth()-userInfoLabel.getWidth()-userSignButton.getWidth(), Gdx.graphics.getHeight()-userInfoLabel.getHeight());
+        stage.addActor(userInfoLabel);
+        stage.addActor(userSignButton);
+        
         final TextButton backButton = new TextButton("Back", skin, "default");
         final TextButton privateGameButton = new TextButton("Private Game", skin, "default");
         final TextButton publicGameButton = new TextButton("Public Game", skin, "default");
         final TextButton singlePlayerButton = new TextButton("Single Player", skin, "default");
         
-        backButton.setWidth(Constants.BUTTON_WIDTH);
-        privateGameButton.setWidth(Constants.BUTTON_WIDTH);
-        publicGameButton.setWidth(Constants.BUTTON_WIDTH);
-        singlePlayerButton.setWidth(Constants.BUTTON_WIDTH);
         
-        backButton.setHeight(Constants.BUTTON_HEIGHT);
-        privateGameButton.setHeight(Constants.BUTTON_HEIGHT);
-        publicGameButton.setHeight(Constants.BUTTON_HEIGHT);
-        singlePlayerButton.setHeight(Constants.BUTTON_HEIGHT);
         
-        backButton.setPosition(Gdx.graphics.getWidth() /2 - backButton.getWidth()/2, Gdx.graphics.getHeight()/2);
-        privateGameButton.setPosition(Gdx.graphics.getWidth() /2 - privateGameButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET);
-        publicGameButton.setPosition(Gdx.graphics.getWidth() /2 - publicGameButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*2);
-        singlePlayerButton.setPosition(Gdx.graphics.getWidth() /2 - singlePlayerButton.getWidth()/2, Gdx.graphics.getHeight()/2 - Constants.BUTTON_OFFSET*3);
+        backButton.setWidth(Gdx.graphics.getWidth() / 4);
+        privateGameButton.setWidth(Gdx.graphics.getWidth() / 3); 
+        publicGameButton.setWidth(privateGameButton.getWidth());
+        singlePlayerButton.setWidth(privateGameButton.getWidth());
         
+        backButton.setHeight(Gdx.graphics.getHeight() / 20);
+        privateGameButton.setHeight(Gdx.graphics.getHeight() / 15);
+        publicGameButton.setHeight(privateGameButton.getHeight());
+        singlePlayerButton.setHeight(privateGameButton.getHeight());
+        
+        backButton.setPosition(0, Gdx.graphics.getHeight()-backButton.getHeight());
+        privateGameButton.setPosition(Gdx.graphics.getWidth()/20, Gdx.graphics.getHeight()/3);
+        publicGameButton.setPosition(privateGameButton.getX(),privateGameButton.getY() - publicGameButton.getHeight());
+        singlePlayerButton.setPosition(publicGameButton.getX(),publicGameButton.getY() - singlePlayerButton.getHeight());
+        
+        //When back button is clicked
         backButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
             	dispose();
             	game.setScreen(new MainScreen(game));
-            }
-        });
+            }});
         
         privateGameButton.addListener(new ClickListener(){
             @Override 
@@ -113,7 +141,7 @@ public class LobbyScreen extends Game implements Screen{
         publicGameButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	dispose();
+            	game.setScreen(new MultiplayerLobby(game));
             }
         });
         
@@ -129,7 +157,7 @@ public class LobbyScreen extends Game implements Screen{
         stage.addActor(privateGameButton);
         stage.addActor(publicGameButton);
         stage.addActor(singlePlayerButton);
-        
+
         Gdx.input.setInputProcessor(stage);
 
 	}

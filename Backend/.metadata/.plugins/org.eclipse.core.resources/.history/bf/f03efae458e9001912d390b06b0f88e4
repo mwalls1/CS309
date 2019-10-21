@@ -1,0 +1,45 @@
+package com.example.demo.lobby;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+public class lobbyController {
+	@Autowired
+	private lobbyRepository lobbyRepo;
+	
+	@GetMapping("getlobbys")
+	public List<lobby> getlobbys(){
+		return lobbyRepo.findAll();
+	}
+	
+	@GetMapping("getPosByID")
+	public String getXbyID(Integer id) {
+		Optional<lobby> p = lobbyRepo.findById(id);
+		lobby p1 = p.get();
+		return p1.getXpos().toString() + " " + p1.getYpos().toString();
+	}
+	
+	@PostMapping("/newlobby")
+	public String savelobby(Integer xpos, Integer ypos) {
+		lobby p = new lobby(xpos, ypos);
+		lobbyRepo.save(p);
+		return "New lobby made at " + p.getXpos() + " added to user " + p.getYpos();
+	}
+	
+	@PostMapping("/updatePos")
+	public String updatePos(Integer id, Integer xpos, Integer ypos) {
+		Optional<lobby> p = lobbyRepo.findById(id);
+		lobby p1 = p.get();
+		p1.setXpos(xpos);
+		p1.setYpos(ypos);
+		lobbyRepo.save(p1);
+		return p1.getXpos().toString() + " " + p1.getYpos().toString();
+	}
+}

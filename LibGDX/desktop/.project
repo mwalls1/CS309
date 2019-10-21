@@ -20,4 +20,14 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
+<<<<<<< HEAD
+	<linkedResources>
+		<link>
+			<name>assets</name>
+			<type>2</type>
+			<location>/Users/taylorweil/Desktop/tc_1_/LibGDX/core/assets</location>
+		</link>
+	</linkedResources>
+=======
+>>>>>>> 57a4fd15136f32ccc9f5c1f20ff92698ee3c7354
 </projectDescription>

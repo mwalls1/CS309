@@ -48,30 +48,15 @@ import util.JsonParser;
 public class GameTest extends Game implements Screen{
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
-	private Skin skin;
 	private Stage stage;
-	private Viewport viewport;
-	private TextureAtlas atlas;
-	private TextButtonStyle textButtonStyle;
 	private BitmapFont font;
 	Scanner scan;
 	private Game game;
-	private float offset = Gdx.graphics.getHeight() / 10;
-	private int daWayx;
-	private int daWayy;
 	private Texture blade;
-	private Texture left;
-	private Texture right;
-	private Texture background;
-	private CharSequence str;
-	private Sound theway;
 	private Player player;
 	private int score = 0;
 	private Player player2;
 	private ShapeRenderer shape;
-	private int height;
-	private int width;
-	private Sprite knuckles;
 	private boolean gameOver = false;
 	private float elapsed = 0;
 	private TiledMap map;
@@ -96,8 +81,6 @@ public class GameTest extends Game implements Screen{
 		font = new BitmapFont();
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-		width = Gdx.graphics.getWidth();
-		height = Gdx.graphics.getHeight();
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
 		map = new TmxMapLoader().load("assets/dungeon3.tmx");
 		MapLayers mapLayers = map.getLayers();
@@ -187,6 +170,23 @@ public class GameTest extends Game implements Screen{
 		if(player.numCoins==50 && player.numEnemies == 0)
 			gameOver = true;
 			//thread.run(player, player2);
+		if (player.hp > 0) {
+			try {
+				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
+				scan = new Scanner(s2);
+				player2.setPos(scan.nextInt(), scan.nextInt());
+				scan.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				JsonParser.sendHTML("updatePos", "id=45&xpos="+player.getX()+"&ypos="+player.getY());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			thread.run(player, player2);
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
@@ -264,10 +264,10 @@ public class GameTest extends Game implements Screen{
 	    	 game.setScreen(new MainScreen(game));
 	     }
 	}
+	}
 
 	@Override
 	public void resize(int width, int height) {
-		offset = Gdx.graphics.getHeight() / 10;
 		create();
 	}
 
@@ -308,7 +308,6 @@ public class GameTest extends Game implements Screen{
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 		batch = new SpriteBatch();
-		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 

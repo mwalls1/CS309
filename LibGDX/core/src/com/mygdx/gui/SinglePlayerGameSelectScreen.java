@@ -9,13 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
-import com.mygdx.space.Space;
-
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.games.GameTest;
 import com.mygdx.space.Space;
-
 
 import util.Constants;
 
@@ -167,8 +162,6 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         		
         	}
         });
-        
-      
       
         
         Gdx.input.setInputProcessor(stage);

@@ -1,0 +1,57 @@
+package com.example.demo.lobby;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "lobby")
+public class lobby {
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+
+	@Column(name = "player1")
+	private Integer player1;
+
+	@Column(name = "player2")
+	private Integer player2;
+	
+	@Column(name = "player3")
+	private Integer player3;
+
+	@Column(name = "player4")
+	private Integer player4;
+
+	public lobby() {
+	}
+
+	public lobby(Integer xpos, Integer ypos) {
+		this.xpos = xpos;
+		this.ypos = ypos;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public Integer getXpos() {
+		return xpos;
+	}
+
+	public Integer getYpos() {
+		return ypos;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setXpos(Integer xpos) {
+		this.xpos = xpos;
+	}
+
+	public void setYpos(Integer ypos) {
+		this.ypos = ypos;
+	}
+}
