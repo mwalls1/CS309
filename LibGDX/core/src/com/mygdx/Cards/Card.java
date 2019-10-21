@@ -11,18 +11,23 @@ public class Card {
 private String suit;
 private String rank;
 private Texture texture;
+private Texture backTexture;
 private Sprite sprite;
 private AssetManager manager;
 private Random rand;
+private boolean isFlipped;
 
 public Card(String rank, String suit, AssetManager manager)
 {
+	isFlipped = false;
 	this.suit = suit;
 	this.rank = rank;
 	this.manager = manager;
 	
 	texture = manager.get("Cards/" + rank + suit + ".png", Texture.class);
+	backTexture = manager.get("Cards/1back.png");
 	sprite = new Sprite(texture);
+	sprite.setSize(sprite.getWidth()*0.3f, sprite.getHeight()*0.3f);
 }
 
 
@@ -30,6 +35,7 @@ public Card(String rank, String suit, AssetManager manager)
 
 public Card(AssetManager manager) //Generate a random card
 {
+	isFlipped = false;
 	rand = new Random();
 	int suitDetermine = rand.nextInt(3);
 	int rankDetermine = rand.nextInt(13)+1;
@@ -87,5 +93,17 @@ public Texture getTexture()
 	return texture;
 }
 
+public void flip()
+{
+	if (isFlipped) sprite.setTexture(texture);
+	else sprite.setTexture(backTexture);
+	
+	isFlipped = !isFlipped;
+}
+
+public boolean isFlipped()
+{
+	return isFlipped;
+}
 
 }

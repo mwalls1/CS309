@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.Cards.Card;
 import com.mygdx.Cards.Deck;
@@ -22,6 +24,7 @@ import util.Constants;
 public class GoFishScreen implements Screen{
 private AssetManager manager;
 private Game game;
+private Sprite[] pondSprites;
 private Sprite[] handSprites;
 private Stage stage;
 private Skin skin;
@@ -30,7 +33,8 @@ private String selectedRank;
 private Player selectedPlayer;
 private int deckIterator;
 private Deck deck;
-
+private TextField moveTextField;
+private Player currentPlayer;
 private Player p1;
 private Player p2;
 private Player p3;
@@ -54,12 +58,18 @@ private GoFish cardGame;
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	     if (selectedPlayer != null && selectedRank != null) {
+	    	 moveTextField.setVisible(true);
+	    	 moveTextField.setText(currentPlayer.getName() + " asks " + selectedPlayer.getName() + " for " + selectedRank);
+	    	 if(selectedPlayer.getName() == currentPlayer.getName()) moveTextField.setText("You can't ask yourself for a card!");
+	     }
 	     batch.begin();
 	     for (int i = 0; i<handSprites.length; i++) handSprites[i].draw(batch);
+	     for (int i = 0; i<pondSprites.length; i++) pondSprites[i].draw(batch);
 	     batch.end();
 	     stage.act();
 	     stage.draw();
-		
+	     if (Gdx.input.isKeyPressed(Keys.R)) create(); //Reset; for debugging only
 	}
 
 	@Override
@@ -94,6 +104,7 @@ private GoFish cardGame;
 
 	public void create()
 	{
+		deckIterator = 0;
 		manager = new AssetManager();
 		deck = new Deck(1, manager);
 		batch = new SpriteBatch();
@@ -103,14 +114,13 @@ private GoFish cardGame;
 		p2 = new Player("p2");
 		p3 = new Player("p3");
 		p4 = new Player("p4");
-		
-		
-		p1.addCard(new Card(manager));
-		p1.addCard(new Card(manager));
-		generateHandSprites();
-		
-		
+		currentPlayer = p1;
 		deal();
+		generateHandSprites();
+		generatePondSprites();
+		
+		p2.addCard(new Card("2", "clubs", manager));
+		
 		
 		//Initialize buttons
 		final TextButton button1 = new TextButton("Aces", skin, "default");
@@ -130,6 +140,7 @@ private GoFish cardGame;
 		final TextButton name2 = new TextButton(p2.getName(), skin, "default");
 		final TextButton name3 = new TextButton(p3.getName(), skin, "default");
 		final TextButton name4 = new TextButton(p4.getName(), skin, "default");
+		final TextButton goButton = new TextButton("Go!", skin, "default");
 		
 		float offset = Gdx.graphics.getWidth()/20;
 		float buttonWidth = Gdx.graphics.getWidth() / 25;
@@ -220,7 +231,29 @@ private GoFish cardGame;
 		name3.setHeight(buttonWidth);
 		name3.setX(name2.getX() - offset * 2);
 		name3.setY(name4.getY());
-
+		
+		goButton.setWidth(buttonWidth * 2);
+		goButton.setHeight(buttonWidth);
+		goButton.setPosition(name1.getX()+buttonWidth, button4.getY());
+		
+		
+		moveTextField = new TextField("", skin);
+		moveTextField.setVisible(false);
+		moveTextField.setWidth((name4.getX()+buttonWidth*2) - button4.getX());
+		moveTextField.setPosition(button4.getX(), 5);
+	
+		goButton.addListener(new ClickListener(){
+            @Override 
+            public void clicked(InputEvent event, float x, float y){
+            	if (selectedRank != null && selectedPlayer != null && selectedPlayer != currentPlayer && currentPlayer.getName() == Constants.user)
+            	{
+            		play(currentPlayer, selectedPlayer, selectedRank);
+            		nextTurn();
+            	}
+            }
+        });
+		
+		
 		name1.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
@@ -358,6 +391,8 @@ private GoFish cardGame;
 		stage.addActor(name2);
 		stage.addActor(name3);
 		stage.addActor(name4);
+		stage.addActor(moveTextField);
+		stage.addActor(goButton);
 		
 		 Gdx.input.setInputProcessor(stage);
 		
@@ -376,15 +411,30 @@ private GoFish cardGame;
 		for (int i = 0; i<handSprites.length; i++) 
 		{
 			Sprite temp = hand.get(i).getSprite();
-			//temp.setScale(0.3f);
-			temp.setSize(temp.getWidth()*0.3f, temp.getHeight()*0.3f);
-			temp.setPosition(60*i, 10);
+			temp.setPosition(60 * i, 10);
 			
 			
 			handSprites[i] = temp;
 		}
 		
 	}
+	
+	private void generatePondSprites()
+	{
+		pondSprites = new Sprite[deck.getSize()-deckIterator];
+	
+		for (int i = deckIterator; i<deck.getSize(); i++) 
+		{
+			Card tempCard = deck.getCard(i);
+			Sprite tempSprite;
+			if (!tempCard.isFlipped()) tempCard.flip();
+			tempSprite = tempCard.getSprite();
+			
+			tempSprite.setPosition(Gdx.graphics.getWidth()/4+(20*(i-deckIterator)), Gdx.graphics.getHeight()/2);
+			pondSprites[i-deckIterator] = tempSprite;
+		}
+	}
+	
 	
 	private void play(Player currentPlayer, Player otherPlayer, String rank)
 	{
@@ -394,15 +444,38 @@ private GoFish cardGame;
 			otherPlayer.removeCard(toMove); //Remove the card that was taken by current player
 		}
 		else currentPlayer.addCard(fish());
+		generatePondSprites();
+		generateHandSprites();
 	}
 	
 	private Card fish() {
+		Card card = deck.getCard(deckIterator);
+		card.flip();
 		deckIterator++;
-		return deck.getCard(deckIterator-1);
+		return card;
 	}
 	
 	private void deal()
 	{
-		
+		for (int i = 0; i<7; i++)
+		{
+			p1.addCard(deck.getCard(deckIterator));
+			deckIterator++;
+			p2.addCard(deck.getCard(deckIterator));
+			deckIterator++;
+			p3.addCard(deck.getCard(deckIterator));
+			deckIterator++;
+			p4.addCard(deck.getCard(deckIterator));
+			deckIterator++;
+		}
+	}
+	
+	private void nextTurn()
+	{
+		if (currentPlayer == p1) currentPlayer = p2;
+		else if (currentPlayer == p2) currentPlayer = p3;
+		else if (currentPlayer == p3) currentPlayer = p4;
+		else if (currentPlayer == p4) currentPlayer = p1;
+		generateHandSprites();
 	}
 }

@@ -118,4 +118,9 @@ public void printDeck()
 	}
 }
 
+public int getSize()
+{
+	return cards.length;
+}
+
 }
