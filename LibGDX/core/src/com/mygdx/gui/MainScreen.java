@@ -46,7 +46,7 @@ public class MainScreen extends Game implements Screen{
 	}
 	private void init()
 	{
-		
+ 		
 	}
 	@Override
 	public void render(float delta) {
