@@ -1,7 +1,6 @@
 package com.example.demo.userInfo;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import javax.validation.constraints.*;
 
 import org.hibernate.annotations.NotFound;
@@ -23,18 +22,21 @@ public class userInfo {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-//	@NotFound(action = NotFoundAction.IGNORE)
 	private Integer id;
 	
 	@NotEmpty
 	@Column(name = "name")
-//	@NotFound(action = NotFoundAction.IGNORE)
 	private String name;
 	
 	@NotEmpty
 	@Column(name = "password")
-//	@NotFound(action = NotFoundAction.IGNORE)
 	private String password;
+	
+	@Column(name = "xpos")
+	private Integer xpos;
+
+	@Column(name = "ypos")
+	private Integer ypos;
 	
 	public userInfo() {
 		this.setName("default");
@@ -44,6 +46,11 @@ public class userInfo {
 	public userInfo(String name, String password) {
 		this.setName(name);
 		this.setPassword(password);
+	}
+	
+	public userInfo(Integer xpos, Integer ypos) {
+		this.setXpos(xpos);
+		this.setYpos(ypos);
 	}
 	
 	// used for testing Mockito
@@ -59,18 +66,19 @@ public class userInfo {
 	
 	public String getPassword() { return password; }
 	
+	public Integer getXpos() { return xpos; }
+
+	public Integer getYpos() { return ypos; }
+	
 	public void setId(Integer idnum) { id = idnum;}
 	
 	public void setName(String name1) { name = name1; }
 	
 	public void setPassword(String pass) { password = pass; }
 	
-//	@Override
-//    public String toString() {
-//        return new ToStringCreator(this)
-//                .append("id", this.getId())
-//                .append("name", this.getName()).toString();
-//	}    
+	public void setXpos(Integer xpos) { this.xpos = xpos; }
+
+	public void setYpos(Integer ypos) { this.ypos = ypos; }
 
 }
 

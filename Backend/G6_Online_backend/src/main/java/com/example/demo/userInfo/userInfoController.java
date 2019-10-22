@@ -78,4 +78,28 @@ public class userInfoController {
 	    }
     	return -1;
     }
+	
+	@GetMapping("getPosByID")
+	public String getXbyID(Integer id) {
+		Optional<userInfo> p = userRepo.findById(id);
+		userInfo p1 = p.get();
+		return p1.getXpos().toString() + " " + p1.getYpos().toString();
+	}
+	
+	@PostMapping("/newPlayer")
+	public String savePlayer(Integer xpos, Integer ypos) {
+		userInfo p = new userInfo(xpos, ypos);
+		userRepo.save(p);
+		return "New player made at " + p.getXpos() + " added to user " + p.getYpos();
+	}
+	
+	@PostMapping("/updatePos")
+	public String updatePos(Integer id, Integer xpos, Integer ypos) {
+		Optional<userInfo> p = userRepo.findById(id);
+		userInfo p1 = p.get();
+		p1.setXpos(xpos);
+		p1.setYpos(ypos);
+		userRepo.save(p1);
+		return p1.getXpos().toString() + " " + p1.getYpos().toString();
+	}
 }

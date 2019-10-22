@@ -52,42 +52,42 @@ public class MockitoTest {
 	/*
 	 * test userInfo
 	 */
-	@Test
-	public void testGetAllUsers() {
-		List<userInfo> list = new ArrayList<userInfo>();
-		
-		Integer id1 = new Integer(1001);
-		Integer id2 = new Integer(1002);
-		Integer id3 = new Integer(1003);
-		
-		userInfo u1 = new userInfo(id1, "user1", "password1");
-		userInfo u2 = new userInfo(id2, "user2", "password2");
-		userInfo u3 = new userInfo(id3, "user3", "password3");
-		
-		list.add(u1);
-		list.add(u2);
-		list.add(u3);
-		
-		// mock instruction
-		when(userRepo.getUserInfoList()).thenReturn(list);
-		
-		List<userInfo> l = userService.getUserInfoList();
-		
-		// test ID's
-		assertEquals(id1, l.get(0).getId());
-		assertEquals(id2, l.get(1).getId());
-		assertEquals(id3, l.get(2).getId());
-		
-		// test name
-		assertEquals("user1", l.get(0).getName());
-		assertEquals("user2", l.get(1).getName());
-		assertEquals("user3", l.get(2).getName());
-		
-		// test password
-		assertEquals("password1", l.get(0).getPassword());
-		assertEquals("password2", l.get(1).getPassword());
-		assertEquals("password3", l.get(2).getPassword());
-	}
+//	@Test
+//	public void testGetAllUsers() {
+//		List<userInfo> list = new ArrayList<userInfo>();
+//		
+//		Integer id1 = new Integer(1001);
+//		Integer id2 = new Integer(1002);
+//		Integer id3 = new Integer(1003);
+//		
+//		userInfo u1 = new userInfo(id1, "user1", "password1");
+//		userInfo u2 = new userInfo(id2, "user2", "password2");
+//		userInfo u3 = new userInfo(id3, "user3", "password3");
+//		
+//		list.add(u1);
+//		list.add(u2);
+//		list.add(u3);
+//		
+//		// mock instruction
+//		when(userRepo.getUserInfoList()).thenReturn(list);
+//		
+//		List<userInfo> l = userService.getUserInfoList();
+//		
+//		// test ID's
+//		assertEquals(id1, l.get(0).getId());
+//		assertEquals(id2, l.get(1).getId());
+//		assertEquals(id3, l.get(2).getId());
+//		
+//		// test name
+//		assertEquals("user1", l.get(0).getName());
+//		assertEquals("user2", l.get(1).getName());
+//		assertEquals("user3", l.get(2).getName());
+//		
+//		// test password
+//		assertEquals("password1", l.get(0).getPassword());
+//		assertEquals("password2", l.get(1).getPassword());
+//		assertEquals("password3", l.get(2).getPassword());
+//	}
 	
 	// Test get user by ID
 	@Test

@@ -18,6 +18,6 @@ public interface userInfoRepository extends JpaRepository<userInfo, Integer> {
 
 	userInfo getUserInfoById(int id);
 
-	List<userInfo> getUserInfoList();
+//	List<userInfo> getUserInfoList();
 
 }

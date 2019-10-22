@@ -18,8 +18,8 @@ public class userInfoService {
 		return repo.getUserInfoById(id);
 	}
 	
-	public List<userInfo> getUserInfoList(){
-		return repo.getUserInfoList();
-	}
+//	public List<userInfo> getUserInfoList(){
+//		return repo.getUserInfoList();
+//	}
 
 }
