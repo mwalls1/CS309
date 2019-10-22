@@ -1,6 +1,7 @@
 package com.mygdx.games;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -22,7 +23,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.gui.MainScreen;
+import com.mygdx.gui.MultiplayerLobby;
 
+import util.Constants;
 import util.JsonParser;
 
 public class GameTest extends Game implements Screen{
@@ -34,8 +37,10 @@ public class GameTest extends Game implements Screen{
 	private Game game;
 	private Texture blade;
 	private Player player;
-	private int score = 0;
 	private Player player2;
+	private Player player3;
+	private Player player4;
+	private int score = 0;
 	private ShapeRenderer shape;
 	private boolean gameOver = false;
 	private float elapsed = 0;
@@ -56,6 +61,11 @@ public class GameTest extends Game implements Screen{
 	Random ranY = new Random(); //893
     public  float randomX;
     public float randomY;
+    private int player1id = 0;
+    private int player2id = 0;
+    private int player3id = 0;
+    private int player4id = 0;
+    
 	public GameTest(Game game)
 	{
 		font = new BitmapFont();
@@ -69,6 +79,8 @@ public class GameTest extends Game implements Screen{
 		collision = (TiledMapTileLayer) mapLayers.get("blockage");
 		player = new Player(847, 54);
 		player2 = new Player(847,54);
+		player3 = new Player(847,54);
+		player4 = new Player(847,54);
 		blade = new Texture(Gdx.files.internal("blade.png"));
 		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
 		Texture wiz = new Texture(Gdx.files.internal("wizard.png"));
@@ -125,6 +137,13 @@ public class GameTest extends Game implements Screen{
 			}
 			coins.add(new Coin(randomX, randomY));
 		}
+		//Retrieves all player IDs by lobby number
+//		String playerIds = "";
+//    	try { playerIds = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPlayersIdByLobby?id="+Constants.lobby);} catch (Exception e1) {e1.printStackTrace();}
+//		player1id = Integer.parseInt(playerIds.split(" ")[0]);
+//		player2id = Integer.parseInt(playerIds.split(" ")[1]);
+//		player3id = Integer.parseInt(playerIds.split(" ")[2]);
+//		player4id = Integer.parseInt(playerIds.split(" ")[3]);
 		create();
 	}
 	@Override
@@ -136,6 +155,31 @@ public class GameTest extends Game implements Screen{
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
+		
+		//Sends position and updates all four players
+		String playerUpdate = "no";
+		System.out.println(Constants.lobby);
+		System.out.println(Constants.userID);
+		System.out.println(player.getX());
+		System.out.println(player.getY());
+		try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
+		String[] playerUpdateArr = playerUpdate.split(" ");
+		player.setPos(0, 0);
+		player2.setPos(0, 0);
+		player3.setPos(0, 0);
+		player4.setPos(0, 0);
+		System.out.println(playerUpdate);
+		System.out.println(Arrays.toString(playerUpdateArr));
+		System.out.println(playerUpdateArr[0]);
+		for (int i = 0; i < 4; i++) {
+			if(Integer.parseInt(playerUpdateArr[3*i]) == Constants.userID) {
+				player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
+			}
+			else if(player2.getX() == 0) player2.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
+			else if(player3.getX() == 0) player3.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
+			else if(player4.getX() == 0) player4.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
+		}
+
 		if(elapsed<3)
 		{
 			batch.begin();
@@ -151,22 +195,22 @@ public class GameTest extends Game implements Screen{
 			gameOver = true;
 			//thread.run(player, player2);
 		if (player.hp > 0) {
-			try {
-				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
-				scan = new Scanner(s2);
-				player2.setPos(scan.nextInt(), scan.nextInt());
-				scan.close();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				JsonParser.sendHTML("updatePos", "id=45&xpos="+player.getX()+"&ypos="+player.getY());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			thread.run(player, player2);
+//			try {
+//				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
+//				scan = new Scanner(s2);
+//				player2.setPos(scan.nextInt(), scan.nextInt());
+//				scan.close();
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				JsonParser.sendHTML("updatePos", "id="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			thread.run(player, player2);
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
@@ -212,10 +256,14 @@ public class GameTest extends Game implements Screen{
 			}
 			player.update(collision, shots, camera,batch);
 			player2.update(batch);
+			player3.update(batch);
+			player4.update(batch);
 			batch.end();
 			elapsed += Gdx.graphics.getDeltaTime();
 			player.render(shape, camera);
 			player2.render();
+			player3.render();
+			player4.render();
 
 		}
 		else

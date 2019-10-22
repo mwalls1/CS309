@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import util.Constants;
+import util.JsonParser;
 
 public class MainScreen extends Game implements Screen{
 	private static Skin skin;
@@ -190,6 +191,7 @@ public class MainScreen extends Game implements Screen{
         quitGameButton.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
+    			try {JsonParser.sendHTML("removePlayerFromLobbies", "id="+Constants.userID);} catch (Exception e) {e.printStackTrace();}
             	dispose();
             	Gdx.app.exit();
             }

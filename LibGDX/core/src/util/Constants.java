@@ -12,6 +12,7 @@ public class Constants {
 	public static float TEXT_HEIGHT = Gdx.graphics.getHeight() / 5;
 	public static Integer userID = 0;
 	public static String user = "Temporary User";
+	public static Integer lobby = 0;
 	public static float red = 0.1f;
 	public static float blue = 0.12f;
 	public static float green = 0.16f;

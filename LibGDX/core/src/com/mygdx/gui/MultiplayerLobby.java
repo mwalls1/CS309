@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.games.GameTest;
 
 import util.Constants;
 import util.JsonParser;
@@ -218,6 +219,7 @@ public class MultiplayerLobby extends Game implements Screen{
             	for (int i = 0; i < 4; i++) {
             		if (playerIds[i].equals("0")){
             			try {JsonParser.sendHTML("updatePlayer", "id="+MultiplayerLobby.this.lobbyNumber+"&player="+(i+1)+"&playerId="+Constants.userID);} catch (Exception e) {e.printStackTrace();}
+            			Constants.lobby = MultiplayerLobby.this.lobbyNumber;
             			refreshNames();
             			break;
             		}
@@ -368,7 +370,10 @@ public class MultiplayerLobby extends Game implements Screen{
 				gameCountDown = 5;
 				time = System.currentTimeMillis();
 			}
-			if ((gameCountDown*10-(System.currentTimeMillis()-time)/100)/10 <= 0) try {JsonParser.sendHTML("readyDown", "id="+MultiplayerLobby.this.lobbyNumber);} catch (Exception e) {e.printStackTrace();}
+			if ((gameCountDown*10-(System.currentTimeMillis()-time)/100)/10 <= 0) {
+				try {JsonParser.sendHTML("readyDown", "id="+MultiplayerLobby.this.lobbyNumber);} catch (Exception e) {e.printStackTrace();}
+	           	game.setScreen(new GameTest(game));
+			}
 			gameStartCD.setText("Game Starting in " + (gameCountDown*10-(System.currentTimeMillis()-time)/100)/10);
 		}
 		else {

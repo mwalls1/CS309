@@ -93,9 +93,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	button.setHeight(Gdx.graphics.getWidth()/7);
         	button.setOrigin(0, 0);
         	button.setPosition(10, 400);
-        
         	games[i] = button;
-        	
         }
         
         final TextButton backButton = new TextButton("Back", skin, "default");
