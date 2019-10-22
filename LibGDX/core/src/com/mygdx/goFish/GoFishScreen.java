@@ -59,7 +59,6 @@ private GoFish cardGame;
 		Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	     if (selectedPlayer != null && selectedRank != null) {
-	    	 moveTextField.setVisible(true);
 	    	 moveTextField.setText(currentPlayer.getName() + " asks " + selectedPlayer.getName() + " for " + selectedRank);
 	    	 if(selectedPlayer.getName() == currentPlayer.getName()) moveTextField.setText("You can't ask yourself for a card!");
 	     }
@@ -238,7 +237,6 @@ private GoFish cardGame;
 		
 		
 		moveTextField = new TextField("", skin);
-		moveTextField.setVisible(false);
 		moveTextField.setWidth((name4.getX()+buttonWidth*2) - button4.getX());
 		moveTextField.setPosition(button4.getX(), 5);
 	

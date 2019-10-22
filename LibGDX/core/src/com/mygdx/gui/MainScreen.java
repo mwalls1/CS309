@@ -52,6 +52,8 @@ public class MainScreen extends Game implements Screen{
 	     {
 	    	 Gdx.app.exit();
 	     }
+	     
+	  
 	}
 	@Override
 	public void resize(int width, int height) {
@@ -86,7 +88,7 @@ public class MainScreen extends Game implements Screen{
 	 */
 	public void create() {
 		// TODO Auto-generated method stub
-        skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
         final TextButton playButton = new TextButton("Play", skin, "default"); //Creates button with label "play"
         final TextButton leaderboardButton = new TextButton("Leaderboards", skin, "default"); //Creates button with label "leaderboards"

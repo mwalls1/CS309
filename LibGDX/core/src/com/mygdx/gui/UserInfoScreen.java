@@ -23,6 +23,7 @@ public class UserInfoScreen extends Game implements Screen {
 	private TextField passwordTextField;
 	private boolean loggedIn = false;
 	public String user = "default";
+	private int useless;
 	public UserInfoScreen(Game game) {
 		this.game = game;
 		create();
