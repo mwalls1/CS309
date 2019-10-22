@@ -1,0 +1,36 @@
+# Stages of pipeline, should match with stage tag inside each job.
+# Each stages executes in sequence, if previous job fails, then all the preceeding jobs are skipped.
+stages:
+  - gradlebuild
+  - gradletests
+
+
+    
+# To build android projects
+# Notice that we cd into Android_test folder which contains all Android files before building apk.    
+# Ensure the tag matches with the tag created for Android runner
+# Android runner should have docker as executor.
+gradle-build:
+  image: javiersantos/android-ci:latest
+  stage: gradlebuild
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./LibGDX/gradlew
+  tags:
+   - gradle_tag
+  script:
+    - cd LibGDX
+    - ./gradlew assemble
+    
+# To run Android unit tests.   
+unitTests:
+  image: javiersantos/android-ci:latest
+  stage: gradletests
+  before_script:
+    - export GRADLE_USER_HOME=`pwd`/.gradle
+    - chmod +x ./LibGDX/gradlew
+  tags:
+   - gradle_tag
+  script:
+    - cd LibGDX
+    - ./gradlew test

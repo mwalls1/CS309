@@ -32,6 +32,7 @@ public class UserInfoScreen extends Game implements Screen {
 	public void show() {
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(stage);
+		
 	}
 
 	@Override
