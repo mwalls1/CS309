@@ -193,8 +193,9 @@ public class GameTest extends Game implements Screen{
 	else if (player.hp > 0 && !gameOver) {
 		if(player.numCoins==50 && player.numEnemies == 0)
 			gameOver = true;
+//<<<<<<< HEAD
 			//thread.run(player, player2);
-		if (player.hp > 0) {
+//		if (player.hp > 0) {
 //			try {
 //				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
 //				scan = new Scanner(s2);
@@ -211,6 +212,24 @@ public class GameTest extends Game implements Screen{
 //				e.printStackTrace();
 //			}
 //			thread.run(player, player2);
+//=======
+			//thread.run(player, player2);
+			/*try {
+				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
+				scan = new Scanner(s2);
+				player2.setPos(scan.nextInt(), scan.nextInt());
+				scan.close();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				JsonParser.sendHTML("updatePos", "id=45&xpos="+player.getX()+"&ypos="+player.getY());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+//>>>>>>> c76a4289bde39501c019432394c0b590a553b0d1
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			stage.act();
@@ -244,7 +263,7 @@ public class GameTest extends Game implements Screen{
 			font.draw(batch, "Health: " + player.hp, player.getX() - 235, player.getY() + 130);
 			font.draw(batch, ""+Gdx.graphics.getFramesPerSecond(), player.getX() + 229, player.getY() + 133);
 			font.draw(batch, "Coins: "+player.numCoins, player.getX()-235, player.getY()+120);
-			font.draw(batch, "Enemies Left: "+player.numEnemies, player.getX()-235, player.getY() +100);
+			font.draw(batch, "Enemies Left: "+player.numEnemies, player.getX()-235, player.getY() +110);
 			for (int i = 0; i < Player.numBullets; i++) {
 				if (shots.get(i).active)
 					shots.get(i).render(batch, collision, zombies, dragons, assassins);
@@ -291,7 +310,6 @@ public class GameTest extends Game implements Screen{
 	    	 dispose();
 	    	 game.setScreen(new MainScreen(game));
 	     }
-	}
 	}
 
 	@Override
