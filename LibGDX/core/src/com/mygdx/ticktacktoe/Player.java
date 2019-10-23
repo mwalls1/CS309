@@ -2,8 +2,8 @@ package com.mygdx.ticktacktoe;
 
 public class Player {
 	private boolean isTurn;
-	private char piece;
-	public Player(boolean turn, char let)
+	private String piece;
+	public Player(boolean turn, String let)
 	{
 		isTurn = turn;
 		piece = let;
@@ -16,7 +16,7 @@ public class Player {
 	{
 		isTurn = set;
 	}
-	public char getLet()
+	public String getLet()
 	{
 		return piece;
 	}

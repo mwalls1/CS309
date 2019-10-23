@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Zone {
 	private Rectangle rect;
 	private boolean active;
-	private char let;
+	private String let;
 	private Sprite sprite;
 	private Texture x = new Texture(Gdx.files.internal("x.png"));
 	private Texture o = new Texture(Gdx.files.internal("o.png"));
@@ -26,14 +26,14 @@ public class Zone {
 	{
 		return rect.contains(x, y);
 	}
-	public char getLetter()
+	public String getLetter()
 	{
 		return let;
 	}
-	public void setLetter(char letter)
+	public void setLetter(String letter)
 	{
 		let = letter;
-		if(let=='x')
+		if(let.equals("x"))
 			sprite.setTexture(x);
 		else
 			sprite.setTexture(o);

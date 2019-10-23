@@ -29,12 +29,12 @@ public class Board {
 		zones.add(new Zone(213,511,189,189));
 		zones.add(new Zone(413,511,189,189));
 	}
-	public char checkWin()
+	public String checkWin()
 	{
 		//Check top row
 		if(zones.get(0).isActive())
 		{
-			if(zones.get(0).getLetter()==zones.get(1).getLetter()&&zones.get(0).getLetter()==zones.get(2).getLetter())	
+			if(zones.get(0).getLetter().equals(zones.get(1).getLetter())&&zones.get(0).getLetter().equals(zones.get(2).getLetter()))
 			{
 				return zones.get(0).getLetter();
 			}
@@ -42,7 +42,7 @@ public class Board {
 		//check middle row
 		if(zones.get(3).isActive())
 		{
-			if(zones.get(3).getLetter()==zones.get(4).getLetter()&&zones.get(3).getLetter()==zones.get(5).getLetter())	
+			if(zones.get(3).getLetter().equals(zones.get(4).getLetter())&&zones.get(3).getLetter().equals(zones.get(5).getLetter()))	
 			{
 				return zones.get(3).getLetter();
 			}
@@ -50,7 +50,7 @@ public class Board {
 		//check bottom row
 		if(zones.get(6).isActive())
 		{
-			if(zones.get(6).getLetter()==zones.get(7).getLetter()&&zones.get(6).getLetter()==zones.get(8).getLetter())	
+			if(zones.get(6).getLetter().equals(zones.get(7).getLetter())&&zones.get(6).getLetter().equals(zones.get(8).getLetter()))
 			{
 				return zones.get(6).getLetter();
 			}
@@ -58,7 +58,7 @@ public class Board {
 		//check left coloumn
 		if(zones.get(0).isActive())
 		{
-			if(zones.get(0).getLetter()==zones.get(3).getLetter()&&zones.get(0).getLetter()==zones.get(6).getLetter())	
+			if(zones.get(0).getLetter().equals(zones.get(3).getLetter())&&zones.get(0).getLetter().equals(zones.get(6).getLetter()))
 			{
 				return zones.get(0).getLetter();
 			}
@@ -66,7 +66,7 @@ public class Board {
 		//check middle column
 		if(zones.get(1).isActive())
 		{
-			if(zones.get(1).getLetter()==zones.get(4).getLetter()&&zones.get(1).getLetter()==zones.get(7).getLetter())	
+			if(zones.get(1).getLetter().equals(zones.get(4).getLetter())&&zones.get(1).getLetter().equals(zones.get(7).getLetter()))
 			{
 				return zones.get(1).getLetter();
 			}
@@ -74,7 +74,7 @@ public class Board {
 		//check right column
 		if(zones.get(2).isActive())
 		{
-			if(zones.get(2).getLetter()==zones.get(5).getLetter()&&zones.get(2).getLetter()==zones.get(7).getLetter())	
+			if(zones.get(2).getLetter().equals(zones.get(5).getLetter())&&zones.get(2).getLetter().equals(zones.get(7).getLetter()))	
 			{
 				return zones.get(2).getLetter();
 			}
@@ -82,7 +82,7 @@ public class Board {
 		//check top left to bottom right diagonal
 		if(zones.get(0).isActive())
 		{
-			if(zones.get(0).getLetter()==zones.get(4).getLetter()&&zones.get(0).getLetter()==zones.get(8).getLetter())	
+			if(zones.get(0).getLetter().equals(zones.get(4).getLetter())&&zones.get(0).getLetter().equals(zones.get(8).getLetter()))	
 			{
 				return zones.get(0).getLetter();
 			}
@@ -90,12 +90,12 @@ public class Board {
 		//check top right to bottom left diagonal
 		if(zones.get(2).isActive())
 		{
-			if(zones.get(2).getLetter()==zones.get(4).getLetter()&&zones.get(2).getLetter()==zones.get(6).getLetter())	
+			if(zones.get(2).getLetter().equals(zones.get(4).getLetter())&&zones.get(2).getLetter().equals(zones.get(6).getLetter()))	
 			{
 				return zones.get(2).getLetter();
 			}
 		}
-		return 'n';
+		return "n";
 	}
 	public void render(SpriteBatch batch, Player play1, Player play2, int mouseX, int mouseY)
 	{

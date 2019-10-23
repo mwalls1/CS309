@@ -34,7 +34,7 @@ public class Runner extends Game implements Screen{
 	
 	@Override
 	public void render(float delta) {
-		if(board.checkWin()!='x' && board.checkWin()!='o')
+		if(!board.checkWin().equals("x") && !board.checkWin().equals("o"))
 		{
 			mouseX = Gdx.input.getX();
 			mouseY = Gdx.input.getY();
@@ -52,7 +52,7 @@ public class Runner extends Game implements Screen{
 			batch.begin();
 			board.render(batch, play1, play2, mouseX, mouseY);
 			font.setColor(Color.BLACK);
-			if(board.checkWin()=='x')
+			if(board.checkWin().equals("x"))
 				font.draw(batch,"X's Win!", 0, 650);
 			else
 				font.draw(batch,"O's Win!", 0, 650);
@@ -103,8 +103,8 @@ public class Runner extends Game implements Screen{
 		Gdx.graphics.setResizable(false);
 		batch = new SpriteBatch();
         stage = new Stage();
-        play1 = new Player(true, 'x');
-        play2 = new Player(false, 'o');
+        play1 = new Player(true, "x");
+        play2 = new Player(false, "o");
         Gdx.input.setInputProcessor(stage);
 	}
 }
