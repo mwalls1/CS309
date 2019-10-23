@@ -114,7 +114,7 @@ public class Assassin {
 				shots.add(0, new Bolt(bolt, midX, midY, player.x+player.width+5, player.y+player.height+5));
 				startTime = time;
 			}
-			if(Math.abs(Math.sqrt(Math.pow(player.midX-midX, 2) + Math.pow(player.midY-midY, 2)))<= 64 && Math.abs(Math.sqrt(Math.pow(player.midX-midX, 2) + Math.pow(player.midY-midY, 2))) >= 32)
+			if(Math.abs(Math.sqrt(Math.pow(player.midX-midX, 2) + Math.pow(player.midY-midY, 2)))<= 96 && Math.abs(Math.sqrt(Math.pow(player.midX-midX, 2) + Math.pow(player.midY-midY, 2))) >= 32)
 			{
 				isMoving = true;
 				if(x < player.x)

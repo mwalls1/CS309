@@ -157,28 +157,28 @@ public class GameTest extends Game implements Screen{
 		// TODO Auto-generated method stub
 		
 		//Sends position and updates all four players
-		String playerUpdate = "no";
-		System.out.println(Constants.lobby);
-		System.out.println(Constants.userID);
-		System.out.println(player.getX());
-		System.out.println(player.getY());
-		try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
-		String[] playerUpdateArr = playerUpdate.split(" ");
-		player.setPos(0, 0);
-		player2.setPos(0, 0);
-		player3.setPos(0, 0);
-		player4.setPos(0, 0);
-		System.out.println(playerUpdate);
-		System.out.println(Arrays.toString(playerUpdateArr));
-		System.out.println(playerUpdateArr[0]);
-		for (int i = 0; i < 4; i++) {
+		//String playerUpdate = "no";
+		//System.out.println(Constants.lobby);
+		//System.out.println(Constants.userID);
+		//System.out.println(player.getX());
+		//System.out.println(player.getY());
+		//try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
+		//String[] playerUpdateArr = playerUpdate.split(" ");
+		//player.setPos(850, 50);
+		//player2.setPos(0, 0);
+		//player3.setPos(0, 0);
+		//player4.setPos(0, 0);
+		//System.out.println(playerUpdate);
+		//System.out.println(Arrays.toString(playerUpdateArr));
+		//System.out.println(playerUpdateArr[0]);
+		/*for (int i = 0; i < 4; i++) {
 			if(Integer.parseInt(playerUpdateArr[3*i]) == Constants.userID) {
 				player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
 			}
 			else if(player2.getX() == 0) player2.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
 			else if(player3.getX() == 0) player3.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
 			else if(player4.getX() == 0) player4.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-		}
+		}*/
 
 		if(elapsed<3)
 		{
@@ -294,6 +294,7 @@ public class GameTest extends Game implements Screen{
 			{
 				font.draw(batch, "Game Over", player.x-40, player.y);
 				font.draw(batch, "Press Esc to Exit", player.x-40, player.y-20);
+				batch.end();
 			}
 			else
 			{
@@ -302,8 +303,7 @@ public class GameTest extends Game implements Screen{
 				font.draw(batch, "Press Esc to Exit", player.x-40, player.y-20);
 				font.draw(batch, "Score: "+score, player.x-40, player.y-40);
 				batch.end();
-			}
-			
+			}		
 		}
 	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
