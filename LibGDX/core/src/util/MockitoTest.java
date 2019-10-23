@@ -5,11 +5,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
-import org.mockito.Mock;
 
 import com.mygdx.Cards.Card;
 
-public class MockitoTest {
+public class MockitoTest{
 	
 	
 	@Test
