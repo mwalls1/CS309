@@ -12,7 +12,6 @@ private AssetManager manager;
 public Deck(int seed, AssetManager manager) //Creates a deck with 52 unique cards
 {
 	this.manager = manager;
-	loadAllAssets();
 	cards = new Deck("organized", manager).getCards();
 	shuffle(seed);
 }
@@ -20,6 +19,7 @@ public Deck(int seed, AssetManager manager) //Creates a deck with 52 unique card
 public Deck(String arg, AssetManager manager)
 {
 	cards = new Card[52];
+	loadAllAssets();
 	if (arg == "organized")
 	{
 		for (int i = 0; i<10; i++) cards[i] = new Card("" + (i+1), "spades", manager);

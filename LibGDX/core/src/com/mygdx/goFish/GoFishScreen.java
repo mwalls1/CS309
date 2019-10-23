@@ -39,7 +39,7 @@ private Player p1;
 private Player p2;
 private Player p3;
 private Player p4;
-
+private String currentMove;
 private GoFish cardGame;
 
 
@@ -62,6 +62,8 @@ private GoFish cardGame;
 	    	 moveTextField.setText(currentPlayer.getName() + " asks " + selectedPlayer.getName() + " for " + selectedRank);
 	    	 if(selectedPlayer.getName() == currentPlayer.getName()) moveTextField.setText("You can't ask yourself for a card!");
 	     }
+	     
+	     if(currentPlayer.getName() != Constants.user) moveTextField.setText(currentMove);
 	     batch.begin();
 	     for (int i = 0; i<handSprites.length; i++) handSprites[i].draw(batch);
 	     for (int i = 0; i<pondSprites.length; i++) pondSprites[i].draw(batch);
@@ -246,6 +248,7 @@ private GoFish cardGame;
             	if (selectedRank != null && selectedPlayer != null && selectedPlayer != currentPlayer && currentPlayer.getName() == Constants.user)
             	{
             		play(currentPlayer, selectedPlayer, selectedRank);
+            		currentMove = (currentPlayer.getName() + ", " + selectedPlayer.getName() + ", " + selectedRank);
             		nextTurn();
             	}
             }
@@ -476,4 +479,11 @@ private GoFish cardGame;
 		else if (currentPlayer == p4) currentPlayer = p1;
 		generateHandSprites();
 	}
+	
+	public String getNextMove()
+	{
+		return null;
+	}
+	
+	
 }

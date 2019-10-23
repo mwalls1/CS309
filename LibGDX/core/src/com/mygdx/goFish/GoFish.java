@@ -12,6 +12,7 @@ public class GoFish{
 	private AssetManager manager;
 	private static int deckIterator;
 	private static Deck deck;
+	private String currentPlay;
 	
 	
 //	public GoFish(int seed, Player p1, Player p2, Player p3, Player p4, AssetManager manager) 
@@ -67,4 +68,6 @@ public class GoFish{
 	{
 		return deck;
 	}
+	
+	
 }
