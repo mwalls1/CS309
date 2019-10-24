@@ -21,9 +21,11 @@ public class MockitoTest{
 		//Return the test hand when getHand() is called
 		when(cardMocked.getSuit()).thenReturn("spades");
 		
+		when(cardMocked.getRank()).thenReturn("Ace");
 		//Create hand to compare to return
 	
 		assertEquals(cardMocked.getSuit(), "spades");
+		assertEquals(cardMocked.getRank(), "Ace");
 		
 	}
 	
