@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.games.GameTest;
 import com.mygdx.space.Space;
+import com.mygdx.ticktacktoe.Runner;
 
 import util.Constants;
 
@@ -83,7 +84,9 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         final TextButton[] games = new TextButton[16];
         final String[] gameNames = new String[16];
         for (int i = 0; i<games.length; i++) gameNames[i] = "Coming soon!";
+        gameNames[0] = "Dungeon Mayhem";
         gameNames[1] = "Space!";
+        gameNames[2] = "Tic Tac Toe";
       
      
         for (int i = 0; i < games.length; i++)
@@ -157,6 +160,14 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
         		game.setScreen(new Space(game));
+        		
+        	}
+        });
+        games[2].addListener(new ClickListener(){
+        	@Override
+        	public void clicked(InputEvent event, float x, float y) {
+        		dispose();
+        		game.setScreen(new Runner(game));
         		
         	}
         });

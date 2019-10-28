@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.gui.MainScreen;
 
 public class Runner extends Game implements Screen{
     
@@ -58,10 +59,15 @@ public class Runner extends Game implements Screen{
 				font.draw(batch,"O's Win!", 0, 650);
 			batch.end();
 		}
-		if(Gdx.input.isButtonJustPressed(Input.Keys.ESCAPE))
+		if(Gdx.input.isButtonJustPressed(Input.Keys.R))
 		{
 			System.out.println("Restart");
 		}
+	    if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+	    {
+	   	 dispose();
+	     game.setScreen(new MainScreen(game));
+	    }
 	}
 
 	@Override
