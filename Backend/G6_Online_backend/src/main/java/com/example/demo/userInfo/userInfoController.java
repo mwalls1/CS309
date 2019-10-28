@@ -37,9 +37,11 @@ public class userInfoController {
      */
     @PostMapping("/newUser")
     public String saveUser(String name, String password) {
-    	userInfo u = new userInfo(name, password);
+    	try {
+    		userInfo u = new userInfo(name, password);
     	userRepo.save(u);
         return "New User \""+ u.getName();
+    	} catch (Exception e) {return e.toString();}
     }
     
     /**
@@ -49,9 +51,11 @@ public class userInfoController {
      */
     @DeleteMapping("/deleteUser")
     public String delete(int id){
-        Optional<userInfo> u = userRepo.findById(id);
+    	try {
+    		Optional<userInfo> u = userRepo.findById(id);
         userRepo.deleteById(id);
         return "Deleted user with ID: " + id + ".";
+    	} catch (Exception e) {return e.toString();}
     }
     
     /**
@@ -61,9 +65,12 @@ public class userInfoController {
      */
     @GetMapping("/getUserById")
     public String getUserById(Integer id) {
-    	Optional<userInfo> u = userRepo.findById(id);
-    	userInfo u1 = u.get();
-    	return u1.getName();
+    	try {
+    		Optional<userInfo> u = userRepo.findById(id);
+        	userInfo u1 = u.get();
+        	return u1.getName();
+    	} catch (Exception e) {return e.toString();}
+    	
     }
     
     @GetMapping("/userLogin")
@@ -81,25 +88,32 @@ public class userInfoController {
 	
 	@GetMapping("getPosByID")
 	public String getXbyID(Integer id) {
-		Optional<userInfo> p = userRepo.findById(id);
+		try {
+			Optional<userInfo> p = userRepo.findById(id);
 		userInfo p1 = p.get();
 		return p1.getXpos().toString() + " " + p1.getYpos().toString();
+		} catch (Exception e) {return e.toString();}
 	}
 	
 	@PostMapping("/newPlayer")
 	public String savePlayer(Integer xpos, Integer ypos) {
-		userInfo p = new userInfo(xpos, ypos);
+		try {
+			userInfo p = new userInfo(xpos, ypos);
 		userRepo.save(p);
 		return "New player made at " + p.getXpos() + " added to user " + p.getYpos();
+		} catch (Exception e) {return e.toString();}
 	}
 	
 	@PostMapping("/updatePos")
 	public String updatePos(Integer id, Integer xpos, Integer ypos) {
-		Optional<userInfo> p = userRepo.findById(id);
+		try {
+			Optional<userInfo> p = userRepo.findById(id);
 		userInfo p1 = p.get();
 		p1.setXpos(xpos);
 		p1.setYpos(ypos);
 		userRepo.save(p1);
 		return p1.getXpos().toString() + " " + p1.getYpos().toString();
+		} catch (Exception e) {return e.toString();}
+		
 	}
 }

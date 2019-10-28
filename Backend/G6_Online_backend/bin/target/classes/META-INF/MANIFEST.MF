@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: coleweitzel
+Build-Jdk: 12.0.1
+Implementation-Title: gsix
+Implementation-Version: backend
+Implementation-Vendor-Id: com.example
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/gsix
+Created-By: Maven Integration for Eclipse
+
