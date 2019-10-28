@@ -45,6 +45,7 @@ private GoFish cardGame;
 
 	public GoFishScreen(Game game)
 	{
+		manager = new AssetManager();
 		this.game = game;
 	}
 	@Override
@@ -106,7 +107,7 @@ private GoFish cardGame;
 	public void create()
 	{
 		deckIterator = 0;
-		manager = new AssetManager();
+		
 		deck = new Deck(1, manager);
 		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));

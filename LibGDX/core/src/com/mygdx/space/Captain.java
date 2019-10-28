@@ -44,7 +44,7 @@ private int health;
  */
 	public Captain(float xPos, float yPos, AssetManager manager)
 	{
-		texture = manager.get("assets/enemy3.png"); //Texture for ship
+		texture = manager.get("enemy3.png"); //Texture for ship
 		sprite = new Sprite(texture);
 		alive = true;
 		sprite.setPosition(xPos, yPos);

@@ -23,8 +23,8 @@ public class Ram implements Ship{
 	public Ram(AssetManager manager)
 	{
 		rand = new Random();
-		texture = manager.get("assets/enemy2.png");
-		damagedTexture = manager.get("assets/enemy2damaged.png");
+		texture = manager.get("enemy2.png");
+		damagedTexture = manager.get("enemy2damaged.png");
 		
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()-50);

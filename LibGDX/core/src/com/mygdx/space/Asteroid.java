@@ -72,10 +72,10 @@ public Asteroid(int type, int levelNum, AssetManager manager)
 	this.type = type;
 	this.levelNum = levelNum;
 	//Determine texture of asteroid object from given type int
-	if (type == SMALL) texture = manager.get("assets/smallAsteroid.png");
-	else if (type == MEDIUM) texture = manager.get("assets/mediumAsteroid.png");
-	else if (type == LARGE) texture = manager.get("assets/largeAsteroid.png");
-	else if (type == GOLDEN) texture = manager.get("assets/goldenAsteroid.png");
+	if (type == SMALL) texture = manager.get("smallAsteroid.png");
+	else if (type == MEDIUM) texture = manager.get("mediumAsteroid.png");
+	else if (type == LARGE) texture = manager.get("largeAsteroid.png");
+	else if (type == GOLDEN) texture = manager.get("goldenAsteroid.png");
 	
 	rand = new Random();
 	intact = true;

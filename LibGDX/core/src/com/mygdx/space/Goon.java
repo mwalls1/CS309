@@ -52,8 +52,8 @@ public class Goon implements Ship{
 	public Goon()
 	{
 		manager = new AssetManager();
-		texture = manager.get("assets/enemy1.png", Texture.class);
-		shotTexture = new Texture(Gdx.files.internal("assets/shot.png"));
+		texture = manager.get("enemy1.png", Texture.class);
+		shotTexture = new Texture(Gdx.files.internal("shot.png"));
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - 100);
 		alive = true;

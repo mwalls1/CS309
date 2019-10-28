@@ -26,7 +26,7 @@ Texture shotTexture;
 	public PlayerShip(AssetManager manager)
 	{
 		alive = true;
-		texture = manager.get("assets/ship.png");
+		texture = manager.get("ship.png");
 		sprite = new Sprite(texture);
 		sprite.setPosition(Gdx.graphics.getWidth()/2, 5);
 		shotOneFired = false;

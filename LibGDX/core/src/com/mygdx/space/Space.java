@@ -223,7 +223,7 @@ public class Space extends Game implements Screen{
 		player = new PlayerShip(manager);
 		sprite = player.getSprite();
 		level = new Level(levelNum, player, manager);
-		skin = new Skin(Gdx.files.internal("assets/uiskin.json"));
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		stage = new Stage();
 		
 		exitButton = new TextButton("Exit", skin, "default");
@@ -295,18 +295,17 @@ public class Space extends Game implements Screen{
 	
 	private void loadAssets()
 	{
-		manager.load("enemy1.png", Texture.class);
-		manager.load("enemy2.png", Texture.class);
-		manager.load("enemy2damaged.png", Texture.class);
-		manager.load("enemy3.png", Texture.class);
-		manager.load("enemy4.png", Texture.class);
-		manager.load("goldenAsteroid.png", Texture.class);
-		manager.load("largeAsteroid.png", Texture.class);
-		manager.load("mediumAsteroid.png", Texture.class);
-		manager.load("smallAsteroid.png", Texture.class);
-		manager.load("ship.png", Texture.class);
-		manager.load("shot.png", Texture.class);
-		
+		manager.load("Space/enemy1.png", Texture.class);
+		manager.load("Space/enemy2.png", Texture.class);
+		manager.load("Space/enemy2damaged.png", Texture.class);
+		manager.load("Space/enemy3.png", Texture.class);
+		manager.load("Space/enemy4.png", Texture.class);
+		manager.load("Space/goldenAsteroid.png", Texture.class);
+		manager.load("Space/largeAsteroid.png", Texture.class);
+		manager.load("Space/mediumAsteroid.png", Texture.class);
+		manager.load("Space/smallAsteroid.png", Texture.class);
+		manager.load("Space/ship.png", Texture.class);
+		manager.load("Space/shot.png", Texture.class);
 		
 		manager.finishLoading();
 	}
