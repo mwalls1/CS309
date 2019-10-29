@@ -13,7 +13,7 @@ public class Board {
 	private Sprite sprite;
 	private ArrayList<Zone> zones = new ArrayList<Zone>();
 	private Texture texture = new Texture(Gdx.files.internal("board.png"));
-	public Board()
+	public Board()//creates a board of a set size with the zones set accordingly.
 	{
 		width = 600;
 		height = 600;
@@ -29,7 +29,7 @@ public class Board {
 		zones.add(new Zone(213,511,189,189));
 		zones.add(new Zone(413,511,189,189));
 	}
-	public String checkWin()
+	public String checkWin()//checks the win condition of the game
 	{
 		//Check top row
 		if(zones.get(0).isActive())
@@ -97,7 +97,7 @@ public class Board {
 		}
 		return "n";
 	}
-	public void render(SpriteBatch batch, Player play1, Player play2, int mouseX, int mouseY)
+	public void render(SpriteBatch batch, Player play1, Player play2, int mouseX, int mouseY)//renders all of the information of the screen
 	{
 		sprite.draw(batch);
 		if(play1.getTurn())
