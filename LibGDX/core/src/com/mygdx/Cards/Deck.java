@@ -19,6 +19,7 @@ public Deck(int seed, AssetManager manager) //Creates a deck with 52 unique card
 
 public Deck(String arg, AssetManager manager)
 {
+	this.manager = manager;
 	cards = new Card[52];
 	loadAllAssets();
 	if (arg == "organized")
@@ -106,7 +107,7 @@ public void loadAllAssets()
 		manager.load("Cards/queen" + suitNames[i] + ".png", Texture.class);
 		manager.load("Cards/king" + suitNames[i] + ".png", Texture.class);
 	}
-	//manager.finishLoading();
+	manager.finishLoading();
 }
 
 

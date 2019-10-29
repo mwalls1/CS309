@@ -51,6 +51,7 @@ public Card(AssetManager manager) //Generate a random card
 	else if (rankDetermine == 13) this.rank = "king";
 	
 	
+	
 	texture = manager.get("Cards/" + rank + suit + ".png", Texture.class);
 	sprite = new Sprite(texture);
 }
