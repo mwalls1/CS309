@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.gui.MainScreen;
 
 public class Runner extends Game implements Screen{
     
@@ -34,15 +35,15 @@ public class Runner extends Game implements Screen{
 	
 	@Override
 	public void render(float delta) {
-		if(!board.checkWin().equals("x") && !board.checkWin().equals("o"))
+		if(!board.checkWin().equals("x") && !board.checkWin().equals("o"))//The game continues while no one has won.
 		{
-			mouseX = Gdx.input.getX();
+			mouseX = Gdx.input.getX();//gets the location of the click for zone assignment
 			mouseY = Gdx.input.getY();
 			Gdx.gl.glClearColor(1, 1, 1, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
-			board.render(batch, play1, play2, mouseX, mouseY);
-			font.draw(batch, "X: "+mouseX + " Y: " + mouseY, 0, 650);
+			board.render(batch, play1, play2, mouseX, mouseY);//renders the board with player booleans
+			font.draw(batch, "X: "+mouseX + " Y: " + mouseY, 0, 650);//shows mouse x and y for test purposes
 			batch.end();
 		}
 		else
@@ -52,16 +53,22 @@ public class Runner extends Game implements Screen{
 			batch.begin();
 			board.render(batch, play1, play2, mouseX, mouseY);
 			font.setColor(Color.BLACK);
-			if(board.checkWin().equals("x"))
+			if(board.checkWin().equals("x"))//checks if x has won, and prints it
 				font.draw(batch,"X's Win!", 0, 650);
 			else
-				font.draw(batch,"O's Win!", 0, 650);
+				font.draw(batch,"O's Win!", 0, 650);//checks if o has won and prints it
 			batch.end();
 		}
-		if(Gdx.input.isButtonJustPressed(Input.Keys.ESCAPE))
+		if(Gdx.input.isKeyPressed(Input.Keys.R))
 		{
-			System.out.println("Restart");
+			System.out.println("Restart");//restarts the game
+			create();
 		}
+	    if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))//closes the game when the user hits escape
+	    {
+	   	 dispose();
+	     game.setScreen(new MainScreen(game));
+	    }
 	}
 
 	@Override
