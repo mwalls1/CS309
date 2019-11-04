@@ -1,6 +1,13 @@
 package com.mygdx.gui;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -25,11 +32,12 @@ import com.mygdx.games.GameTest;
 import util.Constants;
 import util.JsonParser;
 
-public class MultiplayerLobby extends Game implements Screen{
+public class MultiplayerLobby extends Game implements Screen {
 	private Skin skin;
 	private Stage stage;
-//	private Stage tableStage;
+	// private Stage tableStage;
 	private Game game;
+<<<<<<< HEAD
     
     Integer lobbyNumber = 0;
     double gameCountDown = -1;
@@ -47,24 +55,43 @@ public class MultiplayerLobby extends Game implements Screen{
 	 */
 	public MultiplayerLobby(Game game)
 	{
+=======
+	private WebSocketClient cc;
+	
+	Integer lobbyNumber = 0;
+	double gameCountDown = -1;
+	long time = 0;
+	ArrayList<Label> players;
+	Label lobbyLabel;
+	Label topVoteLabel;
+	Label secondVoteLabel;
+	Label thirdVoteLabel;
+	Label fourthVoteLabel;
+	Label gameStartCD;
+
+	public MultiplayerLobby(Game game) {
+>>>>>>> branch 'MasonUIBranch' of https://git.linux.iastate.edu/cs309/fall2019/tc_1_.git
 		this.game = game;
 		create();
 	}
+
 	@Override
 	public void show() {
 	}
+
 	@Override
 	/**
 	 * Runs the screen 60 times per second
 	 */
 	public void render(float delta) {
-		 Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
-	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	     stage.act();
-	     stage.draw();
-	     refreshNames();
-	     startGame();
+		Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		stage.act();
+		stage.draw();
+		refreshNames();
+		startGame();
 	}
+
 	@Override
 	/**
 	 * Allows for the window to be resized, calls create() to make each element the correct size
@@ -72,26 +99,31 @@ public class MultiplayerLobby extends Game implements Screen{
 	public void resize(int width, int height) {
 		create();
 	}
+
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
 		stage.dispose();
 	}
+
 	@Override
 	/**
 	 * Creates and sets all text, buttons and tables to correct size based on the current size of the window.
@@ -99,6 +131,45 @@ public class MultiplayerLobby extends Game implements Screen{
 	public void create() {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
+        
+        
+        Draft[] drafts = {new Draft_6455()};
+        String w = "ws://10.26.13.93:8080/websocket/";
+        try {
+            cc = new WebSocketClient(new URI(w),(Draft) drafts[0]) {
+                @Override
+            public void onMessage(String message) {
+                    String s="Hello?";
+                    //t1.setText("hello world");
+                    //Log.d("first", "run() returned: " + s);
+                    //s=t1.getText().toString();
+                    //Log.d("second", "run() returned: " + s);
+                    System.out.println(message);
+            }
+
+                @Override
+                public void onOpen(ServerHandshake handshake) {
+                	System.out.println("opOpen");
+                }
+
+                @Override
+                public void onClose(int code, String reason, boolean remote) {
+                	System.out.println("onClose");
+                }
+
+                @Override
+                public void onError(Exception e)
+                {
+                	System.out.println("onError");
+                }
+            };
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        cc.connect();
+
+
         
     	Table table = new Table();
     	table.setWidth(Gdx.graphics.getWidth()/2);
@@ -315,84 +386,125 @@ public class MultiplayerLobby extends Game implements Screen{
 
         Gdx.input.setInputProcessor(stage);
 	}
+<<<<<<< HEAD
 	/**
 	 * Keeps player names updated as they join and leave the lobby
 	 */
 	private void refreshNames(){
+=======
+
+	private void refreshNames() {
+>>>>>>> branch 'MasonUIBranch' of https://git.linux.iastate.edu/cs309/fall2019/tc_1_.git
 		String playerString = "X X X X";
-	    try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="+MultiplayerLobby.this.lobbyNumber);}catch (Exception e1) {e1.printStackTrace();}
-    	String[] playerIds = playerString.split(" ");
-	     for (int i =  0; i < MultiplayerLobby.this.players.size(); i++) {
-    		String name = "";
-    		MultiplayerLobby.this.players.get(i).setColor(255, 255, 255, 1);
-    		if (!playerIds[i].equals("0")) {
-    			try { name = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUserById?id="+playerIds[i]);} catch (Exception e1) {e1.printStackTrace();}
-    			MultiplayerLobby.this.players.get(i).setColor(0, 255, 0, 1);
-    			if (name.contentEquals(Constants.user)) MultiplayerLobby.this.players.get(i).setColor(Color.TEAL);
-    			Integer readyInt = -1;
-    			try { readyInt = Integer.parseInt(JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getReadyStatus?id="+MultiplayerLobby.this.lobbyNumber));} catch (Exception e1) {e1.printStackTrace();}
-    			if (readyInt%2 == 0) MultiplayerLobby.this.players.get(0).setColor(Color.GOLD);
-    			if (readyInt%3 == 0) MultiplayerLobby.this.players.get(1).setColor(Color.GOLD);
-    			if (readyInt%5 == 0) MultiplayerLobby.this.players.get(2).setColor(Color.GOLD);
-    			if (readyInt%7 == 0) MultiplayerLobby.this.players.get(3).setColor(Color.GOLD);
-    		} else name = "[NONE]";
-    		MultiplayerLobby.this.players.get(i).setText(name);
-	     }
-	     lobbyLabel.setText("Lobby " + lobbyNumber);
-	     if (lobbyNumber == 0) lobbyLabel.setText("Click on a lobby to view");
-	   
-	     String voteString = "0 0 0 0";
-	     int[][] votes = {{0,0},{0,0},{0,0},{0,0}};
-	     try { voteString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPlayerVotes?id="+MultiplayerLobby.this.lobbyNumber);}catch (Exception e1) {e1.printStackTrace();}
-	     String[] voteStringArr = voteString.split(" ");
-	     for (String vote : voteStringArr) {
-		     for (int[] voteList : votes) { 
-			    	 if (!vote.equals("0")) {
-		    			 if (vote.equals(voteList[0]+"")) {
-		    				 voteList[1]++;
-		    				 break;
-		    			 }
-	    			 else if (voteList[0] == 0) {
-	    				 voteList[0] = (int)Integer.parseInt(vote);
-	    				 voteList[1]++;
-	    				 break;
-	    			 }
-	    		 }
-	    	 }
-	     }
-	     int[][] sortedVotes = new int[4][2];
-	     for (int i = 0; i < 4; i++) {
-	    	 int[] largest = {0,0};
-	    	 for (int j = 0; j < 4; j++) {
-	    		 if (votes[j][1] > largest[1]) {
-	    			 largest = votes[j].clone();
-	    			 votes[j][1] = 0;
-	    		 }
-	    	 }
-	    	 sortedVotes[i] = largest.clone();
-	     }
-	     topVoteLabel.setText("Game "+sortedVotes[0][0]+" ("+sortedVotes[0][1]+")");
-	     secondVoteLabel.setText("Game "+sortedVotes[1][0]+" ("+sortedVotes[1][1]+")");
-	     thirdVoteLabel.setText("Game "+sortedVotes[2][0]+" ("+sortedVotes[2][1]+")");
-	     fourthVoteLabel.setText("Game "+sortedVotes[3][0]+" ("+sortedVotes[3][1]+")");
+		try {
+			playerString = JsonParser.getHTML(
+					"http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id=" + MultiplayerLobby.this.lobbyNumber);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		String[] playerIds = playerString.split(" ");
+		for (int i = 0; i < MultiplayerLobby.this.players.size(); i++) {
+			String name = "";
+			MultiplayerLobby.this.players.get(i).setColor(255, 255, 255, 1);
+			if (!playerIds[i].equals("0")) {
+				try {
+					name = JsonParser
+							.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUserById?id=" + playerIds[i]);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				MultiplayerLobby.this.players.get(i).setColor(0, 255, 0, 1);
+				if (name.contentEquals(Constants.user))
+					MultiplayerLobby.this.players.get(i).setColor(Color.TEAL);
+				Integer readyInt = -1;
+				try {
+					readyInt = Integer
+							.parseInt(JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getReadyStatus?id="
+									+ MultiplayerLobby.this.lobbyNumber));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				if (readyInt % 2 == 0)
+					MultiplayerLobby.this.players.get(0).setColor(Color.GOLD);
+				if (readyInt % 3 == 0)
+					MultiplayerLobby.this.players.get(1).setColor(Color.GOLD);
+				if (readyInt % 5 == 0)
+					MultiplayerLobby.this.players.get(2).setColor(Color.GOLD);
+				if (readyInt % 7 == 0)
+					MultiplayerLobby.this.players.get(3).setColor(Color.GOLD);
+			} else
+				name = "[NONE]";
+			MultiplayerLobby.this.players.get(i).setText(name);
+		}
+		lobbyLabel.setText("Lobby " + lobbyNumber);
+		if (lobbyNumber == 0)
+			lobbyLabel.setText("Click on a lobby to view");
+
+		String voteString = "0 0 0 0";
+		int[][] votes = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+		try {
+			voteString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPlayerVotes?id="
+					+ MultiplayerLobby.this.lobbyNumber);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		String[] voteStringArr = voteString.split(" ");
+		for (String vote : voteStringArr) {
+			for (int[] voteList : votes) {
+				if (!vote.equals("0")) {
+					if (vote.equals(voteList[0] + "")) {
+						voteList[1]++;
+						break;
+					} else if (voteList[0] == 0) {
+						voteList[0] = (int) Integer.parseInt(vote);
+						voteList[1]++;
+						break;
+					}
+				}
+			}
+		}
+		int[][] sortedVotes = new int[4][2];
+		for (int i = 0; i < 4; i++) {
+			int[] largest = { 0, 0 };
+			for (int j = 0; j < 4; j++) {
+				if (votes[j][1] > largest[1]) {
+					largest = votes[j].clone();
+					votes[j][1] = 0;
+				}
+			}
+			sortedVotes[i] = largest.clone();
+		}
+		topVoteLabel.setText("Game " + sortedVotes[0][0] + " (" + sortedVotes[0][1] + ")");
+		secondVoteLabel.setText("Game " + sortedVotes[1][0] + " (" + sortedVotes[1][1] + ")");
+		thirdVoteLabel.setText("Game " + sortedVotes[2][0] + " (" + sortedVotes[2][1] + ")");
+		fourthVoteLabel.setText("Game " + sortedVotes[3][0] + " (" + sortedVotes[3][1] + ")");
 	}
+<<<<<<< HEAD
 	/**
 	 * Starts the game based on each players ready state
 	 */
+=======
+
+>>>>>>> branch 'MasonUIBranch' of https://git.linux.iastate.edu/cs309/fall2019/tc_1_.git
 	private void startGame() {
-		if (MultiplayerLobby.this.players.get(0).getColor().equals(Color.GOLD) && (!topVoteLabel.getText().contains("(0)"))) {
+		if (MultiplayerLobby.this.players.get(0).getColor().equals(Color.GOLD)
+				&& (!topVoteLabel.getText().contains("(0)"))) {
 			gameStartCD.setVisible(true);
-			if (gameCountDown == -1){
+			if (gameCountDown == -1) {
 				gameCountDown = 5;
 				time = System.currentTimeMillis();
 			}
-			if ((gameCountDown*10-(System.currentTimeMillis()-time)/100)/10 <= 0) {
-				try {JsonParser.sendHTML("readyDown", "id="+MultiplayerLobby.this.lobbyNumber);} catch (Exception e) {e.printStackTrace();}
-	           	game.setScreen(new GameTest(game));
+			if ((gameCountDown * 10 - (System.currentTimeMillis() - time) / 100) / 10 <= 0) {
+				try {
+					JsonParser.sendHTML("readyDown", "id=" + MultiplayerLobby.this.lobbyNumber);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				game.setScreen(new GameTest(game));
 			}
-			gameStartCD.setText("Game Starting in " + (gameCountDown*10-(System.currentTimeMillis()-time)/100)/10);
-		}
-		else {
+			gameStartCD.setText(
+					"Game Starting in " + (gameCountDown * 10 - (System.currentTimeMillis() - time) / 100) / 10);
+		} else {
 			gameCountDown = -1;
 			gameStartCD.setVisible(false);
 		}
