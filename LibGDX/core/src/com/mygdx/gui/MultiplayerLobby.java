@@ -41,7 +41,10 @@ public class MultiplayerLobby extends Game implements Screen{
     Label thirdVoteLabel;
     Label fourthVoteLabel;  
     Label gameStartCD;
-	
+	/**
+	 * Creates an instance of the multiplayer lobby
+	 * @param game game object, we use Game's setScreen() method to switch between different screens
+	 */
 	public MultiplayerLobby(Game game)
 	{
 		this.game = game;
@@ -51,6 +54,9 @@ public class MultiplayerLobby extends Game implements Screen{
 	public void show() {
 	}
 	@Override
+	/**
+	 * Runs the screen 60 times per second
+	 */
 	public void render(float delta) {
 		 Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -60,6 +66,9 @@ public class MultiplayerLobby extends Game implements Screen{
 	     startGame();
 	}
 	@Override
+	/**
+	 * Allows for the window to be resized, calls create() to make each element the correct size
+	 */
 	public void resize(int width, int height) {
 		create();
 	}
@@ -84,6 +93,9 @@ public class MultiplayerLobby extends Game implements Screen{
 		stage.dispose();
 	}
 	@Override
+	/**
+	 * Creates and sets all text, buttons and tables to correct size based on the current size of the window.
+	 */
 	public void create() {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
@@ -303,7 +315,9 @@ public class MultiplayerLobby extends Game implements Screen{
 
         Gdx.input.setInputProcessor(stage);
 	}
-	
+	/**
+	 * Keeps player names updated as they join and leave the lobby
+	 */
 	private void refreshNames(){
 		String playerString = "X X X X";
 	    try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="+MultiplayerLobby.this.lobbyNumber);}catch (Exception e1) {e1.printStackTrace();}
@@ -362,7 +376,9 @@ public class MultiplayerLobby extends Game implements Screen{
 	     thirdVoteLabel.setText("Game "+sortedVotes[2][0]+" ("+sortedVotes[2][1]+")");
 	     fourthVoteLabel.setText("Game "+sortedVotes[3][0]+" ("+sortedVotes[3][1]+")");
 	}
-	
+	/**
+	 * Starts the game based on each players ready state
+	 */
 	private void startGame() {
 		if (MultiplayerLobby.this.players.get(0).getColor().equals(Color.GOLD) && (!topVoteLabel.getText().contains("(0)"))) {
 			gameStartCD.setVisible(true);

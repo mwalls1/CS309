@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.mygdx.games.GameTest;
 import com.mygdx.gui.MainScreen;
 import com.mygdx.maptest.MapTest;
+import com.mygdx.platformer.Map;
 import com.mygdx.ticktacktoe.Runner;
 
 public class MyGdxGame extends Game {
@@ -11,7 +12,7 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create() {
 		// TODO Auto-generated method stub
-		game.setScreen(new MainScreen(game));
+		game.setScreen(new Map(game));
 	}
 	
 	
