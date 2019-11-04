@@ -1,18 +1,29 @@
 package util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.badlogic.gdx.Game;
 import com.mygdx.Cards.Card;
+import com.mygdx.goFish.GoFishScreen;
 
-public class MockitoTest{
+public class MockitoTest extends Game{
+	private Game game = this;
+	private GoFishScreen mockedGame;
 	
 	
+	@Before
+	public void init()
+	{
+		mockedGame = mock(GoFishScreen.class);
+	}
 	@Test
-	public void shouldReturnCorrectSuit()
+	public void testCardSuit()
 	{
 		
 		//Create mocked Player object
@@ -26,6 +37,33 @@ public class MockitoTest{
 	
 		assertEquals(cardMocked.getSuit(), "spades");
 		assertEquals(cardMocked.getRank(), "Ace");
+		
+	}
+	
+	@Test
+	public void testGetThisPlayer()
+	{
+		assertEquals(mockedGame.getThisPlayer().getName(), Constants.user);
+	}
+
+	@Test
+	public void testGetMoveHandling()
+	{
+		when(mockedGame.getMove()).thenReturn("temporaryUser asks p2 for 2");
+		
+		
+		assertTrue(mockedGame.handleMove(mockedGame.getMove()));
+	}
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void create() {
+		// TODO Auto-generated method stub
 		
 	}
 	

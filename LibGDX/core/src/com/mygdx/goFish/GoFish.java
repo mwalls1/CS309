@@ -15,17 +15,7 @@ public class GoFish{
 	private String currentPlay;
 	
 	
-//	public GoFish(int seed, Player p1, Player p2, Player p3, Player p4, AssetManager manager) 
-//	{
-//		this.manager = manager;
-//		deckIterator = 0;
-//		deck = new Deck(seed, manager);
-//		this.p1 = p1;
-//		this.p2 = p2;
-//		this.p3 = p3;
-//		this.p4 = p4;
-//		
-//	}
+
 	
 	public Player getPlayer(int player)
 	{
@@ -61,7 +51,6 @@ public class GoFish{
 		result[3] = p4.getScore();
 		
 		return result;
-		
 	}
 	
 	public static Deck getDeck()

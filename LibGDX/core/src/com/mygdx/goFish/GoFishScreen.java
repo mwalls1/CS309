@@ -39,6 +39,7 @@ private Player p1;
 private Player p2;
 private Player p3;
 private Player p4;
+private Player thisPlayer;
 private String currentMove;
 private GoFish cardGame;
 
@@ -113,15 +114,19 @@ private GoFish cardGame;
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 	    stage = new Stage();
 		p1 = new Player(getUserName());
+	
+		//TODO get players from current lobby
 		p2 = new Player("p2");
 		p3 = new Player("p3");
 		p4 = new Player("p4");
 		currentPlayer = p1;
+		thisPlayer = getThisPlayer();
 		deal();
 		generateHandSprites();
 		generatePondSprites();
 		
 		p2.addCard(new Card("2", "clubs", manager));
+		p1.addCard(new Card("2", "hearts", manager));
 		
 		
 		//Initialize buttons
@@ -144,11 +149,13 @@ private GoFish cardGame;
 		final TextButton name4 = new TextButton(p4.getName(), skin, "default");
 		final TextButton goButton = new TextButton("Go!", skin, "default");
 		
+		
+		//For button positioning
 		float offset = Gdx.graphics.getWidth()/20;
 		float buttonWidth = Gdx.graphics.getWidth() / 25;
 		float startingX = Gdx.graphics.getWidth() * 0.6f;
 		float startingY = Gdx.graphics.getHeight()*.4f;
-		
+	
 		button1.setWidth(buttonWidth);
 		button1.setHeight(buttonWidth);
 		button1.setX(startingX);
@@ -249,6 +256,7 @@ private GoFish cardGame;
             	if (selectedRank != null && selectedPlayer != null && selectedPlayer != currentPlayer && currentPlayer.getName() == Constants.user)
             	{
             		play(currentPlayer, selectedPlayer, selectedRank);
+            		sendMove();
             		currentMove = (currentPlayer.getName() + ", " + selectedPlayer.getName() + ", " + selectedRank);
             		nextTurn();
             	}
@@ -407,7 +415,7 @@ private GoFish cardGame;
 	
 	public void generateHandSprites()
 	{
-		ArrayList<Card> hand = p1.getHand();
+		ArrayList<Card> hand = thisPlayer.getHand();
 		handSprites = new Sprite[hand.size()];
 		
 		for (int i = 0; i<handSprites.length; i++) 
@@ -481,10 +489,72 @@ private GoFish cardGame;
 		generateHandSprites();
 	}
 	
-	public String getNextMove()
+	
+
+	public void sendMove()
 	{
+		//TODO
+	}
+	
+	public String getMove()
+	{
+		//TODO
 		return null;
 	}
+	
+	public Player getThisPlayer()
+	{
+			if (p1.getName() == Constants.user) return p1;
+			if (p2.getName() == Constants.user) return p2;
+			if (p3.getName() == Constants.user) return p3;
+			if (p4.getName() == Constants.user) return p4;
+			else return new Player("GetThisPlayerMethodFailed");
+	}
+	
+
+	public Player getPlayer(int player)
+	{
+		if (player == 1) return p1;
+		if (player == 2) return p2;
+		if (player == 3) return p3;
+		if (player == 4) return p4;
+		else return new Player("GetPlayerMethodFailed");
+		
+	}
+	
+	public Player getPlayer(String name)
+	{
+		if (name == p1.getName()) return p1;
+		if (name == p2.getName()) return p2;
+		if (name == p3.getName()) return p3;
+		if (name == p4.getName()) return p4;
+		else return new Player("GetPlayerMethodFailed");
+	}
+	
+	public boolean handleMove(String move)
+	{
+		String[] words = move.split("\\s+");
+		if (words.length != 5) return false;
+		
+		Player currentPlayer = getPlayer(words[0]);
+		Player otherPlayer = getPlayer(words[2]);
+		if (currentPlayer.getName() == "GetPlayerMethodFailed")
+			{
+			System.out.println("Current player failed");
+				return false;
+			}
+		if (otherPlayer.getName() == "GetPlayerMethodFailed")
+			{
+				System.out.println("Other player failed");
+				return false;
+			}
+		String rank = words[4];
+		
+		play(currentPlayer, otherPlayer, rank);
+		
+		return true;
+	}
+	
 	
 	
 }
