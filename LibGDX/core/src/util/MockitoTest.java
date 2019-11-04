@@ -2,6 +2,7 @@ package util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,24 +41,27 @@ public class MockitoTest extends Game{
 		
 	}
 	
-	@Test
-	public void testGetThisPlayer()
-	{
-		assertEquals(mockedGame.getThisPlayer().getName(), Constants.user);
-	}
+
 
 	@Test
-	public void testGetMoveHandling()
+	public void testGetMoveHandling1()
 	{
 		when(mockedGame.getMove()).thenReturn("temporaryUser asks p2 for 2");
 		
 		
-		assertTrue(mockedGame.handleMove(mockedGame.getMove()));
+		assertFalse(mockedGame.handleMove(mockedGame.getMove()));
 	}
 	
-	
-	
-	
+	@Test
+	public void testGetMoveHandling2()
+	{
+		GoFishScreen newGame = new GoFishScreen(game);
+		newGame.create();
+		when(mockedGame.getMove()).thenReturn("TemporaryUser asks p2 for 2");
+		
+		
+		assertFalse(newGame.handleMove(mockedGame.getMove()));
+	}
 	
 	
 	
