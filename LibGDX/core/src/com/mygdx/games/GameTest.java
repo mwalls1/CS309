@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.gui.MainScreen;
 
 import util.Constants;
+import util.JsonParser;
 
 public class GameTest extends Game implements Screen{
 	private SpriteBatch batch;
@@ -77,7 +78,7 @@ public class GameTest extends Game implements Screen{
 	{
 		
 		Draft[] drafts = { new Draft_6455() };
-		String w = "ws://localhost:8080/websocket/user";
+		String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/user";
 //		w = w.replace(" ", "_");
 		try {
             cc = new WebSocketClient(new URI(w),(Draft) drafts[0]) {
@@ -95,6 +96,7 @@ public class GameTest extends Game implements Screen{
 				@Override
 				public void onClose(int code, String reason, boolean remote) {
 					System.out.println("onClose");
+					try {JsonParser.sendHTML("removePlayerFromLobbies", "id="+Constants.userID);} catch (Exception e) {e.printStackTrace();}
 				}
 
 				@Override
@@ -111,7 +113,7 @@ public class GameTest extends Game implements Screen{
 	
 		font = new BitmapFont();
 		this.game = game;
-		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
 		map = new TmxMapLoader().load("dungeon3.tmx");
 		MapLayers mapLayers = map.getLayers();
@@ -333,6 +335,7 @@ public class GameTest extends Game implements Screen{
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			if(player.hp<1)
 			{
+				cc.close();
 				font.draw(batch, "Game Over", player.x-40, player.y);
 				font.draw(batch, "Press Esc to Exit", player.x-40, player.y-20);
 				batch.end();
@@ -348,6 +351,7 @@ public class GameTest extends Game implements Screen{
 		}
 	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
+	    	 cc.close();
 	    	 dispose();
 	    	 game.setScreen(new MainScreen(game));
 	     }

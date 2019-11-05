@@ -234,11 +234,18 @@ public class MultiplayerLobby extends Game implements Screen {
         joinLobby.addListener(new ClickListener(){
             @Override 
             public void clicked(InputEvent event, float x, float y){
-            	String playerString = "0 0 0 0";
-            	try { playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="+MultiplayerLobby.this.lobbyNumber);} catch (Exception e1) {e1.printStackTrace();}
-            	String[] playerIds = playerString.split(" ");
-            	for (int i = 0; i < 4; i++) {
-            		if (playerIds[i].equals("0")){
+				String playerString = "0 0 0 0";
+				if (MultiplayerLobby.this.lobbyNumber > 0) {
+					try {
+						playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="
+								+ MultiplayerLobby.this.lobbyNumber);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				String[] playerIds = playerString.split(" ");
+				for (int i = 0; i < 4; i++) {
+					if (playerIds[i].equals("0") && MultiplayerLobby.this.lobbyNumber > 0){
             			try {JsonParser.sendHTML("updatePlayer", "id="+MultiplayerLobby.this.lobbyNumber+"&player="+(i+1)+"&playerId="+Constants.userID);} catch (Exception e) {e.printStackTrace();}
             			Constants.lobby = MultiplayerLobby.this.lobbyNumber;
             			refreshNames();
