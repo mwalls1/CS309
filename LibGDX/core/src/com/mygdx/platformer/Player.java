@@ -220,11 +220,11 @@ public class Player {
 			}
 		}
 		if (!isJumping) {
-			if (walls.getCell((int) ((x) / tileW), (int) ((y - 1) / tileH)) == null) {
-				isFalling = true;
-			} else if (walls.getCell((int) ((x + width) / tileW), (int) ((y - 1) / tileH)) == null) {
-				isFalling = true;
-			}
+			if (walls.getCell((int) ((x) / tileW), (int) ((y - 1) / tileH)) == null && walls.getCell((int) ((x + width) / tileW), (int) ((y - 1) / tileH)) == null) {
+				isFalling = true;}
+//			} else if (walls.getCell((int) ((x + width) / tileW), (int) ((y - 1) / tileH)) == null) {
+//				isFalling = true;
+//			}
 		}
 		if(walls.getCell((int) ((x) / tileW), (int) ((y) / tileH)) != null || walls.getCell((int) ((x + width) / tileW), (int) ((y) / tileH)) != null)
 		{
