@@ -1,8 +1,14 @@
 apply plugin: "java"
 
+
 dependencies { 
+				implementation fileTree(include: ['*.jar'], dir: 'libs')
 				implementation "org.mockito:mockito-core:2.25.0"
-				implementation "org.objenesis:objenesis:2.3" }
+				implementation files('libs/java_websocket.jar')
+				implementation "org.objenesis:objenesis:2.3" 
+				compile group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.4.0'
+				
+}
 
 sourceCompatibility = 1.7
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'

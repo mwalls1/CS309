@@ -1,9 +1,16 @@
 package com.mygdx.games;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -23,10 +30,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.gui.MainScreen;
-import com.mygdx.gui.MultiplayerLobby;
 
 import util.Constants;
-import util.JsonParser;
 
 public class GameTest extends Game implements Screen{
 	private SpriteBatch batch;
@@ -40,6 +45,8 @@ public class GameTest extends Game implements Screen{
 	private Player player2;
 	private Player player3;
 	private Player player4;
+	private WebSocketClient cc;
+	private String playerUpdate = "";
 	private int score = 0;
 	private ShapeRenderer shape;
 	private boolean gameOver = false;
@@ -68,6 +75,40 @@ public class GameTest extends Game implements Screen{
     
 	public GameTest(Game game)
 	{
+		
+		Draft[] drafts = { new Draft_6455() };
+		String w = "ws://localhost:8080/websocket/user";
+//		w = w.replace(" ", "_");
+		try {
+            cc = new WebSocketClient(new URI(w),(Draft) drafts[0]) {
+				@Override
+				public void onMessage(String message) {
+					System.out.println(message);
+					playerUpdate = message;
+				}
+
+				@Override
+				public void onOpen(ServerHandshake handshake) {
+					System.out.println("opOpen");
+				}
+
+				@Override
+				public void onClose(int code, String reason, boolean remote) {
+					System.out.println("onClose");
+				}
+
+				@Override
+				public void onError(Exception e) {
+					e.printStackTrace();
+					System.out.println("onError");
+				}
+			};
+		} catch (URISyntaxException e) {
+			System.out.println("fail");
+			e.printStackTrace();
+      }
+      cc.connect();
+	
 		font = new BitmapFont();
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
@@ -155,31 +196,31 @@ public class GameTest extends Game implements Screen{
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		
+		try {
 		//Sends position and updates all four players
-		//String playerUpdate = "no";
-		//System.out.println(Constants.lobby);
-		//System.out.println(Constants.userID);
-		//System.out.println(player.getX());
-		//System.out.println(player.getY());
-		//try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
-		//String[] playerUpdateArr = playerUpdate.split(" ");
-		//player.setPos(850, 50);
-		//player2.setPos(0, 0);
-		//player3.setPos(0, 0);
-		//player4.setPos(0, 0);
-		//System.out.println(playerUpdate);
-		//System.out.println(Arrays.toString(playerUpdateArr));
-		//System.out.println(playerUpdateArr[0]);
-		/*for (int i = 0; i < 4; i++) {
+		System.out.println(Constants.lobby);
+		System.out.println(Constants.userID);
+		System.out.println(player.getX());
+		System.out.println(player.getY());
+//		try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
+		cc.send(Constants.lobby + " " + Constants.userID + " " + player.getX() + " " +player.getY());
+		String[] playerUpdateArr = playerUpdate.split(" ");
+//		player.setPos(850, 50);
+		player2.setPos(0, 0);
+		player3.setPos(0, 0);
+		player4.setPos(0, 0);
+		System.out.println(playerUpdate);
+		System.out.println(Arrays.toString(playerUpdateArr));
+		System.out.println(playerUpdateArr[0]);
+		for (int i = 0; i < 4; i++) {
 			if(Integer.parseInt(playerUpdateArr[3*i]) == Constants.userID) {
-				player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
+//				player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
 			}
 			else if(player2.getX() == 0) player2.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
 			else if(player3.getX() == 0) player3.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
 			else if(player4.getX() == 0) player4.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-		}*/
-
+		}
+		}catch(Exception e) {e.printStackTrace();}
 		if(elapsed<3)
 		{
 			batch.begin();

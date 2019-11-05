@@ -1,13 +1,6 @@
 package com.mygdx.gui;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft;
-import org.java_websocket.drafts.Draft_6455;
-import org.java_websocket.handshake.ServerHandshake;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -37,8 +30,6 @@ public class MultiplayerLobby extends Game implements Screen {
 	private Stage stage;
 	// private Stage tableStage;
 	private Game game;
-<<<<<<< HEAD
-    
     Integer lobbyNumber = 0;
     double gameCountDown = -1;
 	long time = 0;
@@ -49,32 +40,18 @@ public class MultiplayerLobby extends Game implements Screen {
     Label thirdVoteLabel;
     Label fourthVoteLabel;  
     Label gameStartCD;
+
 	/**
 	 * Creates an instance of the multiplayer lobby
-	 * @param game game object, we use Game's setScreen() method to switch between different screens
+	 * 
+	 * @param game
+	 *            game object, we use Game's setScreen() method to switch between
+	 *            different screens
 	 */
-	public MultiplayerLobby(Game game)
-	{
-=======
-	private WebSocketClient cc;
-	
-	Integer lobbyNumber = 0;
-	double gameCountDown = -1;
-	long time = 0;
-	ArrayList<Label> players;
-	Label lobbyLabel;
-	Label topVoteLabel;
-	Label secondVoteLabel;
-	Label thirdVoteLabel;
-	Label fourthVoteLabel;
-	Label gameStartCD;
-
 	public MultiplayerLobby(Game game) {
->>>>>>> branch 'MasonUIBranch' of https://git.linux.iastate.edu/cs309/fall2019/tc_1_.git
 		this.game = game;
 		create();
 	}
-
 	@Override
 	public void show() {
 	}
@@ -131,47 +108,8 @@ public class MultiplayerLobby extends Game implements Screen {
 	public void create() {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
-        
-        
-        Draft[] drafts = {new Draft_6455()};
-        String w = "ws://10.26.13.93:8080/websocket/";
-        try {
-            cc = new WebSocketClient(new URI(w),(Draft) drafts[0]) {
-                @Override
-            public void onMessage(String message) {
-                    String s="Hello?";
-                    //t1.setText("hello world");
-                    //Log.d("first", "run() returned: " + s);
-                    //s=t1.getText().toString();
-                    //Log.d("second", "run() returned: " + s);
-                    System.out.println(message);
-            }
 
-                @Override
-                public void onOpen(ServerHandshake handshake) {
-                	System.out.println("opOpen");
-                }
-
-                @Override
-                public void onClose(int code, String reason, boolean remote) {
-                	System.out.println("onClose");
-                }
-
-                @Override
-                public void onError(Exception e)
-                {
-                	System.out.println("onError");
-                }
-            };
-        }
-        catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        cc.connect();
-
-
-        
-    	Table table = new Table();
+        Table table = new Table();
     	table.setWidth(Gdx.graphics.getWidth()/2);
         table.setHeight(Gdx.graphics.getHeight()*3/5);
         table.setPosition(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight()/5+5);
@@ -386,19 +324,17 @@ public class MultiplayerLobby extends Game implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 	}
-<<<<<<< HEAD
 	/**
 	 * Keeps player names updated as they join and leave the lobby
 	 */
 	private void refreshNames(){
-=======
 
-	private void refreshNames() {
->>>>>>> branch 'MasonUIBranch' of https://git.linux.iastate.edu/cs309/fall2019/tc_1_.git
 		String playerString = "X X X X";
 		try {
-			playerString = JsonParser.getHTML(
-					"http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id=" + MultiplayerLobby.this.lobbyNumber);
+			if (this.lobbyNumber > 0) {
+				playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="
+						+ MultiplayerLobby.this.lobbyNumber);
+			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -408,8 +344,14 @@ public class MultiplayerLobby extends Game implements Screen {
 			MultiplayerLobby.this.players.get(i).setColor(255, 255, 255, 1);
 			if (!playerIds[i].equals("0")) {
 				try {
-					name = JsonParser
-							.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUserById?id=" + playerIds[i]);
+					if (this.lobbyNumber > 0) {
+						name = JsonParser
+								.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUserById?id=" + playerIds[i]);
+						if (name.contains("No value present")) {
+							System.out.println("name");
+							name = "";
+						}
+					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -418,9 +360,11 @@ public class MultiplayerLobby extends Game implements Screen {
 					MultiplayerLobby.this.players.get(i).setColor(Color.TEAL);
 				Integer readyInt = -1;
 				try {
-					readyInt = Integer
-							.parseInt(JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getReadyStatus?id="
-									+ MultiplayerLobby.this.lobbyNumber));
+					if (this.lobbyNumber > 0) {
+						readyInt = Integer.parseInt(
+								JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getReadyStatus?id="
+										+ MultiplayerLobby.this.lobbyNumber));
+					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -443,8 +387,14 @@ public class MultiplayerLobby extends Game implements Screen {
 		String voteString = "0 0 0 0";
 		int[][] votes = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 		try {
-			voteString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPlayerVotes?id="
-					+ MultiplayerLobby.this.lobbyNumber);
+			if (this.lobbyNumber > 0) {
+				voteString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPlayerVotes?id="
+						+ MultiplayerLobby.this.lobbyNumber);
+				if (voteString.split(" ").length != 4) {
+					System.out.println(voteString);
+					voteString = "0 0 0 0";
+				}
+			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -479,13 +429,9 @@ public class MultiplayerLobby extends Game implements Screen {
 		thirdVoteLabel.setText("Game " + sortedVotes[2][0] + " (" + sortedVotes[2][1] + ")");
 		fourthVoteLabel.setText("Game " + sortedVotes[3][0] + " (" + sortedVotes[3][1] + ")");
 	}
-<<<<<<< HEAD
 	/**
 	 * Starts the game based on each players ready state
 	 */
-=======
-
->>>>>>> branch 'MasonUIBranch' of https://git.linux.iastate.edu/cs309/fall2019/tc_1_.git
 	private void startGame() {
 		if (MultiplayerLobby.this.players.get(0).getColor().equals(Color.GOLD)
 				&& (!topVoteLabel.getText().contains("(0)"))) {
