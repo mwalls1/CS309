@@ -52,9 +52,11 @@ public class Player {
 	private TextureAtlas iLeft;
 	private TextureAtlas iRight;
 	public int numCoins;
+	private float jumpPower = 6;
 	public static int numEnemies = 45;
-	private float velocity = 0;
-	private float gravity = 10;
+	private float velocity = jumpPower;
+	private float downVelocity = 0;
+	private float gravity = 1/6f;
 	private boolean isJumping = false;
 	private boolean isFalling = false;
 	private float jumptime = -1000000;
@@ -106,8 +108,7 @@ public class Player {
 	public void update(TiledMapTileLayer walls, OrthographicCamera camera, SpriteBatch batch) {
 		float tileW = walls.getTileWidth();
 		float tileH = walls.getTileHeight();
-		if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S)
-				|| Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.A) ||  Gdx.input.isKeyPressed(Input.Keys.D)) {
 			if(Gdx.input.isKeyPressed(Input.Keys.A))
 			{
 				for(int i = 0; i < dx; i ++)
@@ -149,16 +150,10 @@ public class Player {
 			isMoving = false;
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !isJumping && !isFalling)
 		{
-			jumptime = elapsed;
+			System.out.println("Jumped");
 			isJumping = true;
-		}
-		if(isJumping)
-		{
-			if(elapsed>(jumptime+.5))
-			{
-				isJumping = false;
-				isFalling = false;
-			}
+			velocity=jumpPower;
+			downVelocity=0;
 		}
 		if (!isMoving) {
 			if (direction == 0) {
@@ -173,65 +168,72 @@ public class Player {
 			else
 				batch.draw(runRight.getKeyFrame(elapsed, true), x, y);
 		}
-		jump(walls);
-		fall(walls);
-			
+		gravity(walls);
 	}
-	public void update(SpriteBatch batch) {
-		if (!isMoving) {
-			if (direction == 0) {
-				batch.draw(idleLeft.getKeyFrame(elapsed, true), x, y);
-			} else {
-				batch.draw(idleRight.getKeyFrame(elapsed, true), x, y);
-			}
-		}
-		if (isMoving) {
-			if (direction == 0)
-				batch.draw(runLeft.getKeyFrame(elapsed, true), x, y);
-			else
-				batch.draw(runRight.getKeyFrame(elapsed, true), x, y);
-		}
-			
-	}
-	private void fall(TiledMapTileLayer walls)
+//	public void update(SpriteBatch batch) {
+//		if (!isMoving) {
+//			if (direction == 0) {
+//				batch.draw(idleLeft.getKeyFrame(elapsed, true), x, y);
+//			} else {
+//				batch.draw(idleRight.getKeyFrame(elapsed, true), x, y);
+//			}
+//		}
+//		if (isMoving) {
+//			if (direction == 0)
+//				batch.draw(runLeft.getKeyFrame(elapsed, true), x, y);
+//			else
+//				batch.draw(runRight.getKeyFrame(elapsed, true), x, y);
+//		}
+//			
+//	}
+	private void gravity(TiledMapTileLayer walls)
 	{
 		float tileW = walls.getTileWidth();
 		float tileH = walls.getTileHeight();
-		for(int i = 0; i < 5; i ++)
+		if(isJumping)
 		{
-			if(walls.getCell((int)((x)/tileW), (int)((y-1)/tileH))!=null)
-			{
-				isFalling = false;
+			if (walls.getCell((int) ((x) / tileW), (int) ((y + height + 1) / tileH)) != null) {
+				isJumping = false;
+			} else if (walls.getCell((int) ((x + width) / tileW), (int) ((y + height + 1) / tileH)) != null) {
+				isJumping = false;
 			}
-			else if(walls.getCell((int)((x+width)/tileW), (int)((y-1)/tileH))!=null)
-			{
+			else {
+				y += velocity;
+				velocity -= gravity;
+				if (velocity < 0) {
+					isJumping = false;
+					isFalling = true;
+				}
+			}
+		}
+		if(isFalling)
+		{
+			if (walls.getCell((int) ((x) / tileW), (int) ((y - 1) / tileH)) != null) {
+				isFalling = false;
+			} else if (walls.getCell((int) ((x + width) / tileW), (int) ((y - 1) / tileH)) != null) {
 				isFalling = false;
 			}
 			else
 			{
-				if(!isJumping)
-					y-=1;
+				y-=downVelocity;
+				downVelocity+=gravity;
+			}
+		}
+		if (!isJumping) {
+			if (walls.getCell((int) ((x) / tileW), (int) ((y - 1) / tileH)) == null) {
+				isFalling = true;
+			} else if (walls.getCell((int) ((x + width) / tileW), (int) ((y - 1) / tileH)) == null) {
 				isFalling = true;
 			}
 		}
-	}
-	private void jump(TiledMapTileLayer walls)
-	{
-		float tileW = walls.getTileWidth();
-		float tileH = walls.getTileHeight();
-			if(walls.getCell((int)((x)/tileW), (int)((y+height+1)/tileH))!=null)
-			{
-				isJumping = false;
-			}
-			else if(walls.getCell((int)((x+width)/tileW), (int)((y+height+1)/tileH))!=null)
-			{
-				isJumping = false;
-			}
-			else
-			{
-				if(isJumping)
-					y+=5;
-			}
+		if(walls.getCell((int) ((x) / tileW), (int) ((y) / tileH)) != null || walls.getCell((int) ((x + width) / tileW), (int) ((y) / tileH)) != null)
+		{
+			y+=1;
+		}
+		if(!isFalling)
+		{
+			downVelocity = 0;
+		}
 	}
     public void setPos(int x1, int y1){
         x = x1;
