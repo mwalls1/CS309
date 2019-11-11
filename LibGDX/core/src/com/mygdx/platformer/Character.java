@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
-public class Player {
+public class Character {
     public int x,y;
     public int dx, dy;
     public int width, height;
@@ -52,15 +52,18 @@ public class Player {
 	private TextureAtlas iLeft;
 	private TextureAtlas iRight;
 	public int numCoins;
-	private float jumpPower = 6;
+	private float jumpPower = 4.5F;
 	public static int numEnemies = 45;
 	private float velocity = jumpPower;
 	private float downVelocity = 0;
 	private float gravity = 1/6f;
 	private boolean isJumping = false;
 	private boolean isFalling = false;
+	private int numJumps = 0;
 	private float jumptime = -1000000;
-    public Player(int spawnX, int spawnY){
+	private int sX;
+	private int sY;
+    public Character(int spawnX, int spawnY){
 		numCoins = 0;
     	sprite = new Sprite();
     	direction = 1;
@@ -73,6 +76,8 @@ public class Player {
         area = width*height;
         x = spawnX;
         y = spawnY;
+        sX = spawnX;
+        sY = spawnY;
         dx = 2;
         dy = 2;
         numBullets = 0;
@@ -148,12 +153,13 @@ public class Player {
 
 		} else
 			isMoving = false;
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !isJumping && !isFalling)
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && numJumps < 2)
 		{
 			System.out.println("Jumped");
 			isJumping = true;
 			velocity=jumpPower;
 			downVelocity=0;
+			numJumps++;
 		}
 		if (!isMoving) {
 			if (direction == 0) {
@@ -192,6 +198,7 @@ public class Player {
 		float tileH = walls.getTileHeight();
 		if(isJumping)
 		{
+			downVelocity = 0;
 			if (walls.getCell((int) ((x) / tileW), (int) ((y + height + 1) / tileH)) != null) {
 				isJumping = false;
 			} else if (walls.getCell((int) ((x + width) / tileW), (int) ((y + height + 1) / tileH)) != null) {
@@ -210,8 +217,10 @@ public class Player {
 		{
 			if (walls.getCell((int) ((x) / tileW), (int) ((y - 1) / tileH)) != null) {
 				isFalling = false;
+				numJumps = 0;
 			} else if (walls.getCell((int) ((x + width) / tileW), (int) ((y - 1) / tileH)) != null) {
 				isFalling = false;
+				numJumps = 0;
 			}
 			else
 			{
@@ -243,7 +252,11 @@ public class Player {
     {
     	return sprite;
     }
-
+    public void reset()
+    {
+    	x = sX;
+    	y = sY;
+    }
     public int getX(){
         return x;
     }
