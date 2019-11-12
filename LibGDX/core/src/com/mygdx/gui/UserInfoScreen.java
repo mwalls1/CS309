@@ -161,10 +161,33 @@ public class UserInfoScreen extends Game implements Screen {
 //        final ScrollPane friendsScroll = new ScrollPane(friendsTable);
 //        friendsScroll.setWidth(friendsTable.getWidth());
 //        friendsScroll.setHeight(friendsTable.getHeight()/2);
+         
+        String friendString;
+        try{
+        	friendString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getFriendsNames?userId="+Constants.userID);
+        } catch (Exception e) { 
+        	friendString = "Failed";
+        	e.printStackTrace(); 
+        }
         
-        
-         Label sampleFriend = new Label("Sample Friend",skin,"default");
-         friendsTable.add(sampleFriend).row();
+        if(friendString.equals("Failed")) {
+        	Label failedFriend = new Label("Failed to get friends list", skin, "default");
+        	friendsTable.add(failedFriend).row();
+        } else if(friendString.equals("Temporary user")){
+        	Label failedFriend = new Label("Temporary user has no friends", skin, "default");
+        	friendsTable.add(failedFriend).row();
+        } else {
+        	if(friendString.equals("You have no friends")){
+        		Label noFriends = new Label("You have no friends", skin, "default");
+            	friendsTable.add(noFriends).row();
+        	} else {
+        		String[] arr = friendString.split("::");
+        		for(int i = 0; i < arr.length; i++) {
+        			Label f = new Label(arr[i], skin, "default");
+                	friendsTable.add(f).row();
+        		}
+        	}
+        }
         
 		usernameTextField.setWidth((Gdx.graphics.getWidth()-selectBox.getWidth())*9/10);
 		usernameTextField.setHeight(Constants.BUTTON_HEIGHT);
