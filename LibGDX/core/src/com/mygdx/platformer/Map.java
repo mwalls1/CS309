@@ -28,7 +28,7 @@ public class Map extends Game implements Screen{
 	private BitmapFont font;
 	Scanner scan;
 	private Game game;
-	private Player player;
+	private Character player;
 	private int score = 0;
 	private ShapeRenderer shape;
 	private boolean gameOver = false;
@@ -45,7 +45,7 @@ public class Map extends Game implements Screen{
 		map = new TmxMapLoader().load("platformer.tmx");
 		MapLayers mapLayers = map.getLayers();
 		terrain = (TiledMapTileLayer) mapLayers.get("blockage");
-		player = new Player(100, 100);
+		player = new Character(100, 100);
 		create();
 	}
 	@Override
