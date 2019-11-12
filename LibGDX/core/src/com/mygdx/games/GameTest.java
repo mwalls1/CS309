@@ -205,7 +205,7 @@ public class GameTest extends Game implements Screen{
 		System.out.println(player.getX());
 		System.out.println(player.getY());
 //		try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
-		cc.send(Constants.lobby + " " + Constants.userID + " " + player.getX() + " " +player.getY());
+		cc.send("UPDATEPOS:"+Constants.lobby + " " + Constants.userID + " " + player.getX() + " " +player.getY());
 		String[] playerUpdateArr = playerUpdate.split(" ");
 //		player.setPos(850, 50);
 		player2.setPos(0, 0);

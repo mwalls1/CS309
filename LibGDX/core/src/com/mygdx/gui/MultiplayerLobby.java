@@ -449,7 +449,7 @@ public class MultiplayerLobby extends Game implements Screen {
 			}
 			if ((gameCountDown * 10 - (System.currentTimeMillis() - time) / 100) / 10 <= 0) {
 				try {
-					JsonParser.sendHTML("readyDown", "id=" + MultiplayerLobby.this.lobbyNumber);
+//					JsonParser.sendHTML("readyDown", "id=" + MultiplayerLobby.this.lobbyNumber);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
