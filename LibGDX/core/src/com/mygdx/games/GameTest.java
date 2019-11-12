@@ -23,7 +23,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.gui.MainScreen;
-import com.mygdx.gui.MultiplayerLobby;
+
 
 import util.Constants;
 import util.JsonParser;
@@ -56,7 +56,7 @@ public class GameTest extends Game implements Screen{
 	public ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	public ArrayList<Dragon> dragons = new ArrayList<Dragon>();
 	public ArrayList<Coin> coins = new ArrayList<Coin>();
-	public serverThread thread = new serverThread();
+	//public serverThread thread = new serverThread();
 	Random randX = new Random(); //866
 	Random ranY = new Random(); //893
     public  float randomX;

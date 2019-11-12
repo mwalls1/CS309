@@ -105,10 +105,10 @@ public Asteroid()
 	rand = new Random();
 	type = rand.nextInt(4);
 	
-	if (type == SMALL) texture = new Texture("assets/smallAsteroid.png");
-	else if (type == MEDIUM) texture = new Texture("assets/mediumAsteroid.png");
-	else if (type == LARGE) texture = new Texture("assets/largeAsteroid.png");
-	else if (type == GOLDEN) texture = new Texture("assets/GoldenAsteroid.png");
+	if (type == SMALL) texture = new Texture("Space/smallAsteroid.png");
+	else if (type == MEDIUM) texture = new Texture("Space/mediumAsteroid.png");
+	else if (type == LARGE) texture = new Texture("Space/largeAsteroid.png");
+	else if (type == GOLDEN) texture = new Texture("Space/GoldenAsteroid.png");
 	
 	intact = true;
 	sprite = new Sprite(texture);
