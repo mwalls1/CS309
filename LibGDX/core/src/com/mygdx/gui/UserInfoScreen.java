@@ -89,6 +89,9 @@ public class UserInfoScreen extends Game implements Screen {
 		final TextButton loginWithUsernamePassword = new TextButton("Enter", skin, "default");
 		final TextButton createNewUser = new TextButton("New User", skin, "default");
 		final Label loginMessage = new Label("Incorect Password or Username", skin, "default"); //TODO change font color to red
+		final TextField addFriendField = new TextField("Friends ID", skin);
+		final TextButton addFriendButton = new TextButton("Add Friend", skin, "default");
+		final TextButton deleteFriendButton = new TextButton("Delete Friend", skin, "default");
 		
 		//User Info Name and sign in/ sign out button at the top of the screen
         final Label userInfoLabel = new Label("HI GUYS: " + Constants.user, skin, "default");
@@ -174,7 +177,7 @@ public class UserInfoScreen extends Game implements Screen {
         	Label failedFriend = new Label("Failed to get friends list", skin, "default");
         	friendsTable.add(failedFriend).row();
         } else if(friendString.equals("Temporary user")){
-        	Label failedFriend = new Label("Temporary user has no friends", skin, "default");
+        	Label failedFriend = new Label("Sign-in to see your friends list.", skin, "default");
         	friendsTable.add(failedFriend).row();
         } else {
         	if(friendString.equals("You have no friends")){
@@ -182,8 +185,8 @@ public class UserInfoScreen extends Game implements Screen {
             	friendsTable.add(noFriends).row();
         	} else {
         		String[] arr = friendString.split("::");
-        		for(int i = 0; i < arr.length; i++) {
-        			Label f = new Label(arr[i], skin, "default");
+        		for(int i = 0; i < arr.length; i+=2) {
+        			Label f = new Label(arr[i] + "(" + arr[i+1] + ")", skin, "default");
                 	friendsTable.add(f).row();
         		}
         	}
@@ -256,6 +259,49 @@ public class UserInfoScreen extends Game implements Screen {
 				
 			}
 		});
+		
+		/* ------------------------------------------------------
+		 * FRIEND BUTTONS AND FIELDS
+		 * ----------------------------------------------------*/
+		addFriendField.setWidth((Gdx.graphics.getWidth()-selectBox.getWidth())*9/10);
+        addFriendField.setHeight(Constants.BUTTON_HEIGHT);
+        addFriendField.setPosition(usernameTextField.getX(), loginWithUsernamePassword.getY()-addFriendField.getHeight()-75);
+        
+        addFriendField.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				addFriendField.setText("");
+			}
+		});
+        
+        addFriendButton.setWidth(passwordTextField.getWidth()/2);
+        addFriendButton.setHeight(Constants.BUTTON_HEIGHT);
+        addFriendButton.setPosition(addFriendField.getX(), addFriendField.getY()-addFriendButton.getHeight()-25);
+        addFriendButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				String f = null;
+				try { f = JsonParser.sendHTML("addFriend", "userId="+Constants.userID+"&friendId="+addFriendField.getText());} catch (Exception e1) {e1.printStackTrace();}
+				if (f != null){
+					create();
+				}
+			}});
+        
+        deleteFriendButton.setWidth(passwordTextField.getWidth()/2);
+        deleteFriendButton.setHeight(Constants.BUTTON_HEIGHT);
+        deleteFriendButton.setPosition(passwordTextField.getX()+loginWithUsernamePassword.getWidth(), addFriendField.getY()-addFriendButton.getHeight()-25);
+        deleteFriendButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				String f = null;
+				try { f = JsonParser.sendHTML("deleteFriend", "userId="+Constants.userID+"&friendId="+addFriendField.getText());} catch (Exception e1) {e1.printStackTrace();}
+				if (f != null){
+					create();
+				}
+			}});
+        
+        
+		
 		loginMessage.setWidth(Constants.BUTTON_WIDTH);
 		loginMessage.setHeight(Constants.BUTTON_HEIGHT);
 		loginMessage.setPosition(passwordTextField.getX(), createNewUser.getY()-passwordTextField.getHeight());
@@ -267,6 +313,9 @@ public class UserInfoScreen extends Game implements Screen {
 		stage.addActor(loginButton);
 		stage.addActor(usernameTextField);
 		stage.addActor(passwordTextField);
+		stage.addActor(addFriendField);
+		stage.addActor(addFriendButton);
+		stage.addActor(deleteFriendButton);
 		stage.addActor(loginWithUsernamePassword);
 		stage.addActor(createNewUser);
 		stage.addActor(loginMessage);
