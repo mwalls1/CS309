@@ -56,20 +56,14 @@ public class lobby {
 		return this.id;
 	}
 
-	public Integer getPlayer1() {
-		return player1;
-	}
-
-	public Integer getPlayer2() {
-		return player2;
-	}
-	
-	public Integer getPlayer3() {
-		return player3;
-	}
-	
-	public Integer getPlayer4() {
-		return player4;
+	public Integer getPlayer(int playerNum) {
+		switch (playerNum){
+		case 1 : return player1;
+		case 2 : return player2;
+		case 3 : return player3;
+		case 4 : return player4;
+		}
+		return 0;
 	}
 
 	public String getPlayerGameVote() {
@@ -89,20 +83,18 @@ public class lobby {
 		return playerReadyStatus;
 	}
 	
-	public void setPlayer1(Integer id) {
-		this.player1 = id;
-	}
-
-	public void setPlayer2(Integer id) {
-		this.player2 = id;
-	}
-	
-	public void setPlayer3(Integer id) {
-		this.player3 = id;
-	}
-	
-	public void setPlayer4(Integer id) {
-		this.player4 = id;
+	public void setPlayer(Integer id, int playerNum) {
+		switch (playerNum){
+			case 1 : this.player1 = id;
+				break;
+			case 2 : this.player2 = id;
+				break;
+			case 3 : this.player3 = id;
+				break;
+			case 4 : this.player4 = id;
+				break;
+		}
+		
 	}
 	
 	public void setId(Integer id) {

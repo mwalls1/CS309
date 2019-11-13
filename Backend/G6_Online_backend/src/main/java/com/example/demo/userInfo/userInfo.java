@@ -38,19 +38,29 @@ public class userInfo {
 	@Column(name = "ypos")
 	private Integer ypos;
 	
+	@Column(name = "friends")
+	private String friends;
+	
 	public userInfo() {
 		this.setName("default");
 		this.setPassword("default");
+		this.xpos = -1;
+		this.ypos = -1;
+		this.friends = null;
 	}
 	
 	public userInfo(String name, String password) {
 		this.setName(name);
 		this.setPassword(password);
+		this.xpos = -1;
+		this.ypos = -1;
+		this.friends = null;
 	}
 	
 	public userInfo(Integer xpos, Integer ypos) {
 		this.setXpos(xpos);
 		this.setYpos(ypos);
+		this.friends = null;
 	}
 	
 	// used for testing Mockito
@@ -58,6 +68,9 @@ public class userInfo {
 		this.setId(id);
 		this.setName(name);
 		this.setPassword(password);
+		this.xpos = -1;
+		this.ypos = -1;
+		this.friends = null;
 	}
 	
 	public Integer getId() { return id; }
@@ -70,6 +83,8 @@ public class userInfo {
 
 	public Integer getYpos() { return ypos; }
 	
+	public String getFriends() { return friends; }
+	
 	public void setId(Integer idnum) { id = idnum;}
 	
 	public void setName(String name1) { name = name1; }
@@ -79,6 +94,12 @@ public class userInfo {
 	public void setXpos(Integer xpos) { this.xpos = xpos; }
 
 	public void setYpos(Integer ypos) { this.ypos = ypos; }
+	
+	public void setFirstFriend(Integer id) { this.friends = id + "::"; }
+	
+	public void setFriends(String f) { this.friends = f; }
+	
+	public void addFriend(Integer id) { this.friends = this.friends + "::" + id; }
 
 }
 

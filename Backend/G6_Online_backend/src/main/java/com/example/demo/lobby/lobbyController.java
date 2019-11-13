@@ -15,23 +15,32 @@ import com.example.demo.userInfo.userInfoRepository;
 
 @RestController
 public class lobbyController {
+	
+	
 	@Autowired
 	private lobbyRepository lobbyRepo;
 	
-	@Autowired
-	private userInfoRepository userRepo;
+	@Autowired userInfoRepository userRepo;
 	
+//	@Autowired
+//	private SocketService socketService;
+//	
 	@GetMapping("getLobbies")
 	public List<lobby> getlobbys(){
-		return lobbyRepo.findAll();
+		try {
+			return lobbyRepo.findAll();
+		} catch (Exception e) {
+			List<lobby> l = null;
+			return l;
+		}
 	}
 	
 	@GetMapping("getLobbyByID")
-	public String getXbyID(Integer id) {
+	public String getLobbyByID(Integer id) {
 		try {
 			Optional<lobby> l = lobbyRepo.findById(id);
 			lobby l1 = l.get();
-			return l1.getPlayer1() + " " + l1.getPlayer2() + " " + l1.getPlayer3() + " " + l1.getPlayer4();
+			return l1.getPlayer(1) + " " + l1.getPlayer(2) + " " + l1.getPlayer(3) + " " + l1.getPlayer(4);
 		} catch (Exception e) {return e.toString();}
 	}
 	
@@ -46,23 +55,23 @@ public class lobbyController {
 	}
 	
 	@PostMapping("/updatePlayer")
-	public String updatePos(Integer id, Integer player, Integer playerId) {
+	public String updatePlayer(Integer id, Integer player, Integer playerId) {
 		try {
 			removePlayerFromLobbies(playerId);
 			Optional<lobby> l = lobbyRepo.findById(id);
 			lobby l1 = l.get();
 			switch(player) {
 			case(1):
-				l1.setPlayer1(playerId);
+				l1.setPlayer(playerId,1);
 				break;
 			case(2):
-				l1.setPlayer2(playerId);
+				l1.setPlayer(playerId,2);
 				break;
 			case(3):
-				l1.setPlayer3(playerId);
+				l1.setPlayer(playerId,3);
 				break;
 			case(4):
-				l1.setPlayer4(playerId);
+				l1.setPlayer(playerId,4);
 			 	break;
 			}
 			lobbyRepo.save(l1);
@@ -72,14 +81,17 @@ public class lobbyController {
 	
 	@PostMapping("/vote")
 	public String vote(Integer id, Integer playerId, Integer vote) {
-		lobby l = lobbyRepo.findById(id).get();
-		if (l.getPlayer1() == playerId) l.setPlayerOneVote(vote);
-		else if (l.getPlayer2() == playerId) l.setPlayerTwoVote(vote);
-		else if (l.getPlayer3() == playerId) l.setPlayerThreeVote(vote);
-		else if (l.getPlayer4() == playerId) l.setPlayerFourVote(vote);
-		else return "fail";
-		lobbyRepo.save(l);
-		return "Vote casted";
+		try {
+			lobby l = lobbyRepo.findById(id).get();
+			if (l.getPlayer(1) == playerId) l.setPlayerOneVote(vote);
+			else if (l.getPlayer(2) == playerId) l.setPlayerTwoVote(vote);
+			else if (l.getPlayer(3) == playerId) l.setPlayerThreeVote(vote);
+			else if (l.getPlayer(4) == playerId) l.setPlayerFourVote(vote);
+			else return "fail";
+			lobbyRepo.save(l);
+			return "Vote casted";
+		} catch (Exception e) {return e.toString();}
+
 	}
 	
 	@PostMapping("/readyUp")
@@ -87,76 +99,96 @@ public class lobbyController {
 		lobby l = lobbyRepo.findById(id).get();
 		if(l.getReadyStatus() == null) l.setReadyStatus(1);
 		try {
-		if (l.getPlayer1() == playerId) {
+		if (l.getPlayer(1) == playerId) {
 			if (l.getReadyStatus()%2 == 0) l.setReadyStatus(l.getReadyStatus()/2);
 			else if (l.getReadyStatus()%2 != 0) l.setReadyStatus(l.getReadyStatus()*2);
 			lobbyRepo.save(l);
 			return "Set player 1 ready status";}
-		if (l.getPlayer2() == playerId) {
+		if (l.getPlayer(2) == playerId) {
 			if (l.getReadyStatus()%3 == 0) l.setReadyStatus(l.getReadyStatus()/3);
 			else if (l.getReadyStatus()%3 != 0) l.setReadyStatus(l.getReadyStatus()*3);
 			lobbyRepo.save(l);
 			return "Set player 2 ready status";}
-		if (l.getPlayer3() == playerId) {
+		if (l.getPlayer(3) == playerId) {
 			if (l.getReadyStatus()%5 == 0) l.setReadyStatus(l.getReadyStatus()/5);
 			else if (l.getReadyStatus()%5 != 0) l.setReadyStatus(l.getReadyStatus()*5);
 			lobbyRepo.save(l);
 			return "Set player 3 ready status";}
-		if (l.getPlayer4() == playerId) {
+		if (l.getPlayer(4) == playerId) {
 			if (l.getReadyStatus()%7 == 0) l.setReadyStatus(l.getReadyStatus()/7);
 			else if (l.getReadyStatus()%7 != 0) l.setReadyStatus(l.getReadyStatus()*7);
 			lobbyRepo.save(l);
 			return "Set player 4 ready status";}
-		}catch (Exception e) {return e.toString();}
+		} catch (Exception e) {return e.toString();}
 		lobbyRepo.save(l);
 		return "No player updated";
 	}
 	
 	@PostMapping("/readyDown")
 	public String readDown(Integer id) {
-		lobby l = lobbyRepo.findById(id).get();
-		l.setReadyStatus(1);
-		lobbyRepo.save(l);
-		return "Lobby ready cleared";
+		try {
+			lobby l = lobbyRepo.findById(id).get();
+			l.setReadyStatus(1);
+			lobbyRepo.save(l);
+			return "Lobby ready cleared";
+		} catch (Exception e) {return e.toString();}
 	}
 	
 	@PutMapping("/cleanLobbies")
 	public String cleanLobbies() {
-		List<lobby> lobbies = lobbyRepo.findAll();
-		for (lobby l : lobbies) {
-			if ((l.getPlayer1() == null) || (l.getPlayer1() == 0)) {
-				lobbyRepo.deleteById(l.getId());
+		try {
+			List<lobby> lobbies = lobbyRepo.findAll();
+			for (lobby l : lobbies) {
+				if ((l.getPlayer(1) == null) || (l.getPlayer(1) == 0)) {
+					lobbyRepo.deleteById(l.getId());
+				}
 			}
+			return "Lobbies Cleaned";
+		} catch (Exception e) {
+			return e.toString();
 		}
-		
-		return "Lobbies Cleaned";
 	}
 	
 	@GetMapping("/getReadyStatus")
 	public String getReadyStatus(Integer id) {
 		try {
-		return lobbyRepo.findById(id).get().getReadyStatus() + "";
-		}catch (Exception e) {return e.toString();}
+			return lobbyRepo.findById(id).get().getReadyStatus() + "";
+		} catch (Exception e) {return e.toString();}
 	}
 	
 	@GetMapping("/getPlayerVotes")
 	public String getPlayerVotes(Integer id) {
-		return lobbyRepo.findById(id).get().getPlayerGameVote();
+		try {
+			return lobbyRepo.findById(id).get().getPlayerGameVote();
+		} catch (Exception e) {return e.toString();}
 	}
 	
 	@PostMapping("/removePlayerFromLobbies")
 	public String removePlayerFromLobbies(Integer playerId) {
-		for (lobby l : lobbyRepo.findAll()) {
-			if(l.getReadyStatus() == null) l.setReadyStatus(1);
-			try {
-				if (l.getPlayer1() == playerId) l.setPlayer1(0);
-				if (l.getPlayer2() == playerId) l.setPlayer2(0);
-				if (l.getPlayer3() == playerId) l.setPlayer3(0);
-				if (l.getPlayer4() == playerId) l.setPlayer4(0);
-			}catch (Exception e) {return e.toString();}
-			lobbyRepo.save(l);
-		}
-		return "Player Removed";
+		try {
+			for (lobby l : lobbyRepo.findAll()) {
+				if(l.getReadyStatus() == null) l.setReadyStatus(1);
+				try {
+					if (l.getPlayer(1) == playerId) l.setPlayer(0,1);
+					if (l.getPlayer(2) == playerId) l.setPlayer(0,2);
+					if (l.getPlayer(3) == playerId) l.setPlayer(0,3);
+					if (l.getPlayer(4) == playerId) l.setPlayer(0,4);
+				}catch (Exception e) {return e.toString();}
+				lobbyRepo.save(l);
+			}
+			return "Player Removed";
+		} catch (Exception e) {return e.toString();}
+	}
+	
+	public String[] getPlayers(Integer id) {
+		try {
+			String[] val = new String[4];
+			lobby l = lobbyRepo.findById(id).get();
+			for(int i = 0; i < 4; i++) {
+				val[i] = l.getPlayer(i+1).toString();
+			}
+			return val;
+		} catch (Exception e) {return new String[]{e.toString()};}
 	}
 	
 	/*
@@ -164,65 +196,38 @@ public class lobbyController {
 	 * 
 	 */
 	@PostMapping("/sendPosGetPlayers")
-	public String sendPosGetPlayers(Integer lobbyId, Integer playerId, Integer xpos, Integer ypos) {
+	public String sendPosGetPlayers(Integer[] messageArr) {
+    	String result = "";
 		try {
-			String result = "";
-			lobby l = lobbyRepo.findById(lobbyId).get();
+			lobby l = lobbyRepo.findById(messageArr[0]).get();
 			userInfo u = null;
+			for (int i = 1; i <= 4; i++) {
+				Integer player = l.getPlayer(i);
+				if(player == 0) {
+					result += "0 0 0 ";
+				} else {
+					try {
+						u = userRepo.findById(player).get();
+						if (player == messageArr[1]) {
+							u.setXpos(messageArr[2]);
+							u.setYpos(messageArr[3]);
+							userRepo.save(u);
+						}
 
-			Integer player1 = l.getPlayer1();
-			if(player1 == 0) {
-				result += "0 0 0 ";
-			} else {
-				u = userRepo.findById(player1).get();
-				if (player1 == playerId){
-					u.setXpos(xpos);
-					u.setYpos(ypos);
-					userRepo.save(u);
+						result = result + player + " " + u.getXpos() + " " + u.getYpos() + " ";
+					}catch(Exception noPosExcpetion) {result = result + "0 0 0 ";}
 				}
-				result = result + player1 + " " + u.getXpos() + " " + u.getYpos() + " ";
-			}
-			
-			Integer player2 = l.getPlayer2();
-			if(player2 == 0) {
-				result += "0 0 0 ";
-			} else {
-				u = userRepo.findById(player2).get();
-				if (player2 == playerId){
-					u.setXpos(xpos);
-					u.setYpos(ypos);
-					userRepo.save(u);
-				}
-				result = result + player2 + " " + u.getXpos() + " " + u.getYpos() + " ";
-			}
-			
-			Integer player3 = l.getPlayer3();
-			if(player3 == 0) {
-				result += "0 0 0 ";
-			} else {
-				u = userRepo.findById(player3).get();
-				if (player3 == playerId){
-					u.setXpos(xpos);
-					u.setYpos(ypos);
-					userRepo.save(u);
-				}
-				result = result + player3 + " " + u.getXpos() + " " + u.getYpos() + " ";
-			}
-			
-			Integer player4 = l.getPlayer4();
-			if(player4 == 0) {
-				result += "0 0 0 ";
-			} else {
-				u = userRepo.findById(player4).get();
-				if (player4 == playerId){
-					u.setXpos(xpos);
-					u.setYpos(ypos);
-					userRepo.save(u);
-				}
-				result = result + player4 + " " + u.getXpos() + " " + u.getYpos() + " ";
 			}
 			return result;
-		} catch (Exception e) {return e.toString();}
-		
-	}
+		} catch (Exception e) {return result + e.toString();}
+		}
+	
+//	public String updateLobbyInfo(Integer id) {
+//		try {
+//			String s = "";
+//			s += getLobbyByID(id) + 
+//		
+//		return null;
+//		
+//	}
 }

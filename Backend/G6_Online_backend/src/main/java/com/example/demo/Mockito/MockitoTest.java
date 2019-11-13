@@ -3,27 +3,22 @@ package com.example.demo.Mockito;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.List;
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 
-import com.example.demo.score.*;
-import com.example.demo.userInfo.*;
+import com.example.demo.lobby.lobby;
+import com.example.demo.lobby.lobbyRepository;
+import com.example.demo.lobby.lobbyService;
+import com.example.demo.score.score;
+import com.example.demo.score.scoreRepository;
+import com.example.demo.score.scoreService;
+import com.example.demo.userInfo.userInfo;
+import com.example.demo.userInfo.userInfoRepository;
+import com.example.demo.userInfo.userInfoService;
 
-/**
- * 
- * @author Cole Weitzel
- *
- */
 public class MockitoTest {
 	
 	/*
@@ -44,51 +39,23 @@ public class MockitoTest {
 	@Mock
 	scoreRepository scoreRepo;
 	
+	/*
+	 *  Set up lobby stuff
+	 */
+	@InjectMocks
+	lobbyService lobbyService;
+	
+	@Mock
+	lobbyRepository lobbyRepo;
+	
 	@Before
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 	}
 	
-	/*
-	 * test userInfo
+	/**
+	 * @author Cole Weitzel
 	 */
-//	@Test
-//	public void testGetAllUsers() {
-//		List<userInfo> list = new ArrayList<userInfo>();
-//		
-//		Integer id1 = new Integer(1001);
-//		Integer id2 = new Integer(1002);
-//		Integer id3 = new Integer(1003);
-//		
-//		userInfo u1 = new userInfo(id1, "user1", "password1");
-//		userInfo u2 = new userInfo(id2, "user2", "password2");
-//		userInfo u3 = new userInfo(id3, "user3", "password3");
-//		
-//		list.add(u1);
-//		list.add(u2);
-//		list.add(u3);
-//		
-//		// mock instruction
-//		when(userRepo.getUserInfoList()).thenReturn(list);
-//		
-//		List<userInfo> l = userService.getUserInfoList();
-//		
-//		// test ID's
-//		assertEquals(id1, l.get(0).getId());
-//		assertEquals(id2, l.get(1).getId());
-//		assertEquals(id3, l.get(2).getId());
-//		
-//		// test name
-//		assertEquals("user1", l.get(0).getName());
-//		assertEquals("user2", l.get(1).getName());
-//		assertEquals("user3", l.get(2).getName());
-//		
-//		// test password
-//		assertEquals("password1", l.get(0).getPassword());
-//		assertEquals("password2", l.get(1).getPassword());
-//		assertEquals("password3", l.get(2).getPassword());
-//	}
-	
 	// Test get user by ID
 	@Test
 	public void testGetUserById() {
@@ -125,7 +92,26 @@ public class MockitoTest {
 		assertEquals(userID, s.getUserID());
 	}
 	
+	/**
+	 * @author Taylor Weil
+	 */
+	@Test
+	public void testLobby() {
+		Integer id = new Integer(5);
+		when(lobbyRepo.getVote1ById(id)).thenReturn(5);
+		
+		assertEquals(id,lobbyService.getVote1ById(5));
+	}
 	
+	@Test
+	public void testLobbyById() {
+		lobby l = new lobby();
+		l.setId(100);
+		when(lobbyRepo.getLobbyById(100)).thenReturn(l);
+		
+		assertEquals(new Integer(100), lobbyRepo.getLobbyById(100).getId());
+		assertEquals(new Integer(0), lobbyRepo.getLobbyById(100).getPlayer(1));
+	}
 	
 
 }
