@@ -33,8 +33,10 @@ public class Map extends Game implements Screen{
 	private boolean gameOver = false;
 	private float elapsed = 0;
 	private TiledMap map;
+	private Goon goon;
 	private TiledMapTileLayer terrain;
 	private OrthogonalTiledMapRenderer renderer;
+	private Checkpoint point1;
 	public Map(Game game)
 	{
 		font = new BitmapFont();
@@ -43,8 +45,10 @@ public class Map extends Game implements Screen{
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
 		map = new TmxMapLoader().load("platformer.tmx");
 		MapLayers mapLayers = map.getLayers();
+		goon = new Goon(150, 127, camera);
 		terrain = (TiledMapTileLayer) mapLayers.get("blockage");
-		player = new Character(100, 100);
+		player = new Character(100, 70);
+		point1 = new Checkpoint(400, 60);
 		create();
 	}
 	@Override
@@ -56,6 +60,7 @@ public class Map extends Game implements Screen{
 		batch = new SpriteBatch();
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+        elapsed+= Gdx.graphics.getDeltaTime();
 		
 	}
 
@@ -76,8 +81,11 @@ public class Map extends Game implements Screen{
 		renderer.render();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		goon.render(batch, player, terrain, elapsed);
+		goon.checkCollision(player);
 		player.update(terrain,camera,batch);
 		player.render(shape, camera);
+		point1.render(player, batch);
 		batch.end();
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {

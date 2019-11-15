@@ -31,6 +31,7 @@ public class Goon {
 	public int startY;
 	public float midX;
 	public float midY;
+	
 	public float endX;
 	public float endY;
 	Circle vision;
@@ -49,11 +50,12 @@ public class Goon {
 	private TextureAtlas rRight;
 	public float elapsed;
 	private boolean left = true;
+	private Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
 	private TextureAtlas iLeft;
 	private TextureAtlas iRight;
-    public Goon(Texture texture, int x1, int y1, OrthographicCamera cam){
+    public Goon(int x1, int y1, OrthographicCamera cam){
     	startTime = 0;
-    	sprite = new Sprite(texture);
+    	sprite = new Sprite(zom);
     	width = sprite.getWidth();
     	height = sprite.getHeight();
     	sprite.setCenter(width/2, height/2);

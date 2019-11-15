@@ -11,7 +11,7 @@ public class MyGdxGame extends Game {
 	private Game game = this;
 	@Override
 	public void create() {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method mstub
 		game.setScreen(new MainScreen(game));
 	}
 	

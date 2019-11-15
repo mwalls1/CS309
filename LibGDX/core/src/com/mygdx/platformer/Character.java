@@ -127,7 +127,6 @@ public class Character {
 						x-=1;
 						direction = 0;
 						isMoving = true;
-						System.out.println("moving left");
 					}
 				}
 			}
@@ -144,7 +143,6 @@ public class Character {
 						x+=1;
 						direction = 1;
 						isMoving = true;
-						System.out.println("moving right");
 					 }
 				}
 			}
@@ -155,7 +153,6 @@ public class Character {
 			isMoving = false;
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && numJumps < 2)
 		{
-			System.out.println("Jumped");
 			isJumping = true;
 			velocity=jumpPower;
 			downVelocity=0;
@@ -251,6 +248,11 @@ public class Character {
     public Sprite getSprite()
     {
     	return sprite;
+    }
+    public void setSpawn(int x, int y)
+    {
+    	sX = x;
+    	sY = y;
     }
     public void reset()
     {
