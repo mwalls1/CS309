@@ -71,7 +71,7 @@ public class GameTest extends Game implements Screen{
 		font = new BitmapFont();
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
+		camera = new OrthographicCamera();
 		map = new TmxMapLoader().load("dungeon3.tmx");
 		MapLayers mapLayers = map.getLayers();
 		terrain = (TiledMapTileLayer) mapLayers.get("floor");
