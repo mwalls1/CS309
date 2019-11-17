@@ -1,8 +1,14 @@
 package Race;
 
+import java.awt.Point;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Car {
 
@@ -11,14 +17,22 @@ public class Car {
 	private Sprite sprite;
 	private Texture texture;
 	private float angle;
-	
-	public Car(String texturePath, AssetManager manager)
+	private float deceleration;
+	private float topSpeed;
+	private OrthographicCamera camera;
+	private double radians;
+	private float speedX;
+	private float speedY;
+	public Car(String texturePath, AssetManager manager, OrthographicCamera camera)
 	{
+		this.camera = camera;
 		texture = manager.get(texturePath, Texture.class);
 		sprite = new Sprite(texture);
 		speed = 0;
 		acceleration = 0.1f;
-		angle = 0;
+		deceleration = 0.15f;
+		angle = 90;
+		topSpeed = 10;
 	}
 	
 	public float getX()
@@ -33,9 +47,75 @@ public class Car {
 	
 	public void move()
 	{
-		speed += acceleration;
-		float xTrans = (float)Math.cos(angle) * speed;
-		float yTrans = (float)Math.sin(angle) * speed;
-		sprite.translate(xTrans, yTrans);
+		float radians;
+		
+		
+		if (angle > 270) angle = -90;
+		if (angle < -90) angle = 270;
+		radians = angle * 0.0174533f;
+		
+		
+		if (Gdx.input.isKeyPressed(Keys.W)) speed += acceleration;
+		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN) ) speed -= deceleration;
+		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && speed != 0) {
+			sprite.rotate(-1);
+			angle--;
+		}
+		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && speed != 0)	
+		{
+			sprite.rotate(1);
+			angle++;
+		}
+		if(speed < 0.05f && speed > -0.05f) speed = 0;
+		if (speed > 0) speed -= 0.05f;
+		if (speed < 0) speed += 0.05f;
+		if (speed < -3f) speed = -3f;
+		
+		if (speed > topSpeed) speed = topSpeed;
+		speedX = speed*(float)Math.cos(radians);
+		speedY = speed * (float)Math.sin(radians);
+		camera.translate(speedX, speedY);
+		camera.update();
+		
+		
+	}
+	public float getSpeedX()
+	{
+		return speedX;
+	}
+	
+	public float getSpeedY()
+	{
+		return speedY;
+	}
+	public Sprite getSprite()
+	{
+		return sprite;
+	}
+	
+	public void draw(SpriteBatch batch)
+	{
+		sprite.draw(batch);
+	}
+	
+	public void setPosition(float x, float y)
+	{
+		sprite.setPosition(x, y);
+	}
+	
+	public Point getTilePosition()
+	{
+		int xPos = (int)Math.floor(camera.position.x + speedX);
+		int yPos = (int)Math.floor(camera.position.y + speedY);
+		
+		
+		
+		return new Point(xPos / 32, 99 - yPos / 32);
+		
+	}
+	
+	public void setSpeed(float newSpeed)
+	{
+		speed = newSpeed;
 	}
 }
