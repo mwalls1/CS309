@@ -42,10 +42,12 @@ private Player p4;
 private Player thisPlayer;
 private String currentMove;
 private GoFish cardGame;
+private WebSocketClient cc;
 
 
 	public GoFishScreen(Game game)
 	{
+		connect();
 		manager = new AssetManager();
 		this.game = game;
 	}
@@ -555,6 +557,47 @@ private GoFish cardGame;
 		return true;
 	}
 	
-	
+	private void connect() {
+		    try {
+		    
+		    Draft[] drafts = { new Draft_6455() };
+		    String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
+		cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
+		@Override
+		public void onMessage(String message) {
+		System.out.println("NewMessage:" + message);
+		playerUpdate = message;
+		}
+
+		@Override
+		public void onOpen(ServerHandshake handshake) {
+		System.out.println("opOpen");
+		}
+
+		@Override
+		public void onClose(int code, String reason, boolean remote) {
+		System.out.println("onClose");
+		try {
+		//JsonParser.sendHTML("removePlayerFromLobbies", "id=" + Constants.userID);
+		} catch (Exception e) {
+
+		e.printStackTrace();
+		}
+		}
+
+		@Override
+		public void onError(Exception e) {
+		//cc.close();
+		//connect();
+		//e.printStackTrace();
+		System.out.println("onError");
+		}
+		};
+		} catch (URISyntaxException e) {
+		System.out.println("fail");
+		e.printStackTrace();
+		}
+		cc.connect();
+		    }
 	
 }
