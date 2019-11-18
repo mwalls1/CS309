@@ -4,8 +4,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.gui.MainScreen;
@@ -13,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ConnectFour extends Game implements Screen {
 	private Game game;
+	private BitmapFont text;
 	private SpriteBatch batch;
 	private Texture yellowCircleImage;
 	private Texture redCircleImage;
@@ -23,9 +26,10 @@ public class ConnectFour extends Game implements Screen {
 
 	private int mousex;
 	private int mousey;
-	private boolean playerRedorYellow;
+	private boolean playerRedORYellow;
 	private boolean isGameOver;
 	private String winner = "empty";
+	private boolean paused;
 
 	public ConnectFour(Game game) {
 		this.game = game;
@@ -37,6 +41,9 @@ public class ConnectFour extends Game implements Screen {
 	 */
 	@Override
 	public void create() {
+		Gdx.graphics.setResizable(false);
+		Gdx.graphics.setWindowedMode(640, 520);
+		
 		zones = new Zone[6][7];
 
 		yellowCircleImage = new Texture("yellowCircle.png");
@@ -50,8 +57,12 @@ public class ConnectFour extends Game implements Screen {
 
 		batch = new SpriteBatch();
 
-		playerRedorYellow = true; // true is red, false is yellow
+		playerRedORYellow = true; // true is red, false is yellow
 		isGameOver = false;
+		paused = false;
+		
+		text = new BitmapFont();
+		text.setColor(new Color(0,0,0,1));
 
 		createZones();
 	}
@@ -61,12 +72,16 @@ public class ConnectFour extends Game implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		endGame();
-		isGameOver = checkGameOver();
+		handleKeys();
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.draw(connectFourBoard, 0, 0);
+		if(playerRedORYellow && !isGameOver) text.draw(batch, "Player: red", 20, 500);
+		else if(!playerRedORYellow && !isGameOver) text.draw(batch, "Player: yellow", 20, 500);
+		if(isGameOver) {
+			text.draw(batch, winner, 20, 515);
+		}
 		for (int r = 0; r < 6; r++) {
 			for (int c = 0; c < 7; c++) {
 				if (zones[r][c].getTile().equals("empty"))
@@ -83,40 +98,33 @@ public class ConnectFour extends Game implements Screen {
 		}
 		batch.end();
 
-		if (Gdx.input.justTouched()) {
+		if (Gdx.input.justTouched() && !isGameOver) {
 			mousex = Gdx.input.getX();
-			mousey = 480 - Gdx.input.getY();
+			mousey = 520 - Gdx.input.getY();
+//			System.out.println(mousex + " " + mousey);
 			for (int r = 0; r < 6; r++) {
 				for (int c = 0; c < 7; c++) {
-					if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedorYellow) {
+					if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow) {
 						int[] index = { r, c };
 						index = findLowestTile(index);
 						zones[index[0]][index[1]].setTile("red");
 						zones[index[0]][index[1]].setActive(true);
-						playerRedorYellow = false;
-						System.out.println(r + " " + c);
-					} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedorYellow) {
+						playerRedORYellow = false;
+//						System.out.println(r + " " + c);
+					} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedORYellow) {
 						int[] index = { r, c };
 						index = findLowestTile(index);
 						zones[index[0]][index[1]].setTile("yellow");
 						zones[index[0]][index[1]].setActive(true);
-						playerRedorYellow = true;
-						System.out.println(r + " " + c);
+						playerRedORYellow = true;
+//						System.out.println(r + " " + c);
 					}
 				}
 			}
 		}
 		
-		if(isGameOver) {
-			System.out.println("game is over, winner is: " + winner);
-//			render();
-//			try {
-//				TimeUnit.SECONDS.sleep(5);
-//				game.setScreen(new MainScreen(game));
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+		if(!isGameOver) {
+			isGameOver = checkGameOver();
 		}
 	}
 
@@ -157,36 +165,78 @@ public class ConnectFour extends Game implements Screen {
 	/**
 	 * checks whether the escape key was pressed to end the game
 	 */
-	private void endGame() {
+	private void handleKeys() {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			game.setScreen(new MainScreen(game));
+		}
+		if(Gdx.input.isKeyJustPressed(Keys.P)) {
+			pause();
+		}
+		if(Gdx.input.isKeyJustPressed(Keys.R)) {
+			restart();
 		}
 	}
 
 	/**
 	 * returns true if the game is over
+	 * assigns the value of the private variable winner
+	 * with the output string for when game won
 	 */
 	private boolean checkGameOver() {
-		int i;
-		int j;
 		int row, col;
 		if(isGameOver == true) return false;
 		
-		// check 4 in a row (horz)
+		// check 4 in a row (horizontal)
+		int plus4 = 0;
 		for(row = 0; row < 6; row++) {
 			for(col = 0; col < 4; col++) {
 				if(zones[row][col].getTile().equals("red") && zones[row][col+1].getTile().equals("red") && zones[row][col+2].getTile().equals("red") && zones[row][col+3].getTile().equals("red")) {
-					winner = "red";
+					plus4 = col+4;
+					winner = "Game is over, red won at row:" + row + " col:" + col + "-" + plus4 + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
 					return true;
-				}
-				if(zones[row][col].getTile().equals("yellow") && zones[row][col+1].getTile().equals("yellow") && zones[row][col+2].getTile().equals("yellow") && zones[row][col+3].getTile().equals("yellow")) {
-					winner = "yellow";
+				} else if(zones[row][col].getTile().equals("yellow") && zones[row][col+1].getTile().equals("yellow") && zones[row][col+2].getTile().equals("yellow") && zones[row][col+3].getTile().equals("yellow")) {
+					plus4 = col+4;
+					winner = "Game is over, yellow won at row:" + row + " col:" + col + "-" + plus4 + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
 					return true;
 				}
 			}
 		}
 		
+		// check 4 in a column (vertical)
+		for(col = 0; col < 7; col++) {
+			for(row = 0; row < 3; row++) {
+				if(zones[row][col].getTile().equals("red") && zones[row+1][col].getTile().equals("red") && zones[row+2][col].getTile().equals("red") && zones[row+3][col].getTile().equals("red")) {
+					plus4 = row+4;
+					winner = "Game is over, red won at row:" + row + "-" + plus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
+					return true;
+				} else if(zones[row][col].getTile().equals("yellow") && zones[row+1][col].getTile().equals("yellow") && zones[row+2][col].getTile().equals("yellow") && zones[row+3][col].getTile().equals("yellow")) {
+					plus4 = row+4;
+					winner = "Game is over, yellow won at row:" + row + "-" + plus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
+					return true;
+				}
+			}
+		}
+		
+		// check 4 diagonal (left to right bottom to top - 45 degrees)
+//		for(row = 0; row < 3; row++) {
+//			for(col = 0; col < 4; col++) {
+//				
+//			}
+//		}
+		
 		return false;
+	}
+	
+	public void pause() {
+		paused = !paused;
+	}
+
+	public void restart() {
+		create();
 	}
 
 	@Override
