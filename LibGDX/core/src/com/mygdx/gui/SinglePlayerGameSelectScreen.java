@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.drop.ConnectFour;
+import com.mygdx.drop.Drop;
 import com.mygdx.games.GameTest;
 import com.mygdx.space.Space;
 import com.mygdx.ticktacktoe.Runner;
@@ -87,6 +89,8 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         gameNames[0] = "Dungeon Mayhem";
         gameNames[1] = "Space!";
         gameNames[2] = "Tic Tac Toe";
+        gameNames[3] = "Drop";
+        gameNames[4] = "Connect Four";
       
      
         for (int i = 0; i < games.length; i++)
@@ -168,6 +172,24 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
         		game.setScreen(new Runner(game));
+        		
+        	}
+        });
+        
+        games[3].addListener(new ClickListener(){
+        	@Override
+        	public void clicked(InputEvent event, float x, float y) {
+        		dispose();
+        		game.setScreen(new Drop(game));
+        		
+        	}
+        });
+        
+        games[4].addListener(new ClickListener(){
+        	@Override
+        	public void clicked(InputEvent event, float x, float y) {
+        		dispose();
+        		game.setScreen(new ConnectFour(game));
         		
         	}
         });
