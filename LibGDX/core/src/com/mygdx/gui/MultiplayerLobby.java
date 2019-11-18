@@ -248,6 +248,7 @@ public class MultiplayerLobby extends Game implements Screen {
 					if (playerIds[i].equals("0") && MultiplayerLobby.this.lobbyNumber > 0){
             			try {JsonParser.sendHTML("updatePlayer", "id="+MultiplayerLobby.this.lobbyNumber+"&player="+(i+1)+"&playerId="+Constants.userID);} catch (Exception e) {e.printStackTrace();}
             			Constants.lobby = MultiplayerLobby.this.lobbyNumber;
+            			System.out.println("Joined lobby "+Constants.lobby);
             			refreshNames();
             			break;
             		}

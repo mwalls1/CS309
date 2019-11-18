@@ -53,7 +53,7 @@ public class GameTest extends Game implements Screen{
 	private boolean gameOver = false;
 	private float elapsed = 0;
 	private TiledMap map;
-	private TiledMapTileLayer terrain;
+//	private TiledMapTileLayer terrain;
 	private TiledMapTileLayer walls;
 	private TiledMapTileLayer collision;
 	private OrthogonalTiledMapRenderer renderer;
@@ -69,22 +69,16 @@ public class GameTest extends Game implements Screen{
 	Random ranY = new Random(); //893
     public  float randomX;
     public float randomY;
-    private int player1id = 0;
-    private int player2id = 0;
-    private int player3id = 0;
-    private int player4id = 0;
+
     
-	public GameTest(Game game)
-	{
-		
-		Draft[] drafts = { new Draft_6455() };
-		String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/user";
-//		w = w.replace(" ", "_");
-		try {
-            cc = new WebSocketClient(new URI(w),(Draft) drafts[0]) {
+    private void connect() {
+    	try {
+    		Draft[] drafts = { new Draft_6455() };
+    		String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
+			cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
 				@Override
 				public void onMessage(String message) {
-					System.out.println(message);
+					System.out.println("NewMessage:" + message);
 					playerUpdate = message;
 				}
 
@@ -96,28 +90,41 @@ public class GameTest extends Game implements Screen{
 				@Override
 				public void onClose(int code, String reason, boolean remote) {
 					System.out.println("onClose");
-					try {JsonParser.sendHTML("removePlayerFromLobbies", "id="+Constants.userID);} catch (Exception e) {e.printStackTrace();}
+					try {
+//						JsonParser.sendHTML("removePlayerFromLobbies", "id=" + Constants.userID);
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+					}
 				}
 
 				@Override
 				public void onError(Exception e) {
-					e.printStackTrace();
+//					cc.close();
+//					connect();
+//					e.printStackTrace();
 					System.out.println("onError");
 				}
 			};
 		} catch (URISyntaxException e) {
 			System.out.println("fail");
 			e.printStackTrace();
-      }
-      cc.connect();
-	
+		}
+		cc.connect();
+    }
+	public GameTest(Game game) {
+
+		
+		// w = w.replace(" ", "_");
+		connect();
+
 		font = new BitmapFont();
 		this.game = game;
 //		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
 		map = new TmxMapLoader().load("dungeon3.tmx");
 		MapLayers mapLayers = map.getLayers();
-		terrain = (TiledMapTileLayer) mapLayers.get("floor");
+//		terrain = (TiledMapTileLayer) mapLayers.get("floor");
 		walls = (TiledMapTileLayer) mapLayers.get("walls");
 		collision = (TiledMapTileLayer) mapLayers.get("blockage");
 		player = new Player(847, 54);
@@ -127,7 +134,7 @@ public class GameTest extends Game implements Screen{
 		blade = new Texture(Gdx.files.internal("blade.png"));
 		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
 		Texture wiz = new Texture(Gdx.files.internal("wizard.png"));
-		Texture asn = new Texture(Gdx.files.internal("daway.png"));
+//		Texture asn = new Texture(Gdx.files.internal("daway.png"));
 		hazards.add(new Hazard(blade,872,240, camera));
 		hazards.add(new Hazard(blade,869,718, camera));
 		hazards.add(new Hazard(blade,639,737, camera));
@@ -199,39 +206,52 @@ public class GameTest extends Game implements Screen{
 	public void render(float delta) {
 		// TODO Auto-generated method stub
 		try {
-		//Sends position and updates all four players
-		System.out.println(Constants.lobby);
-		System.out.println(Constants.userID);
-		System.out.println(player.getX());
-		System.out.println(player.getY());
-//		try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
-		cc.send("UPDATEPOS:"+Constants.lobby + " " + Constants.userID + " " + player.getX() + " " +player.getY());
-		String[] playerUpdateArr = playerUpdate.split(" ");
-//		player.setPos(850, 50);
-		player2.setPos(0, 0);
-		player3.setPos(0, 0);
-		player4.setPos(0, 0);
-		System.out.println(playerUpdate);
-		System.out.println(Arrays.toString(playerUpdateArr));
-		System.out.println(playerUpdateArr[0]);
-		for (int i = 0; i < 4; i++) {
-			if(Integer.parseInt(playerUpdateArr[3*i]) == Constants.userID) {
-//				player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
+			// Sends position and updates all four players
+			System.out.println(Constants.lobby);
+			System.out.println(Constants.userID);
+			System.out.println(player.getX());
+			System.out.println(player.getY());
+			// try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers",
+			// "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());}
+			// catch (Exception e) {e.printStackTrace();}
+			System.out.println("UPDATEPOS:" + Constants.lobby + " " + player.getX() + " " + player.getY());
+			System.out.println(cc.getURI());
+			cc.send("UPDATEPOS:" + Constants.lobby + " " + player.getX() + " "
+					+ player.getY());
+			String[] playerUpdateArr = playerUpdate.split(" ");
+			// player.setPos(850, 50);
+			player2.setPos(0, 0);
+			player3.setPos(0, 0);
+			player4.setPos(0, 0);
+			System.out.println(playerUpdate);
+			System.out.println(Arrays.toString(playerUpdateArr));
+			System.out.println(playerUpdateArr[0]);
+			for (int i = 0; i < 4; i++) {
+				if (Integer.parseInt(playerUpdateArr[3 * i]) == Constants.userID) {
+					// player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]),
+					// Integer.parseInt(playerUpdateArr[3*i+2]));
+				} else if (player2.getX() == 0)
+					player2.setPos(Integer.parseInt(playerUpdateArr[3 * i + 1]),
+							Integer.parseInt(playerUpdateArr[3 * i + 2]));
+				else if (player3.getX() == 0)
+					player3.setPos(Integer.parseInt(playerUpdateArr[3 * i + 1]),
+							Integer.parseInt(playerUpdateArr[3 * i + 2]));
+				else if (player4.getX() == 0)
+					player4.setPos(Integer.parseInt(playerUpdateArr[3 * i + 1]),
+							Integer.parseInt(playerUpdateArr[3 * i + 2]));
 			}
-			else if(player2.getX() == 0) player2.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-			else if(player3.getX() == 0) player3.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-			else if(player4.getX() == 0) player4.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
+		} catch (Exception e) {
+//			connect();
+			e.printStackTrace();
 		}
-		}catch(Exception e) {e.printStackTrace();}
-		if(elapsed<3)
-		{
+		if (elapsed < 3) {
 			batch.begin();
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			font.draw(batch, "Kill all enemies and collect all coins", player.x-40, player.y);
-			font.draw(batch, "Good Luck", player.x-40, player.y-20);
+			font.draw(batch, "Kill all enemies and collect all coins", player.x - 40, player.y);
+			font.draw(batch, "Good Luck", player.x - 40, player.y - 20);
 			batch.end();
-			elapsed+=Gdx.graphics.getDeltaTime();
+			elapsed += Gdx.graphics.getDeltaTime();
 		}
 	else if (player.hp > 0 && !gameOver) {
 		if(player.numCoins==50 && player.numEnemies == 0)
