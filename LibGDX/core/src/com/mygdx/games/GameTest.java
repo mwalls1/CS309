@@ -65,14 +65,15 @@ public class GameTest extends Game implements Screen{
 	public ArrayList<Dragon> dragons = new ArrayList<Dragon>();
 	public ArrayList<Coin> coins = new ArrayList<Coin>();
 	public serverThread thread = new serverThread();
-	Random randX = new Random(); //866
-	Random ranY = new Random(); //893
+	Random randX = new Random(Constants.seed); //866
+	Random ranY = new Random(Constants.seed); //893
     public  float randomX;
     public float randomY;
 
     
     private void connect() {
     	try {
+    		
     		Draft[] drafts = { new Draft_6455() };
     		String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
 			cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
@@ -128,9 +129,9 @@ public class GameTest extends Game implements Screen{
 		walls = (TiledMapTileLayer) mapLayers.get("walls");
 		collision = (TiledMapTileLayer) mapLayers.get("blockage");
 		player = new Player(847, 54);
-		player2 = new Player(847,54);
-		player3 = new Player(847,54);
-		player4 = new Player(847,54);
+		player2 = new Player(-100,-100);
+		player3 = new Player(-100,-100);
+		player4 = new Player(-100,-100);
 		blade = new Texture(Gdx.files.internal("blade.png"));
 		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
 		Texture wiz = new Texture(Gdx.files.internal("wizard.png"));
@@ -220,9 +221,9 @@ public class GameTest extends Game implements Screen{
 					+ player.getY());
 			String[] playerUpdateArr = playerUpdate.split(" ");
 			// player.setPos(850, 50);
-			player2.setPos(0, 0);
-			player3.setPos(0, 0);
-			player4.setPos(0, 0);
+//			player2.setPos(0, 0);
+//			player3.setPos(0, 0);
+//			player4.setPos(0, 0);
 			System.out.println(playerUpdate);
 			System.out.println(Arrays.toString(playerUpdateArr));
 			System.out.println(playerUpdateArr[0]);
