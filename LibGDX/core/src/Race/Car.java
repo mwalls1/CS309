@@ -110,12 +110,54 @@ public class Car {
 		
 		
 		
-		return new Point(xPos / 32, 99 - yPos / 32);
+		return new Point(xPos / 32, yPos / 32);
 		
+	}
+	
+	public void decSpeed(float newSpeed)
+	{
+		if (speed > 0.5f) speed -= newSpeed;
+		if (speed < -0.5f) speed += newSpeed;
 	}
 	
 	public void setSpeed(float newSpeed)
 	{
 		speed = newSpeed;
+	}
+	
+	public float getSpeed()
+	{
+		return speed;
+	}
+	
+	public void moveAfterCollision()
+	{
+float radians;
+		
+		if (angle > 270) angle = -90;
+		if (angle < -90) angle = 270;
+		radians = angle * 0.0174533f;
+		
+		
+		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN) ) speed -= deceleration;
+		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && speed != 0) {
+			sprite.rotate(-1);
+			angle--;
+		}
+		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && speed != 0)	
+		{
+			sprite.rotate(1);
+			angle++;
+		}
+		if(speed < 0.05f && speed > -0.05f) speed = 0;
+		if (speed > 0) speed -= 0.05f;
+		if (speed < 0) speed += 0.05f;
+		if (speed < -3f) speed = -3f;
+		
+		if (speed > topSpeed) speed = topSpeed;
+		speedX = speed*(float)Math.cos(radians);
+		speedY = speed * (float)Math.sin(radians);
+		camera.translate(speedX, speedY);
+		camera.update();
 	}
 }

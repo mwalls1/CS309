@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.2.5" name="raceTileSet" tilewidth="32" tileheight="32" tilecount="50" columns="10">
  <image source="raceTileSet.png" width="320" height="160"/>
+ <tile id="2">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="4">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="5">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
  <tile id="6">
   <properties>
    <property name="slow" value=""/>
@@ -23,7 +38,7 @@
  </tile>
  <tile id="10">
   <properties>
-   <property name="goal" value=""/>
+   <property name="blocked" value=""/>
   </properties>
  </tile>
  <tile id="12">
@@ -34,6 +49,16 @@
  <tile id="13">
   <properties>
    <property name="slow" value=""/>
+  </properties>
+ </tile>
+ <tile id="14">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="15">
+  <properties>
+   <property name="blocked" value=""/>
   </properties>
  </tile>
  <tile id="16">
@@ -71,6 +96,21 @@
    <property name="slow" value=""/>
   </properties>
  </tile>
+ <tile id="24">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="25">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
+ <tile id="26">
+  <properties>
+   <property name="blocked" value=""/>
+  </properties>
+ </tile>
  <tile id="28">
   <properties>
    <property name="slow" value=""/>
@@ -99,6 +139,11 @@
  <tile id="39">
   <properties>
    <property name="slow" value=""/>
+  </properties>
+ </tile>
+ <tile id="47">
+  <properties>
+   <property name="blocked" value=""/>
   </properties>
  </tile>
  <tile id="48">

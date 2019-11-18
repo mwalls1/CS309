@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -57,9 +57,8 @@ public void create()
 	batch.setProjectionMatrix(camera.combined);
 	player = new Car("Race/car1.png", manager, camera);
 	player.setPosition(w/2, h/2);
-	map = new TmxMapLoader().load("Race/track1.tmx");
+	map = new TmxMapLoader().load("Race/track1 copy.tmx");
 	road = (TiledMapTileLayer)map.getLayers().get("Road");
-	wall = (TiledMapTileLayer)map.getLayers().get("Wall");
 	renderer = new OrthogonalTiledMapRenderer(map);
 	Gdx.input.setInputProcessor(stage);
 }
@@ -74,6 +73,7 @@ public void show() {
 
 @Override
 public void render(float delta) {
+	Point playerPosition = player.getTilePosition();
 	 Gdx.gl.glClearColor(1, 0, 0, 1);
      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -86,18 +86,30 @@ public void render(float delta) {
      renderer.render();
      batch.begin();
      player.draw(batch);
-     player.move();
-     batch.end();
+     if (road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("blocked")) {
+    	 player.setSpeed(0);
+    	 player.moveAfterCollision();
+     }
+     else {
+    	 player.move();
+     }
+     batch.end();	
      camera.update();
      if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-     System.out.println("Camera Pos: " + "(" + camera.position.x+ ", " + camera.position.y + ")");
-     System.out.println(player.getTilePosition());
+     System.out.println("Player Position: " + playerPosition.toString());
+     System.out.println("Slow tile: " + road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("slow"));
+     System.out.println("Blocked tile: " + road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("blocked"));
      System.out.println();
      }
      
-     Point playerPosition = player.getTilePosition();
-    if (wall.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("slow")) player.setSpeed(0);
+     
+    if (road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("slow")) {
+    	player.decSpeed(0.1f);
+    	System.out.print("SLOW at " + playerPosition.toString() + "\n");
+   
+    }
     
+   
     
 }
 
