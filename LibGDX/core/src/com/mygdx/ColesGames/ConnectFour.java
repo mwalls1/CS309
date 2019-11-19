@@ -1,4 +1,4 @@
-package com.mygdx.drop;
+package com.mygdx.ColesGames;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -35,6 +35,10 @@ public class ConnectFour extends Game implements Screen {
 	private boolean isGameOver;
 	private String winner = "empty";
 	private boolean paused;
+	
+	public ConnectFour() {
+		create();
+	}
 
 	public ConnectFour(Game game) {
 		this.game = game;
@@ -129,14 +133,14 @@ public class ConnectFour extends Game implements Screen {
 		}
 		
 		if(!isGameOver) {
-			isGameOver = checkGameOver();
+			isGameOver = checkGameOver(zones);
 		}
 	}
 
 	/**
 	 * returns the lowest row that is not active
 	 */
-	private int[] findLowestTile(int[] arr) {
+	public int[] findLowestTile(int[] arr) {
 		if (arr[0] == 0)
 			return arr;
 		int row = arr[0];
@@ -187,7 +191,7 @@ public class ConnectFour extends Game implements Screen {
 	 * assigns the value of the private variable winner
 	 * with the output string for when game is won
 	 */
-	private boolean checkGameOver() {
+	public boolean checkGameOver(Zone[][] z) {
 		int row, col;
 		if(isGameOver == true) return false;
 		
