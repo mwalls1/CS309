@@ -23,13 +23,28 @@ public class Checkpoint {
 	public void render(Character player, SpriteBatch batch)
 	{
 		sprite.draw(batch);
+		
+	}
+	public int getX()
+	{
+		return spawnX;
+	}
+	public int getY()
+	{
+		return spawnY;
+	}
+	public boolean checkCollision(Character player)
+	{
 		if(Intersector.overlaps(player.getSprite().getBoundingRectangle(), sprite.getBoundingRectangle()))
 		{
 			if(!active)
 			{
 				player.setSpawn(spawnX, spawnY);
 				sprite.setTexture(chestOpen);
+				active = !active;
+				return true;
 			}
 		}
+		return false;
 	}
 }

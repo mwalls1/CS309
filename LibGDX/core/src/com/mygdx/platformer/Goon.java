@@ -148,7 +148,7 @@ public class Goon {
     	poly1.setVertices(vertices);
     	poly1.setOrigin(midX, midY);
 		}
-	public void checkCollision(Character player)
+	public boolean checkCollision(Character player)
     {
     	int midX = (player.x*2+player.width)/2;
     	int midY = (player.y*2+player.height);
@@ -167,8 +167,9 @@ public class Goon {
     	if(active && Intersector.overlapConvexPolygons(poly1, play))
     	{
     		player.reset();
-    		System.out.println("Reset");
+    		return true;
     	}
+    	return false;
     }
 	
 	public void setPos(int x1, int y1){

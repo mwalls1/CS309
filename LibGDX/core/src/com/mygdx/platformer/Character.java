@@ -63,6 +63,13 @@ public class Character {
 	private float jumptime = -1000000;
 	private int sX;
 	private int sY;
+	public Character()
+	{
+		x = 100;
+		y = 100;
+		sX = 100;
+		sY = 100;
+	}
     public Character(int spawnX, int spawnY){
 		numCoins = 0;
     	sprite = new Sprite();
@@ -264,5 +271,13 @@ public class Character {
     }
     public int getY(){
         return y;
+    }
+    public int getsX()
+    {
+    	return sX;
+    }
+    public int getsY()
+    {
+    	return sY;
     }
 }
