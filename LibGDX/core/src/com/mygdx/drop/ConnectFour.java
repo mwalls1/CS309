@@ -11,8 +11,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.gui.MainScreen;
-import java.util.concurrent.TimeUnit;
 
+/**
+ * Connect Four game
+ * Images were downloaded from online for free
+ * @author Cole Weitzel
+ *
+ */
 public class ConnectFour extends Game implements Screen {
 	private Game game;
 	private BitmapFont text;
@@ -46,13 +51,13 @@ public class ConnectFour extends Game implements Screen {
 		
 		zones = new Zone[6][7];
 
-		yellowCircleImage = new Texture("yellowCircle.png");
+		yellowCircleImage = new Texture("yellowCircle2.png");
 		redCircleImage = new Texture("redCircle.png");
 		connectFourBoard = new Texture("connectFourBoard.png");
 
 		spriteYellow = new Sprite(yellowCircleImage);
 		spriteRed = new Sprite(redCircleImage);
-		spriteYellow.setSize(80, 80);
+		spriteYellow.setSize(82, 80);
 		spriteRed.setSize(80, 80);
 
 		batch = new SpriteBatch();
@@ -180,24 +185,25 @@ public class ConnectFour extends Game implements Screen {
 	/**
 	 * returns true if the game is over
 	 * assigns the value of the private variable winner
-	 * with the output string for when game won
+	 * with the output string for when game is won
 	 */
 	private boolean checkGameOver() {
 		int row, col;
 		if(isGameOver == true) return false;
 		
 		// check 4 in a row (horizontal)
-		int plus4 = 0;
+		int rowPlus4 = 0;
+		int colPlus4 = 0;
 		for(row = 0; row < 6; row++) {
 			for(col = 0; col < 4; col++) {
 				if(zones[row][col].getTile().equals("red") && zones[row][col+1].getTile().equals("red") && zones[row][col+2].getTile().equals("red") && zones[row][col+3].getTile().equals("red")) {
-					plus4 = col+4;
-					winner = "Game is over, red won at row:" + row + " col:" + col + "-" + plus4 + "\nPress R to replay or ESCAPE to return to main menu";
+					colPlus4 = col+4;
+					winner = "Game is over, red won at row:" + row + " col:" + col + "-" + colPlus4 + "\nPress R to replay or ESCAPE to return to main menu";
 					System.out.println(winner);
 					return true;
 				} else if(zones[row][col].getTile().equals("yellow") && zones[row][col+1].getTile().equals("yellow") && zones[row][col+2].getTile().equals("yellow") && zones[row][col+3].getTile().equals("yellow")) {
-					plus4 = col+4;
-					winner = "Game is over, yellow won at row:" + row + " col:" + col + "-" + plus4 + "\nPress R to replay or ESCAPE to return to main menu";
+					colPlus4 = col+4;
+					winner = "Game is over, yellow won at row:" + row + " col:" + col + "-" + colPlus4 + "\nPress R to replay or ESCAPE to return to main menu";
 					System.out.println(winner);
 					return true;
 				}
@@ -208,33 +214,66 @@ public class ConnectFour extends Game implements Screen {
 		for(col = 0; col < 7; col++) {
 			for(row = 0; row < 3; row++) {
 				if(zones[row][col].getTile().equals("red") && zones[row+1][col].getTile().equals("red") && zones[row+2][col].getTile().equals("red") && zones[row+3][col].getTile().equals("red")) {
-					plus4 = row+4;
-					winner = "Game is over, red won at row:" + row + "-" + plus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					rowPlus4 = row+4;
+					winner = "Game is over, red won at row:" + row + "-" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
 					System.out.println(winner);
 					return true;
 				} else if(zones[row][col].getTile().equals("yellow") && zones[row+1][col].getTile().equals("yellow") && zones[row+2][col].getTile().equals("yellow") && zones[row+3][col].getTile().equals("yellow")) {
-					plus4 = row+4;
-					winner = "Game is over, yellow won at row:" + row + "-" + plus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					rowPlus4 = row+4;
+					winner = "Game is over, yellow won at row:" + row + "-" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
 					System.out.println(winner);
 					return true;
 				}
 			}
 		}
 		
-		// check 4 diagonal (left to right bottom to top - 45 degrees)
-//		for(row = 0; row < 3; row++) {
-//			for(col = 0; col < 4; col++) {
-//				
-//			}
-//		}
+		// check 4 diagonal (left to right bottom to top : 45 degrees : positive slope)
+		for(row = 0; row < 3; row++) {
+			for(col = 0; col < 4; col++) {
+				if(zones[row][col].getTile().equals("red") && zones[row+1][col+1].getTile().equals("red") && zones[row+2][col+2].getTile().equals("red") && zones[row+3][col+3].getTile().equals("red")) {
+					winner = "Game is over, red won diagonally starting at row:" + row + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
+					return true;
+				} else if(zones[row][col].getTile().equals("yellow") && zones[row+1][col+1].getTile().equals("yellow") && zones[row+2][col+2].getTile().equals("yellow") && zones[row+3][col+3].getTile().equals("yellow")) {
+					winner = "Game is over, yellow won diagonally starting at row:" + row + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
+					return true;
+				}
+			}
+		}
+		
+		// check 4 diagonal (left to right top to bottom : -45 degrees : negative slope)
+		for(row = 0; row < 3; row++) {
+			for(col = 0; col < 4; col++) {
+				if(zones[row+3][col].getTile().equals("red") && zones[row+2][col+1].getTile().equals("red") && zones[row+1][col+2].getTile().equals("red") && zones[row][col+3].getTile().equals("red")) {
+					rowPlus4 = row+4;
+					colPlus4 = col+4;
+					winner = "Game is over, red won diagonally starting at row:" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
+					return true;
+				} else if(zones[row+3][col].getTile().equals("yellow") && zones[row+2][col+1].getTile().equals("yellow") && zones[row+1][col+2].getTile().equals("yellow") && zones[row][col+3].getTile().equals("yellow")) {
+					rowPlus4 = row+4;
+					colPlus4 = col+4;
+					winner = "Game is over, yellow won diagonally starting at row:" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
+					System.out.println(winner);
+					return true;
+				}
+			}
+		}
 		
 		return false;
 	}
 	
+	/**
+	 * pause the game (doesn't really do anything though)
+	 */
 	public void pause() {
 		paused = !paused;
 	}
 
+	/**
+	 * restarts the game
+	 */
 	public void restart() {
 		create();
 	}

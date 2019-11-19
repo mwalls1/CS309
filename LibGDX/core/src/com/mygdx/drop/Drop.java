@@ -18,6 +18,22 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.gui.MainScreen;
 
+/**
+ * This game was not created by me (Cole)
+ * I found it online and used it to help me figure
+ * how to use the different components of LibGDX.
+ * Basically how to create textures, batches, sprites,
+ * and what each of the methods did.
+ * 
+ * I did have to change some of the code to make it
+ * work with our game, since the one online was for
+ * and Android application, not a desktop application.
+ * 
+ * The texture were provided online for free.
+ * 
+ * @author Cole Weitzel
+ *
+ */
 public class Drop extends Game implements Screen {
 	private Texture dropImage;
 	private Texture bucketImage;
