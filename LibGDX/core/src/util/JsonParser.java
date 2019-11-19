@@ -7,9 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import com.mygdx.objects.*;
+import com.mygdx.objects.score;
+import com.mygdx.objects.userInfo;
 public class JsonParser {
 	
 	public static ArrayList<userInfo> parseUserInfo(String s){

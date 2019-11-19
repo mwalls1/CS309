@@ -53,6 +53,7 @@ public class Player {
 	private TextureAtlas iRight;
 	public int numCoins;
 	public static int numEnemies = 45;
+	private boolean willUpdate = false;
     public Player(int spawnX, int spawnY){
 		numCoins = 0;
     	sprite = new Sprite();
@@ -218,6 +219,7 @@ public class Player {
 			
 	}
     public void setPos(int x1, int y1){
+    	this.willUpdate = false;
         x = x1;
         y = y1;
     }
@@ -232,4 +234,9 @@ public class Player {
     public int getY(){
         return y;
     }
+    public boolean setUpdate(boolean up) {
+    	this.willUpdate = up;
+    	return willUpdate;
+    }
+    public boolean willUpdate() { return willUpdate;}
 }

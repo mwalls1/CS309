@@ -177,8 +177,9 @@ public class MultiplayerLobby extends Game implements Screen {
 				public void clicked(InputEvent event, float x, float y) {
 					MultiplayerLobby.this.lobbyNumber = num;
 					try {
-						JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="
+						String result = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="
 								+ MultiplayerLobby.this.lobbyNumber);
+								if(result.contains("Fail")) throw new Exception(result);
 					} catch (Exception e1) {
 						try {
 							JsonParser.sendHTML("newLobby", "id=" + MultiplayerLobby.this.lobbyNumber);
@@ -264,8 +265,8 @@ public class MultiplayerLobby extends Game implements Screen {
 				for (int i = 0; i < 4; i++) {
 					if (playerIds[i].equals("0") && MultiplayerLobby.this.lobbyNumber > 0) {
 						try {
-							JsonParser.sendHTML("updatePlayer", "id=" + MultiplayerLobby.this.lobbyNumber + "&player="
-									+ (i + 1) + "&playerId=" + Constants.userID);
+							System.out.println(JsonParser.sendHTML("updatePlayer", "id=" + MultiplayerLobby.this.lobbyNumber + "&player="
+									+ (i + 1) + "&playerId=" + Constants.userID));
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -385,7 +386,8 @@ public class MultiplayerLobby extends Game implements Screen {
 						+ MultiplayerLobby.this.lobbyNumber);
 			}
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			System.out.println("Could not join lobby, creating one at id="+MultiplayerLobby.this.lobbyNumber);
+			
 		}
 		String[] playerIds = playerString.split(" ");
 		for (int i = 0; i < MultiplayerLobby.this.players.size(); i++) {
@@ -393,7 +395,7 @@ public class MultiplayerLobby extends Game implements Screen {
 			MultiplayerLobby.this.players.get(i).setColor(255, 255, 255, 1);
 			if (!playerIds[i].equals("0")) {
 				try {
-					if (this.lobbyNumber > 0) {
+					if (this.lobbyNumber > 0 && !playerIds[i].equals("no")) {
 						name = JsonParser
 								.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getUserById?id=" + playerIds[i]);
 						if (name.contains("No value present")) {
@@ -483,14 +485,16 @@ public class MultiplayerLobby extends Game implements Screen {
 	 * Starts the game based on each players ready state
 	 */
 	private void startGame() {
-		if (MultiplayerLobby.this.players.get(0).getColor().equals(Color.GOLD)
+		if (((MultiplayerLobby.this.players.get(0).getColor().equals(Color.GOLD) //All players have to be ready
 				&& (MultiplayerLobby.this.players.get(1).getColor().equals(Color.GOLD)
 						|| MultiplayerLobby.this.players.get(1).getText().toString().equals("[NONE]"))
 				&& (MultiplayerLobby.this.players.get(2).getColor().equals(Color.GOLD)
 						|| MultiplayerLobby.this.players.get(2).getText().toString().equals("[NONE]"))
 				&& (MultiplayerLobby.this.players.get(3).getColor().equals(Color.GOLD)
-						|| MultiplayerLobby.this.players.get(3).getText().toString().equals("[NONE]"))
-				&& (!topVoteLabel.getText().contains("(0)"))) {
+						|| MultiplayerLobby.this.players.get(3).getText().toString().equals("[NONE]")))
+				|| (((gameCountDown * 10 - (System.currentTimeMillis() - time) / 100) / 10 <= 0.5)
+					&& (gameCountDown * 10 - (System.currentTimeMillis() - time) / 100) / 10 >= -0.5))//Or if timer is already less than a threshold
+				&& (!topVoteLabel.getText().contains("(0)"))) { //And if a game is selected
 			gameStartCD.setVisible(true);
 			if (gameCountDown == -1) {
 				gameCountDown = 5;

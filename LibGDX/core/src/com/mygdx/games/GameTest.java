@@ -92,7 +92,7 @@ public class GameTest extends Game implements Screen{
 				public void onClose(int code, String reason, boolean remote) {
 					System.out.println("onClose");
 					try {
-//						JsonParser.sendHTML("removePlayerFromLobbies", "id=" + Constants.userID);
+						JsonParser.sendHTML("removePlayerFromLobbies", "id=" + Constants.userID);
 					} catch (Exception e) {
 						
 						e.printStackTrace();
@@ -221,9 +221,9 @@ public class GameTest extends Game implements Screen{
 					+ player.getY());
 			String[] playerUpdateArr = playerUpdate.split(" ");
 			// player.setPos(850, 50);
-//			player2.setPos(0, 0);
-//			player3.setPos(0, 0);
-//			player4.setPos(0, 0);
+			player2.setUpdate(true);
+			player3.setUpdate(true);
+			player4.setUpdate(true);
 			System.out.println(playerUpdate);
 			System.out.println(Arrays.toString(playerUpdateArr));
 			System.out.println(playerUpdateArr[0]);
@@ -231,13 +231,13 @@ public class GameTest extends Game implements Screen{
 				if (Integer.parseInt(playerUpdateArr[3 * i]) == Constants.userID) {
 					// player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]),
 					// Integer.parseInt(playerUpdateArr[3*i+2]));
-				} else if (player2.getX() == 0)
+				} else if (player2.willUpdate())
 					player2.setPos(Integer.parseInt(playerUpdateArr[3 * i + 1]),
 							Integer.parseInt(playerUpdateArr[3 * i + 2]));
-				else if (player3.getX() == 0)
+				else if (player3.willUpdate())
 					player3.setPos(Integer.parseInt(playerUpdateArr[3 * i + 1]),
 							Integer.parseInt(playerUpdateArr[3 * i + 2]));
-				else if (player4.getX() == 0)
+				else if (player4.willUpdate())
 					player4.setPos(Integer.parseInt(playerUpdateArr[3 * i + 1]),
 							Integer.parseInt(playerUpdateArr[3 * i + 2]));
 			}
