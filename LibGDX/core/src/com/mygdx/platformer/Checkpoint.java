@@ -23,7 +23,7 @@ public class Checkpoint {
 	public void render(Character player, SpriteBatch batch)
 	{
 		sprite.draw(batch);
-		
+		checkCollision(player);
 	}
 	public int getX()
 	{

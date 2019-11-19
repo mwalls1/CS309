@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.ColesGames.ConnectFour;
 import com.mygdx.ColesGames.Drop;
 import com.mygdx.games.GameTest;
+import com.mygdx.platformer.Map;
 import com.mygdx.space.Space;
 import com.mygdx.ticktacktoe.Runner;
 
@@ -91,6 +92,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         gameNames[2] = "Tic Tac Toe";
         gameNames[3] = "Drop";
         gameNames[4] = "Connect Four";
+        gameNames[5] = "Platformer";
       
      
         for (int i = 0; i < games.length; i++)
@@ -190,6 +192,15 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
         		game.setScreen(new ConnectFour(game));
+        		
+        	}
+        });
+        
+        games[5].addListener(new ClickListener(){
+        	@Override
+        	public void clicked(InputEvent event, float x, float y) {
+        		dispose();
+        		game.setScreen(new Map(game));
         		
         	}
         });
