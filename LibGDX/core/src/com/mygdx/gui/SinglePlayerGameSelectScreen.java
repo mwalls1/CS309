@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygdx.ColesGames.Checkers;
 import com.mygdx.ColesGames.ConnectFour;
 import com.mygdx.ColesGames.Drop;
 import com.mygdx.games.GameTest;
@@ -93,6 +94,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         gameNames[3] = "Drop";
         gameNames[4] = "Connect Four";
         gameNames[5] = "Platformer";
+        gameNames[6] = "Checkers";
       
      
         for (int i = 0; i < games.length; i++)
@@ -201,6 +203,15 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
         		game.setScreen(new Map(game));
+        		
+        	}
+        });
+        
+        games[6].addListener(new ClickListener(){
+        	@Override
+        	public void clicked(InputEvent event, float x, float y) {
+        		dispose();
+        		game.setScreen(new Checkers(game));
         		
         	}
         });

@@ -50,7 +50,6 @@ public class Zone {
 	
 	public void setTile(String tile) {
 		this.tile = tile;
-		active = true;
 	}
 	
 	public void setActive(boolean a) {
