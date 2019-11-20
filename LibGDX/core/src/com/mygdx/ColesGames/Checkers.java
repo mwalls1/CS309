@@ -10,6 +10,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.gui.MainScreen;
 
+/**
+ * Checkers
+ * @author Cole Weitzel
+ *
+ */
 public class Checkers extends Game implements Screen {
 
 	// variables needed for the game
