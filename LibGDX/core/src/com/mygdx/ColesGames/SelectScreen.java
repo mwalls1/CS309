@@ -33,20 +33,23 @@ public class SelectScreen extends Game implements Screen {
 
 		final Label textLabel = new Label("Choose your difficulty wisely!", skin, "default");
 		final TextButton diff0 = new TextButton("PvP", skin, "default");
-		final TextButton diff1 = new TextButton("Easy", skin, "default");
-		final TextButton diff2 = new TextButton("Medium", skin, "default");
+		final TextButton diff1 = new TextButton("Random", skin, "default");
+		final TextButton diff2 = new TextButton("AI tries to win", skin, "default");
+		final TextButton diff3 = new TextButton("AI blocks player", skin, "default");
 
 		// define width
 		textLabel.setWidth(Gdx.graphics.getWidth() / 3);
 		diff0.setWidth(Gdx.graphics.getWidth() / 3);
 		diff1.setWidth(diff0.getWidth());
 		diff2.setWidth(diff0.getWidth());
+		diff3.setWidth(diff0.getWidth());
 
 		// define height
 		textLabel.setHeight(Gdx.graphics.getHeight() / 40);
 		diff0.setHeight(Gdx.graphics.getHeight() / 15);
 		diff1.setHeight(diff0.getHeight());
 		diff2.setHeight(diff0.getHeight());
+		diff3.setHeight(diff0.getHeight());
 
 		// set the position
 		int xpos = Gdx.graphics.getWidth() / 7;
@@ -54,6 +57,7 @@ public class SelectScreen extends Game implements Screen {
 		diff0.setPosition(xpos, Gdx.graphics.getHeight() / 2 - 40);
 		diff1.setPosition(xpos, diff0.getY() - 32);
 		diff2.setPosition(xpos, diff0.getY() - 64);
+		diff3.setPosition(xpos, diff0.getY() - 96);
 
 		// add listeners
 		diff0.addListener(new ClickListener() {
@@ -79,11 +83,20 @@ public class SelectScreen extends Game implements Screen {
 				game.setScreen(new ConnectFour(game, 2));
 			}
 		});
+		
+		diff3.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				dispose();
+				game.setScreen(new ConnectFour(game, 3));
+			}
+		});
 
 		stage.addActor(textLabel);
 		stage.addActor(diff0);
 		stage.addActor(diff1);
 		stage.addActor(diff2);
+		stage.addActor(diff3);
 
 		Gdx.input.setInputProcessor(stage);
 	}
