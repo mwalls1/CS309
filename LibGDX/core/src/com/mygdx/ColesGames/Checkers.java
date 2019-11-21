@@ -38,13 +38,13 @@ public class Checkers extends Game implements Screen {
 	@Override
 	public void create() {
 		Gdx.graphics.setResizable(false);
-		Gdx.graphics.setWindowedMode(503, 500);
+		Gdx.graphics.setWindowedMode(603, 600);
 		
 		batch = new SpriteBatch();
 
 		checkersBoard = new Texture("checkersBoard1.png");
 		spriteCheckersBoard = new Sprite(checkersBoard);
-		spriteCheckersBoard.setSize(500, 500);
+		spriteCheckersBoard.setSize(600, 600);
 	}
 
 	@Override

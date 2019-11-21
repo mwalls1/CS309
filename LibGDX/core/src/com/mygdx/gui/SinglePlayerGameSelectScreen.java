@@ -10,8 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.ColesGames.Checkers;
-import com.mygdx.ColesGames.ConnectFour;
 import com.mygdx.ColesGames.Drop;
+import com.mygdx.ColesGames.SelectScreen;
 import com.mygdx.games.GameTest;
 import com.mygdx.platformer.Map;
 import com.mygdx.space.Space;
@@ -193,7 +193,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	@Override
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
-        		game.setScreen(new ConnectFour(game));
+        		game.setScreen(new SelectScreen(game));
         		
         	}
         });

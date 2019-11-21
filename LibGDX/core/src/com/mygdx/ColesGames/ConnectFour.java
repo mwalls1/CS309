@@ -1,15 +1,20 @@
 package com.mygdx.ColesGames;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.gui.MainScreen;
 
 /**
@@ -28,20 +33,27 @@ public class ConnectFour extends Game implements Screen {
 	private Zone[][] zones;
 	private Sprite spriteYellow;
 	private Sprite spriteRed;
+	private Stage stage;
+	private static Skin skin;
 
 	private int mousex;
 	private int mousey;
-	private boolean playerRedORYellow;
+	private boolean playerRedORYellow; // true is red, false if yellow
 	private boolean isGameOver;
 	private String winner = "empty";
 	private boolean paused;
+	private int difficulty;
+	private int numOfYellow;
+	private String yellowDirection;
 	
 	public ConnectFour() {
 		create();
 	}
 
-	public ConnectFour(Game game) {
+	public ConnectFour(Game game, int diff) {
 		this.game = game;
+		difficulty = diff;
+		System.out.println(diff);
 		create();
 	}
 
@@ -69,6 +81,8 @@ public class ConnectFour extends Game implements Screen {
 		playerRedORYellow = true; // true is red, false is yellow
 		isGameOver = false;
 		paused = false;
+		numOfYellow = 0;
+		yellowDirection = "none";
 		
 		text = new BitmapFont();
 		text.setColor(new Color(0,0,0,1));
@@ -81,6 +95,7 @@ public class ConnectFour extends Game implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
+		
 		handleKeys();
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -106,34 +121,169 @@ public class ConnectFour extends Game implements Screen {
 			}
 		}
 		batch.end();
-
-		if (Gdx.input.justTouched() && !isGameOver) {
-			mousex = Gdx.input.getX();
-			mousey = 520 - Gdx.input.getY();
-//			System.out.println(mousex + " " + mousey);
-			for (int r = 0; r < 6; r++) {
-				for (int c = 0; c < 7; c++) {
-					if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow) {
-						int[] index = { r, c };
-						index = findLowestTile(index);
-						zones[index[0]][index[1]].setTile("red");
-						zones[index[0]][index[1]].setActive(true);
-						playerRedORYellow = false;
-//						System.out.println(r + " " + c);
-					} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedORYellow) {
-						int[] index = { r, c };
-						index = findLowestTile(index);
-						zones[index[0]][index[1]].setTile("yellow");
-						zones[index[0]][index[1]].setActive(true);
-						playerRedORYellow = true;
-//						System.out.println(r + " " + c);
+		if(!isGameOver) {
+			isGameOver = checkGameOver(zones);
+		}
+		
+		if (difficulty > 0 && Gdx.input.justTouched() && !isGameOver) {
+			if(playerRedORYellow) {
+				mousex = Gdx.input.getX();
+				mousey = 520 - Gdx.input.getY();
+	//			System.out.println(mousex + " " + mousey);
+				for (int r = 0; r < 6; r++) {
+					for (int c = 0; c < 7; c++) {
+						if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow) {
+							int[] index = { r, c };
+							index = findLowestTile(index);
+							zones[index[0]][index[1]].setTile("red");
+							zones[index[0]][index[1]].setActive(true);
+							playerRedORYellow = false;
+	//						System.out.println(r + " " + c);
+						}
 					}
 				}
 			}
 		}
 		
-		if(!isGameOver) {
-			isGameOver = checkGameOver(zones);
+		// for difficulty = 0 is PvP
+		if(difficulty == 0) {
+			if (Gdx.input.justTouched() && !isGameOver) {
+				mousex = Gdx.input.getX();
+				mousey = 520 - Gdx.input.getY();
+	//			System.out.println(mousex + " " + mousey);
+				for (int r = 0; r < 6; r++) {
+					for (int c = 0; c < 7; c++) {
+						if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow) {
+							int[] index = { r, c };
+							index = findLowestTile(index);
+							zones[index[0]][index[1]].setTile("red");
+							zones[index[0]][index[1]].setActive(true);
+							playerRedORYellow = false;
+	//						System.out.println(r + " " + c);
+						} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedORYellow) {
+							int[] index = { r, c };
+							index = findLowestTile(index);
+							zones[index[0]][index[1]].setTile("yellow");
+							zones[index[0]][index[1]].setActive(true);
+							playerRedORYellow = true;
+	//						System.out.println(r + " " + c);
+						}
+					}
+				}
+			}
+		}
+		// for difficulty = 1 easy (random AI)
+		else if(difficulty == 1) {
+			if(!playerRedORYellow) {
+				boolean tileFound = false;
+				while(!tileFound) {
+					int r = new Random().nextInt(6);
+					int c = new Random().nextInt(7);
+					if(!zones[r][c].isActive()) {
+						int[] index = { r, c };
+						index = findLowestTile(index);
+						zones[index[0]][index[1]].setTile("yellow");
+						zones[index[0]][index[1]].setActive(true);
+						playerRedORYellow = true;
+						tileFound = true;
+					}
+				}
+			}
+		}
+		
+		// for difficulty = 2 (AI tries to win)
+		else if(difficulty == 2) {
+			if(!playerRedORYellow) {
+				numOfYellow = 0;
+				int[] arr = new int[43];
+				for(int r = 0; r < 6; r++) {
+					for(int c = 0; c < 7; c++) {
+						if(zones[r][c].getTile().equals("yellow")) {
+							arr[numOfYellow] = r;
+							arr[numOfYellow+1] = c;
+							numOfYellow+=2;
+						}
+					}
+				}
+				boolean isTilePlaced = false;
+				for(int i = 0; i < numOfYellow; i+=2) {
+					// check to the left, col > 0, row == 0
+					if(arr[i+1] > 0 && arr[i] == 0 && !zones[arr[i]][arr[i+1]-1].isActive()) {
+						zones[arr[i]][arr[i+1]-1].setTile("yellow");
+						zones[arr[i]][arr[i+1]-1].setActive(true);
+						playerRedORYellow = true;
+						isTilePlaced = true;
+						break;
+					}
+					// check to the left, col > 0, row > 0
+					else if(arr[i] > 0 && arr[i+1] > 0 && zones[arr[i]-1][arr[i+1]-1].isActive() && !zones[arr[i]][arr[i+1]-1].isActive()) {
+						zones[arr[i]][arr[i+1]-1].setTile("yellow");
+						zones[arr[i]][arr[i+1]-1].setActive(true);
+						playerRedORYellow = true;
+						isTilePlaced = true;
+						break;
+					}
+					// check left diagonal, col > 0, row < 5
+					else if(arr[i+1] > 0 && arr[i] < 5 && !zones[arr[i]+1][arr[i+1]-1].isActive() && zones[arr[i]][arr[i+1]-1].isActive()) {
+						zones[arr[i]+1][arr[i+1]-1].setTile("yellow");
+						zones[arr[i]+1][arr[i+1]-1].setActive(true);
+						playerRedORYellow = true;
+						isTilePlaced = true;
+						break;
+					}
+					// check up, row < 5
+					else if(arr[i] < 5 && !zones[arr[i]+1][arr[i+1]].isActive()) {
+						zones[arr[i]+1][arr[i+1]].setTile("yellow");
+						zones[arr[i]+1][arr[i+1]].setActive(true);
+						playerRedORYellow = true;
+						isTilePlaced = true;
+						break;
+					}
+					// check right diagonal, col < 6, row < 5
+					else if(arr[i] < 5 && arr[i+1] < 6 && !zones[arr[i]+1][arr[i+1]+1].isActive() && zones[arr[i]][arr[i+1]+1].isActive()) {
+						zones[arr[i]+1][arr[i+1]+1].setTile("yellow");
+						zones[arr[i]+1][arr[i+1]+1].setActive(true);
+						playerRedORYellow = true;
+						isTilePlaced = true;
+						break;
+					}
+					// check to the right, col < 6, row == 0
+					else if(arr[i+1] < 6 && arr[i] == 0 && !zones[arr[i]][arr[i+1]+1].isActive()) {
+						zones[arr[i]][arr[i+1]+1].setTile("yellow");
+						zones[arr[i]][arr[i+1]+1].setActive(true);
+						playerRedORYellow = true;
+						isTilePlaced = true;
+						break;
+					}
+					// check to the right, col < 6, row > 0
+					else if(arr[i] > 0 && arr[i+1] < 6 && zones[arr[i]-1][arr[i+1]+1].isActive() && !zones[arr[i]][arr[i+1]+1].isActive()) {
+						zones[arr[i]][arr[i+1]+1].setTile("yellow");
+						zones[arr[i]][arr[i+1]+1].setActive(true);
+						playerRedORYellow = true;
+						isTilePlaced = true;
+						break;
+					}
+				}
+				if(!isTilePlaced) {
+					numOfYellow = 0;
+				}
+				// if 0 yellow tiles, place at random spot
+				if(numOfYellow == 0) {
+					boolean tileFound = false;
+					while(!tileFound) {
+						int r = new Random().nextInt(6);
+						int c = new Random().nextInt(7);
+						if(!zones[r][c].isActive()) {
+							int[] index = { r, c };
+							index = findLowestTile(index);
+							zones[index[0]][index[1]].setTile("yellow");
+							zones[index[0]][index[1]].setActive(true);
+							playerRedORYellow = true;
+							tileFound = true;
+						}
+					}
+				}
+			}
 		}
 	}
 
