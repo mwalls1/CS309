@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.gui.MainScreen;
+import com.mygdx.gui.SinglePlayerGameSelectScreen;
 
 import util.Constants;
 
@@ -64,6 +64,7 @@ public class SelectScreen extends Game implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
+				stage.dispose();
 				game.setScreen(new ConnectFour(game, 0));
 			}
 		});
@@ -72,6 +73,7 @@ public class SelectScreen extends Game implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
+				stage.dispose();
 				game.setScreen(new ConnectFour(game, 1));
 			}
 		});
@@ -80,6 +82,7 @@ public class SelectScreen extends Game implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
+				stage.dispose();
 				game.setScreen(new ConnectFour(game, 2));
 			}
 		});
@@ -88,6 +91,7 @@ public class SelectScreen extends Game implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
+				stage.dispose();
 				game.setScreen(new ConnectFour(game, 3));
 			}
 		});
@@ -114,7 +118,8 @@ public class SelectScreen extends Game implements Screen {
 		stage.draw();
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 			dispose();
-			game.setScreen(new MainScreen(game));
+			stage.dispose();
+			game.setScreen(new SinglePlayerGameSelectScreen(game));
 		}
 	}
 
