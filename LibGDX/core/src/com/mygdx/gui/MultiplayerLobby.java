@@ -254,26 +254,37 @@ public class MultiplayerLobby extends Game implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				String playerString = "0 0 0 0";
 				if (MultiplayerLobby.this.lobbyNumber > 0) {
-					try {
-						playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="
-								+ MultiplayerLobby.this.lobbyNumber);
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-				String[] playerIds = playerString.split(" ");
-				for (int i = 0; i < 4; i++) {
-					if (playerIds[i].equals("0") && MultiplayerLobby.this.lobbyNumber > 0) {
-						try {
-							System.out.println(JsonParser.sendHTML("updatePlayer", "id=" + MultiplayerLobby.this.lobbyNumber + "&player="
-									+ (i + 1) + "&playerId=" + Constants.userID));
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						Constants.lobby = MultiplayerLobby.this.lobbyNumber;
-						System.out.println("Joined lobby " + Constants.lobby);
+					if (MultiplayerLobby.this.lobbyNumber == Constants.lobby) { //If the user is already in the lobby, remove them
+						System.out.println("Player: "+Constants.userID);
+						try {JsonParser.sendHTML("readyDown","id=" + MultiplayerLobby.this.lobbyNumber + "&playerId=" + Constants.userID);} catch (Exception e) {e.printStackTrace();}
+						try {JsonParser.sendHTML("removePlayerFromLobbies", "playerId=" + Constants.userID);} catch (Exception e) {e.printStackTrace();}
+						Constants.lobby = 0;
 						refreshNames();
-						break;
+						System.out.println("Left lobby"+Constants.userID);
+					} else { //If the user is not already in the lobby, add them
+						System.out.println("Adding player to lobby");
+						try {
+							playerString = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getLobbyByID?id="+ MultiplayerLobby.this.lobbyNumber);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+
+						String[] playerIds = playerString.split(" ");
+						for (int i = 0; i < 4; i++) {
+							if (playerIds[i].equals("0") && MultiplayerLobby.this.lobbyNumber > 0) {
+								try {
+									System.out.println(JsonParser.sendHTML("updatePlayer",
+											"id=" + MultiplayerLobby.this.lobbyNumber + "&player=" + (i + 1)
+													+ "&playerId=" + Constants.userID));
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								Constants.lobby = MultiplayerLobby.this.lobbyNumber;
+								System.out.println("Joined lobby " + Constants.lobby);
+								refreshNames();
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -390,6 +401,15 @@ public class MultiplayerLobby extends Game implements Screen {
 			
 		}
 		String[] playerIds = playerString.split(" ");
+//		System.out.print(playerString+",");
+		for (String s : playerIds) { //If the player says they are in the lobby but have not joined yet, remove them and render again
+			if (!s.equals("0") && s.equals(Constants.userID.toString()) && !MultiplayerLobby.this.lobbyNumber.equals(Constants.lobby)) {
+				try {JsonParser.sendHTML("removePlayerFromLobbies", "playerId=" + Constants.userID);} catch (Exception e) {e.printStackTrace();}
+				System.out.println("Detected player illegally in lobby, removing them and refreshing: s="+s+",userId="+Constants.userID+",lobby="+Constants.lobby);
+				refreshNames(); 
+				return;
+			}
+		}
 		for (int i = 0; i < MultiplayerLobby.this.players.size(); i++) {
 			String name = "";
 			MultiplayerLobby.this.players.get(i).setColor(255, 255, 255, 1);
