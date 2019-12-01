@@ -84,7 +84,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
 		// TODO Auto-generated method stub
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
-
+        Constants.playerNumber = 0;
         final TextButton[] games = new TextButton[16];
         final String[] gameNames = new String[16];
         for (int i = 0; i<games.length; i++) gameNames[i] = "Coming soon!";
