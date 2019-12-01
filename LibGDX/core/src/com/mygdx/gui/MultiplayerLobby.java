@@ -411,6 +411,9 @@ public class MultiplayerLobby extends Game implements Screen {
 				return;
 			}
 		}
+		for (int i = 1; i <= 4; i++) { //Determine your player number
+			if (playerIds[i-1].equals(Constants.userID.toString())) Constants.playerNumber = i;
+		}
 		for (int i = 0; i < MultiplayerLobby.this.players.size(); i++) {
 			String name = "";
 			MultiplayerLobby.this.players.get(i).setColor(255, 255, 255, 1);
@@ -534,7 +537,7 @@ public class MultiplayerLobby extends Game implements Screen {
 						|| MultiplayerLobby.this.players.get(3).getText().toString().equals(Constants.user))
 					//Start the game
 					if (topVoteLabel.getText().contains("Game 1")) game.setScreen(new GameTest(game));
-					if (topVoteLabel.getText().contains("Game 2")) game.setScreen(new ConnectFour(game,0));
+					if (topVoteLabel.getText().contains("Game 2")) game.setScreen(new ConnectFour(game,-1));
 			}
 			gameStartCD.setText(
 					"Game Starting in " + (int)(gameCountDown - (System.currentTimeMillis() - time) / 1000) / 1);

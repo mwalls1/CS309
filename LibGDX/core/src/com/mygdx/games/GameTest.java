@@ -205,7 +205,6 @@ public class GameTest extends Game implements Screen{
 	
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
 		try {
 			// Sends position and updates all four players
 			System.out.println(Constants.lobby);

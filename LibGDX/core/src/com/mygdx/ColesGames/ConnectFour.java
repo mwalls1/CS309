@@ -1,6 +1,13 @@
 package com.mygdx.ColesGames;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Random;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,7 +19,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.gui.MainScreen;
+
+import util.Constants;
+import util.JsonParser;
 
 /**
  * Connect Four game
@@ -31,9 +40,11 @@ public class ConnectFour extends Game implements Screen {
 	private Sprite spriteRed;
 	private Sprite spriteMoveYellow;
 	private Sprite spriteMoveRed;
-
+	private WebSocketClient cc;
 	private int mousex;
+	private int receiveMousex;
 	private int mousey;
+	private int receiveMousey;
 	private boolean playerRedORYellow; // true is red, false if yellow
 	private boolean isGameOver;
 	private String winner = "empty";
@@ -52,8 +63,9 @@ public class ConnectFour extends Game implements Screen {
 	public ConnectFour(Game game, int diff) {
 		this.game = game;
 		difficulty = diff;
-		System.out.println("new game " + diff);
+		System.out.println("new game " + diff + " as player number " + Constants.playerNumber);
 		create();
+		if (diff == -1) connect();
 	}
 
 	/**
@@ -115,6 +127,9 @@ public class ConnectFour extends Game implements Screen {
 		// handle the user pressing and place their tile
 		if (difficulty > 0 && Gdx.input.justTouched() && !isGameOver && playerRedORYellow && !animate) placeUserTile();
 		
+		
+		// for difficulty = -1 is online PvP
+		if(difficulty == -1 && !isGameOver) difficulty0nline();
 		// for difficulty = 0 is PvP
 		if(difficulty == 0 && !isGameOver) difficulty0();
 		
@@ -144,6 +159,94 @@ public class ConnectFour extends Game implements Screen {
 //						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
 						animate = true;
 //						System.out.println(r + " " + c);
+					}
+				}
+			}
+		}
+	}
+	
+	private void connect() {
+    	try {
+    		
+    		Draft[] drafts = { new Draft_6455() };
+    		String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
+			cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
+				@Override
+				public void onMessage(String message) {
+					System.out.println("NewMessage:" + message);
+					receiveMousex = Integer.parseInt(message.split(" ")[7-(3*Constants.playerNumber)]);
+					receiveMousey = Integer.parseInt(message.split(" ")[8-(3*Constants.playerNumber)]);
+				}
+
+				@Override
+				public void onOpen(ServerHandshake handshake) {
+					System.out.println("opOpen");
+				}
+
+				@Override
+				public void onClose(int code, String reason, boolean remote) {
+					System.out.println("onClose");
+					try {
+						JsonParser.sendHTML("removePlayerFromLobbies", "id=" + Constants.userID);
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+					}
+				}
+
+				@Override
+				public void onError(Exception e) {
+//					cc.close();
+//					connect();
+//					e.printStackTrace();
+					System.out.println("onError");
+				}
+			};
+		} catch (URISyntaxException e) {
+			System.out.println("fail");
+			e.printStackTrace();
+		}
+		cc.connect();
+    }
+	
+	
+	/*
+	 * OnlinePvP
+	 */
+	private void difficulty0nline(){
+		if ((Gdx.input.justTouched() || receiveMousex > 0) && !isGameOver) {
+			mousex = Gdx.input.getX();
+			mousey = 520 - Gdx.input.getY();
+			for (int r = 0; r < 6; r++) {
+				for (int c = 0; c < 7; c++) {
+					if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow && Constants.playerNumber == 1) {
+						cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
+						this.lowest = findLowestTile(new int[] {r, c});
+						spriteMoveRed.setPosition(zones[5][c].getX(), 400);
+//						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
+						animate = true;
+					} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedORYellow && Constants.playerNumber == 2) {
+						cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
+						this.lowest = findLowestTile(new int[] {r, c});
+						spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
+//						System.out.println(spriteMoveYellow.getX() + " " + spriteMoveYellow.getY());
+						animate = true;
+					}
+					else if (zones[r][c].contains(receiveMousex, receiveMousey) && !zones[r][c].isActive() && !playerRedORYellow && Constants.playerNumber == 1) {
+						this.lowest = findLowestTile(new int[] {r, c});
+						spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
+//						System.out.println(spriteMoveYellow.getX() + " " + spriteMoveYellow.getY());
+						animate = true;
+						receiveMousex = 0;
+						receiveMousey = 0;
+					}
+					else if (zones[r][c].contains(receiveMousex, receiveMousey) && !zones[r][c].isActive() && playerRedORYellow && Constants.playerNumber == 2) {
+						this.lowest = findLowestTile(new int[] {r, c});
+						spriteMoveRed.setPosition(zones[5][c].getX(), 400);
+//						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
+						animate = true;
+						receiveMousex = 0;
+						receiveMousey = 0;
 					}
 				}
 			}
