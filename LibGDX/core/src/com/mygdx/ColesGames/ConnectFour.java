@@ -174,8 +174,10 @@ public class ConnectFour extends Game implements Screen {
 				@Override
 				public void onMessage(String message) {
 					System.out.println("NewMessage:" + message);
-					receiveMousex = Integer.parseInt(message.split(" ")[7-(3*Constants.playerNumber)]);
-					receiveMousey = Integer.parseInt(message.split(" ")[8-(3*Constants.playerNumber)]);
+					if (!message.contains("User:") && (!playerRedORYellow && Constants.playerNumber == 1 || playerRedORYellow && Constants.playerNumber == 2)) {
+						receiveMousex = Integer.parseInt(message.split(" ")[7-(3*Constants.playerNumber)]);
+						receiveMousey = Integer.parseInt(message.split(" ")[8-(3*Constants.playerNumber)]);
+					}
 				}
 
 				@Override
@@ -198,8 +200,8 @@ public class ConnectFour extends Game implements Screen {
 				public void onError(Exception e) {
 //					cc.close();
 //					connect();
-//					e.printStackTrace();
-					System.out.println("onError");
+					e.printStackTrace();
+					System.out.println("onError: "+e.getMessage());
 				}
 			};
 		} catch (URISyntaxException e) {
@@ -220,12 +222,16 @@ public class ConnectFour extends Game implements Screen {
 			for (int r = 0; r < 6; r++) {
 				for (int c = 0; c < 7; c++) {
 					if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow && Constants.playerNumber == 1) {
+						receiveMousex = 0;
+						receiveMousey = 0;
 						cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
 						this.lowest = findLowestTile(new int[] {r, c});
 						spriteMoveRed.setPosition(zones[5][c].getX(), 400);
 //						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
 						animate = true;
 					} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedORYellow && Constants.playerNumber == 2) {
+						receiveMousex = 0;
+						receiveMousey = 0;
 						cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
 						this.lowest = findLowestTile(new int[] {r, c});
 						spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
