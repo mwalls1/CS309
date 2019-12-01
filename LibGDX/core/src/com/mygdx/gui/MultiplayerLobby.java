@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.ColesGames.ConnectFour;
 import com.mygdx.games.GameTest;
 
 import util.Constants;
@@ -132,7 +133,7 @@ public class MultiplayerLobby extends Game implements Screen {
 			p.setWidth(Gdx.graphics.getWidth() / 2 - checkPlayer.getWidth());
 			players.add(p);
 			table.row().colspan(3).expandX();
-			table.add(p).height(100).width(table.getWidth() / 2 - checkPlayer.getWidth()).align(Align.right);
+			table.add(p).height(table.getHeight()/4).width(table.getWidth() / 2 - checkPlayer.getWidth()).align(Align.right);
 			table.add(checkPlayer).height(20).width(20).align(Align.right);
 		}
 		table.pad(10);
@@ -160,7 +161,7 @@ public class MultiplayerLobby extends Game implements Screen {
 		lobbyLabel.setWidth(table.getWidth());
 		lobbyLabel.setFontScale(2);
 		lobbyLabel.setPosition(table.getX(),
-				table.getY() + table.getHeight() - lobbyLabel.getHeight() * lobbyLabel.getFontScaleY());
+				table.getY() + table.getHeight() + 20); // lobbyLabel.getHeight()
 		stage.addActor(lobbyLabel);
 
 		ArrayList<TextButton> lobbies = new ArrayList<TextButton>();
@@ -268,8 +269,9 @@ public class MultiplayerLobby extends Game implements Screen {
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}
-
+						
 						String[] playerIds = playerString.split(" ");
+						Constants.seed = Long.parseLong(playerIds[4]);
 						for (int i = 0; i < 4; i++) {
 							if (playerIds[i].equals("0") && MultiplayerLobby.this.lobbyNumber > 0) {
 								try {
@@ -319,13 +321,12 @@ public class MultiplayerLobby extends Game implements Screen {
 		pixmap.fillRectangle(radius, 0, width - (radius * 2), height);
 		playerTable.setBackground(new Image(new Texture(pixmap)).getDrawable());
 		playerTable.setVisible(false);
-		for (int rowNum = 1; rowNum <= 5; rowNum++) {
+		String validGameNumbers = "1,2,3";
+		for (int rowNum = 0; rowNum <= 20; rowNum += 5) {
 			playerTable.row().colspan(5).expand();
 			for (int colNum = 1; colNum <= 5; colNum++) {
-				final TextButton g = new TextButton("Game " + colNum * rowNum, skin, "default"); // Will refrence
-																									// database to see
-																									// if game is valid
-																									// and display name
+				final TextButton g = new TextButton("Game " + (colNum + rowNum), skin, "default"); 
+				if (!validGameNumbers.contains((colNum + rowNum) +"")) g.setVisible(false);
 				g.setColor(Color.CYAN);
 				g.addListener(new ClickListener() {
 					@Override
@@ -531,7 +532,9 @@ public class MultiplayerLobby extends Game implements Screen {
 						|| MultiplayerLobby.this.players.get(1).getText().toString().equals(Constants.user)
 						|| MultiplayerLobby.this.players.get(2).getText().toString().equals(Constants.user)
 						|| MultiplayerLobby.this.players.get(3).getText().toString().equals(Constants.user))
-					game.setScreen(new GameTest(game));
+					//Start the game
+					if (topVoteLabel.getText().contains("Game 1")) game.setScreen(new GameTest(game));
+					if (topVoteLabel.getText().contains("Game 2")) game.setScreen(new ConnectFour(game,0));
 			}
 			gameStartCD.setText(
 					"Game Starting in " + (int)(gameCountDown - (System.currentTimeMillis() - time) / 1000) / 1);
