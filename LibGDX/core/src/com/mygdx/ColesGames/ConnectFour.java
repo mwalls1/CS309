@@ -129,10 +129,10 @@ public class ConnectFour extends Game implements Screen {
 		
 		
 		// for difficulty = -1 is online PvP
-		if(difficulty == -1 && !isGameOver) difficulty0nline();
+		if(difficulty == -1 && !isGameOver && !animate) difficulty0nline();
 		
 		// for difficulty = 0 is PvP
-		if(difficulty == 0 && !isGameOver) difficulty0();
+		else if(difficulty == 0 && !isGameOver && !animate) difficulty0();
 		
 		// for difficulty = 1 easy (random AI)
 		else if(difficulty == 1 && !playerRedORYellow && wait == WAITTIME && !isGameOver && !animate) difficulty1();
@@ -213,7 +213,7 @@ public class ConnectFour extends Game implements Screen {
     }
 	
 	
-	/*
+	/**
 	 * OnlinePvP
 	 */
 	private void difficulty0nline(){
