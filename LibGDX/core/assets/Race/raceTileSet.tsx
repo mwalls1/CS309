@@ -41,6 +41,11 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+ <tile id="11">
+  <properties>
+   <property name="checkpoint2" value=""/>
+  </properties>
+ </tile>
  <tile id="12">
   <properties>
    <property name="slow" value=""/>
@@ -131,6 +136,11 @@
    <property name="goal" value=""/>
   </properties>
  </tile>
+ <tile id="32">
+  <properties>
+   <property name="checkpoint3" value=""/>
+  </properties>
+ </tile>
  <tile id="38">
   <properties>
    <property name="slow" value=""/>
@@ -149,6 +159,11 @@
  <tile id="48">
   <properties>
    <property name="slow" value=""/>
+  </properties>
+ </tile>
+ <tile id="49">
+  <properties>
+   <property name="checkpoint1" value=""/>
   </properties>
  </tile>
 </tileset>

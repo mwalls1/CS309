@@ -1,6 +1,13 @@
 package com.mygdx.goFish;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -43,6 +50,8 @@ private Player thisPlayer;
 private String currentMove;
 private GoFish cardGame;
 private WebSocketClient cc;
+private String toSend;
+private String messageReceived;
 
 
 	public GoFishScreen(Game game)
@@ -495,13 +504,38 @@ private WebSocketClient cc;
 
 	public void sendMove()
 	{
+		int sender = 0;
+		int receiver = 0;
+		if(currentPlayer == p1) sender = 10;
+		else if(currentPlayer == p2) sender = 20;
+		else if (currentPlayer == p3) sender = 30;
+		else if (currentPlayer == p4) sender = 40;
+		
+		if (selectedPlayer == p1) receiver = 1;
+		else if (selectedPlayer == p2) receiver = 2;
+		else if (selectedPlayer == p3) receiver = 3;
+		else if (selectedPlayer == p4) receiver = 4;
+		
+		int result = sender + receiver;
+		toSend = result + selectedRank;
 		//TODO
+		cc.send(toSend);
 	}
 	
-	public String getMove()
+	public void getMove()
 	{
-		//TODO
-		return null;
+		if (toSend == messageReceived) return;
+	
+		char sender = messageReceived.charAt(0);
+		char receiver = messageReceived.charAt(1);
+		Player send;
+		Player receive;
+		if (sender == '1') send = p1;
+		else if(sender == '2') send = p2;
+		else if(sender == '3') send = p3;
+		else if(sender == '4') send = p4;
+		 
+		
 	}
 	
 	public Player getThisPlayer()
@@ -558,15 +592,15 @@ private WebSocketClient cc;
 	}
 	
 	private void connect() {
-		    try {
-		    
-		    Draft[] drafts = { new Draft_6455() };
-		    String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
-		cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
+try {
+
+Draft[] drafts = { new Draft_6455() };
+String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
+cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
 		@Override
-		public void onMessage(String message) {
+public void onMessage(String message) {
 		System.out.println("NewMessage:" + message);
-		playerUpdate = message;
+messageReceived = message;
 		}
 
 		@Override
@@ -598,6 +632,6 @@ private WebSocketClient cc;
 		e.printStackTrace();
 		}
 		cc.connect();
-		    }
+		}
 	
 }
