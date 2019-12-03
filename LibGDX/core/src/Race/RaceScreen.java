@@ -65,12 +65,14 @@ public void create()
 	stage = new Stage();
 	camera = new OrthographicCamera();
 	camera.setToOrtho(false,w,h);
-	camera.position.x = 320;
-	camera.position.y = 320;
+	//track 1 = 320, 320
+	//track 2 = 520, 1320
+	camera.position.x = 520;
+	camera.position.y = 1320;
 	batch.setProjectionMatrix(camera.combined);
 	player = new Car("Race/car1.png", manager, camera);
 	player.setPosition(w/2, h/2);
-	map = new TmxMapLoader().load("Race/track1 copy.tmx");
+	map = new TmxMapLoader().load("Race/track2.tmx");
 	road = (TiledMapTileLayer)map.getLayers().get("Road");
 	checkpoint = (TiledMapTileLayer)map.getLayers().get("Checkpoint");
 	renderer = new OrthogonalTiledMapRenderer(map);
@@ -104,8 +106,8 @@ public void render(float delta) {
      renderer.render();
      batch.begin();
      player.draw(batch);
-     lapFont.draw(batch, lap + "/3", player.getX()-450, player.getY()-300);
-     timeFont.draw(batch, lapOneTime + "\n" + lapTwoTime + "\n" + lapThreeTime, player.getX()+100, player.getY()+100);
+     lapFont.draw(batch, lap + "/3\nFPS: " + Gdx.graphics.getFramesPerSecond(), player.getX()-450, player.getY()-300);
+     timeFont.draw(batch, lapOneTime + "\n" + lapTwoTime + "\n" + lapThreeTime, player.getX()-350, player.getY()-300);
      if (road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("blocked")) {
     	 player.setSpeed(0);
     	 player.moveAfterCollision();
@@ -119,6 +121,7 @@ public void render(float delta) {
      System.out.println("Player Position: " + playerPosition.toString());
      System.out.println("Slow tile: " + road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("slow"));
      System.out.println("Blocked tile: " + road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("blocked"));
+     System.out.println("Camera Position: " + camera.position.x + ", " + camera.position.y);
      System.out.println();
      }
      
@@ -131,9 +134,24 @@ public void render(float delta) {
     	check1 = false;
     	check2 = false;
     	check3 = false;
-    	if (lap == 1) lapOneTime = "" + frameCount;
-    	else if (lap == 2) lapTwoTime = "" + frameCount;
-    	else if (lap == 3) lapThreeTime = "" +frameCount;
+    	if (lap == 1)
+    		{
+    		int min = frameCount / 3600 ;
+			int sec = (frameCount %  3600) / 60;
+			lapOneTime = min + ":" + sec;
+    		}
+    	else if (lap == 2)
+    		{
+    		int min = frameCount / 3600 ;
+			int sec = (frameCount %  3600) / 60;
+			lapTwoTime = min + ":" + sec;
+    		}
+    	else if (lap == 3) 
+    		{
+    		int min = frameCount / 3600 ;
+			int sec = (frameCount %  3600) / 60;
+			lapThreeTime = min + ":" + sec;
+    		}
      	frameCount = 0;
     }
     if (checkpoint.getCell(playerPosition.x, playerPosition.y) != null) {
