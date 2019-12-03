@@ -9,8 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.ColesGames.ConnectFour;
+import com.mygdx.ColesGames.Checkers;
 import com.mygdx.ColesGames.Drop;
+import com.mygdx.ColesGames.SelectScreen;
 import com.mygdx.games.GameTest;
 import com.mygdx.platformer.Map;
 import com.mygdx.space.Space;
@@ -83,7 +84,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
 		// TODO Auto-generated method stub
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage();
-
+        Constants.playerNumber = 0;
         final TextButton[] games = new TextButton[16];
         final String[] gameNames = new String[16];
         for (int i = 0; i<games.length; i++) gameNames[i] = "Coming soon!";
@@ -93,6 +94,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         gameNames[3] = "Drop";
         gameNames[4] = "Connect Four";
         gameNames[5] = "Platformer";
+        gameNames[6] = "Checkers";
       
      
         for (int i = 0; i < games.length; i++)
@@ -191,7 +193,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	@Override
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
-        		game.setScreen(new ConnectFour(game));
+        		game.setScreen(new SelectScreen(game));
         		
         	}
         });
@@ -201,6 +203,15 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
         		game.setScreen(new Map(game));
+        		
+        	}
+        });
+        
+        games[6].addListener(new ClickListener(){
+        	@Override
+        	public void clicked(InputEvent event, float x, float y) {
+        		dispose();
+        		game.setScreen(new Checkers(game));
         		
         	}
         });

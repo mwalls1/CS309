@@ -13,6 +13,7 @@ public class Constants {
 	public static Integer userID = 0;
 	public static String user = "Temporary User";
 	public static Integer lobby = 0;
+	public static Integer playerNumber = 0;
 	public static long seed = 0;
 	public static float red = 0.1f;
 	public static float blue = 0.12f;
