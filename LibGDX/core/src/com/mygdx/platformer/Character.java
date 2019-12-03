@@ -117,9 +117,11 @@ public class Character {
         elapsed+=Gdx.graphics.getDeltaTime();
     }
 
-	public void update(TiledMapTileLayer walls, OrthographicCamera camera, SpriteBatch batch) {
+	public void update(TiledMapTileLayer walls,TiledMapTileLayer death, OrthographicCamera camera, SpriteBatch batch) {
 		float tileW = walls.getTileWidth();
 		float tileH = walls.getTileHeight();
+		if(death.getCell((int)((x-1)/tileW), (int)(y/tileH))!=null)
+			reset();
 		if (Gdx.input.isKeyPressed(Input.Keys.A) ||  Gdx.input.isKeyPressed(Input.Keys.D)) {
 			if(Gdx.input.isKeyPressed(Input.Keys.A))
 			{

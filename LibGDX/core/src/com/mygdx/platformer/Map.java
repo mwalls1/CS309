@@ -1,5 +1,6 @@
 package com.mygdx.platformer;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.badlogic.gdx.Game;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.games.Zombie;
 import com.mygdx.gui.MainScreen;
 
 public class Map extends Game implements Screen{
@@ -34,8 +36,14 @@ public class Map extends Game implements Screen{
 	private float elapsed = 0;
 	private TiledMap map;
 	private Goon goon;
+	private Fairy f1;
 	private TiledMapTileLayer terrain;
+	private TiledMapTileLayer death;
 	private OrthogonalTiledMapRenderer renderer;
+	public ArrayList<Spike> spikes = new ArrayList<Spike>();
+	public ArrayList<Goon> goons = new ArrayList<Goon>();
+	public ArrayList<Checkpoint> points = new ArrayList<Checkpoint>();
+	public ArrayList<Fairy> fairies = new ArrayList<Fairy>();
 	private Checkpoint point1;
 	public Map(Game game)
 	{
@@ -43,12 +51,36 @@ public class Map extends Game implements Screen{
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
-		map = new TmxMapLoader().load("platformer.tmx");
+		map = new TmxMapLoader().load("platformer2.tmx");
 		MapLayers mapLayers = map.getLayers();
-		goon = new Goon(150, 127, camera);
+		fairies.add(new Fairy(494, 920, camera));
+		fairies.add(new Fairy(779, 800, camera));
+		goons.add(new Goon(394, 911, camera));
+		goons.add(new Goon(1216, 527, camera));
+		goons.add(new Goon(1725, 975, camera));
+		goons.add(new Goon(1953, 975, camera));
+		goons.add(new Goon(2264, 1167, camera));
+		goons.add(new Goon(1976, 1167, camera));
 		terrain = (TiledMapTileLayer) mapLayers.get("blockage");
-		player = new Character(100, 70);
-		point1 = new Checkpoint(400, 60);
+		death = (TiledMapTileLayer) mapLayers.get("death");
+		player = new Character(50, 240);
+		points.add(new Checkpoint(50, 718));
+		points.add(new Checkpoint(1599, 128));
+		points.add(new Checkpoint(1841, 1072));
+		spikes.add(new Spike(100,240));
+		spikes.add(new Spike(222,240));
+		spikes.add(new Spike(242,240));
+		spikes.add(new Spike(575,336));
+		spikes.add(new Spike(575,144));
+		spikes.add(new Spike(839,272));
+		spikes.add(new Spike(498,592));
+		spikes.add(new Spike(410,912));
+		spikes.add(new Spike(626,816));
+		spikes.add(new Spike(802,768));
+		spikes.add(new Spike(912,688));
+		spikes.add(new Spike(1276,240));
+		spikes.add(new Spike(1724,400));
+		spikes.add(new Spike(1842,688));
 		create();
 	}
 	@Override
@@ -81,11 +113,25 @@ public class Map extends Game implements Screen{
 		renderer.render();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		goon.render(batch, player, terrain, elapsed);
-		goon.checkCollision(player);
-		player.update(terrain,camera,batch);
+		player.update(terrain, death ,camera,batch);
 		player.render(shape, camera);
-		point1.render(player, batch);
+		font.draw(batch, "X, Y: "+player.getX()+", "+player.getY(), player.x - 40, player.y);
+		for (Fairy zomb : fairies) {
+			zomb.render(batch, player, terrain, elapsed);
+			zomb.checkCollision(player);
+		}
+		for (Spike zomb : spikes) {
+			zomb.render(player, batch);
+			zomb.checkCollision(player);
+		}
+		for (Goon zomb : goons) {
+			zomb.render(batch, player, terrain, elapsed);
+			zomb.checkCollision(player);
+		}
+		for (Checkpoint zomb : points) {
+			zomb.render(player, batch);
+			zomb.checkCollision(player);
+		}
 		batch.end();
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
 	     {
