@@ -102,22 +102,17 @@ public class Character {
 		idleLeft = new Animation<TextureRegion>(1/5f, iLeft.getRegions());
 		idleRight = new Animation<TextureRegion>(1/5f, iRight.getRegions());
     }
-    public void render(ShapeRenderer shape, OrthographicCamera camera){
-        //sprite.setPosition(x, y);
+    public void render(TiledMapTileLayer walls,TiledMapTileLayer death, OrthographicCamera camera, SpriteBatch batch){
         camera.position.x = x;
         camera.position.y = y;
         sprite.setX(x);
         sprite.setY(y);
         camera.update();
         elapsed+=Gdx.graphics.getDeltaTime();
-    }
-    public void render(){
-        sprite.setX(x);
-        sprite.setY(y);
-        elapsed+=Gdx.graphics.getDeltaTime();
+        update(walls, death, camera, batch);
     }
 
-	public void update(TiledMapTileLayer walls,TiledMapTileLayer death, OrthographicCamera camera, SpriteBatch batch) {
+	private void update(TiledMapTileLayer walls,TiledMapTileLayer death, OrthographicCamera camera, SpriteBatch batch) {
 		float tileW = walls.getTileWidth();
 		float tileH = walls.getTileHeight();
 		if(death.getCell((int)((x-1)/tileW), (int)(y/tileH))!=null)

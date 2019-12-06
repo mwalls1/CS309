@@ -5,38 +5,28 @@ import java.util.Scanner;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.games.Zombie;
-import com.mygdx.gui.MainScreen;
 
-public class Map extends Game implements Screen{
+public class lvlOne extends Game implements Screen{
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private Stage stage;
 	private BitmapFont font;
 	Scanner scan;
-	private Game game;
 	private Character player;
-	private int score = 0;
-	private ShapeRenderer shape;
-	private boolean gameOver = false;
 	private float elapsed = 0;
 	private TiledMap map;
-	private Goon goon;
-	private Fairy f1;
 	private TiledMapTileLayer terrain;
 	private TiledMapTileLayer death;
 	private OrthogonalTiledMapRenderer renderer;
@@ -44,11 +34,9 @@ public class Map extends Game implements Screen{
 	public ArrayList<Goon> goons = new ArrayList<Goon>();
 	public ArrayList<Checkpoint> points = new ArrayList<Checkpoint>();
 	public ArrayList<Fairy> fairies = new ArrayList<Fairy>();
-	private Checkpoint point1;
-	public Map(Game game)
+	public lvlOne(Game game)
 	{
 		font = new BitmapFont();
-		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		camera = new OrthographicCamera(Gdx.graphics.getDisplayMode().width/4, Gdx.graphics.getDisplayMode().height/4);
 		map = new TmxMapLoader().load("platformer2.tmx");
@@ -113,31 +101,21 @@ public class Map extends Game implements Screen{
 		renderer.render();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		player.update(terrain, death ,camera,batch);
-		player.render(shape, camera);
+		player.render(terrain, death ,camera,batch);
 		font.draw(batch, "X, Y: "+player.getX()+", "+player.getY(), player.x - 40, player.y);
 		for (Fairy zomb : fairies) {
 			zomb.render(batch, player, terrain, elapsed);
-			zomb.checkCollision(player);
 		}
 		for (Spike zomb : spikes) {
 			zomb.render(player, batch);
-			zomb.checkCollision(player);
 		}
 		for (Goon zomb : goons) {
 			zomb.render(batch, player, terrain, elapsed);
-			zomb.checkCollision(player);
 		}
 		for (Checkpoint zomb : points) {
 			zomb.render(player, batch);
-			zomb.checkCollision(player);
 		}
 		batch.end();
-		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-	     {
-	    	 dispose();
-	    	 game.setScreen(new MainScreen(game));
-	     }
 	}
 
 	@Override

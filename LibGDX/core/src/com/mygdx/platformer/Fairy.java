@@ -96,11 +96,12 @@ public class Fairy {
         	midY = (2*y + height)/2;
     		update(player, walls, time, batch);
     		elapsed+=Gdx.graphics.getDeltaTime();
+    		checkCollision(player);
     	}
     	
     }
 
-	public void update(Character player, TiledMapTileLayer walls, float time, SpriteBatch batch) {
+	private void update(Character player, TiledMapTileLayer walls, float time, SpriteBatch batch) {
 		if (active) {
 			isMoving = true;
 			if (left) {
