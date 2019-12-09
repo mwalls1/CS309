@@ -534,7 +534,7 @@ public class ConnectFour extends Game implements Screen {
 	/**
 	 * creates the zones on screen to click
 	 */
-	private void createZones() {
+	public void createZones() {
 		int x = 6;
 		int y = 0;
 		for (int r = 0; r < 6; r++) {
