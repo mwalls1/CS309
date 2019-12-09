@@ -32,7 +32,7 @@ public class Car {
 		acceleration = 0.1f;
 		deceleration = 0.15f;
 		angle = 90;
-		topSpeed = 10;
+		topSpeed = 20;
 	}
 	
 	public float getX()
@@ -66,7 +66,7 @@ public class Car {
 			sprite.rotate(1);
 			angle++;
 		}
-		if(speed < 0.05f && speed > -0.05f) speed = 0;
+		if(speed < .05f && speed > -0.05f) speed = 0;
 		if (speed > 0) speed -= 0.05f;
 		if (speed < 0) speed += 0.05f;
 		if (speed < -3f) speed = -3f;
@@ -116,7 +116,7 @@ public class Car {
 	
 	public void decSpeed(float newSpeed)
 	{
-		if (speed > 0.5f) speed -= newSpeed;
+		if (speed > 2.0f) speed -= newSpeed;
 		if (speed < -0.5f) speed += newSpeed;
 	}
 	

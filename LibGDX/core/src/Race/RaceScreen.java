@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -30,6 +31,8 @@ private TiledMapTileLayer checkpoint;
 private AssetManager manager;
 private SpriteBatch batch;
 private Car player;
+private Texture gaugeTexture;
+private Sprite gaugeSprite;
 private float angle;
 private Point playerPosition;
 private int lap;
@@ -37,11 +40,19 @@ private boolean check1;
 private boolean check2;
 private boolean check3;
 private BitmapFont lapFont;
-private BitmapFont timeFont;
+private BitmapFont lapOneFont;
+private BitmapFont lapTwoFont;
+private BitmapFont lapThreeFont;
+private BitmapFont finalTimeFont;
+private BitmapFont speedFont;
 private int frameCount;
+private int bigFrameCount;
 private String lapOneTime;
 private String lapTwoTime;
 private String lapThreeTime;
+private String finalTime;
+private float w = Gdx.graphics.getWidth();
+private float h = Gdx.graphics.getHeight();
 public RaceScreen(Game game)
 {
 	this.game = game;
@@ -54,9 +65,10 @@ public RaceScreen(Game game)
 public void create()
 {
 	lap = 0;
-	lapOneTime = "---";
-	lapTwoTime = "---";
-	lapThreeTime = "---";
+	lapOneTime = "1: ---";
+	lapTwoTime = "2: ---";
+	lapThreeTime = "3: ---";
+	finalTime = "F: ---";
 	angle = 90;
 	float w = Gdx.graphics.getWidth();
 	float h = Gdx.graphics.getHeight();
@@ -67,19 +79,29 @@ public void create()
 	camera.setToOrtho(false,w,h);
 	//track 1 = 320, 320
 	//track 2 = 520, 1320
-	camera.position.x = 520;
-	camera.position.y = 1320;
+	camera.position.x = 320;
+	camera.position.y = 520;
+	
+	
 	batch.setProjectionMatrix(camera.combined);
 	player = new Car("Race/car1.png", manager, camera);
 	player.setPosition(w/2, h/2);
-	map = new TmxMapLoader().load("Race/track2.tmx");
+	map = new TmxMapLoader().load("Race/track1 copy.tmx");
 	road = (TiledMapTileLayer)map.getLayers().get("Road");
 	checkpoint = (TiledMapTileLayer)map.getLayers().get("Checkpoint");
 	renderer = new OrthogonalTiledMapRenderer(map);
 	Gdx.input.setInputProcessor(stage);
 	lapFont = new BitmapFont();
-	timeFont = new BitmapFont();
+	lapOneFont = new BitmapFont();
+	lapTwoFont = new BitmapFont();
+	lapThreeFont = new BitmapFont();
+	finalTimeFont = new BitmapFont();
+	speedFont = new BitmapFont();
+	gaugeTexture = new Texture("Race/gaugeCluster.png");
+	gaugeSprite = new Sprite(gaugeTexture);
+	gaugeSprite.setSize(gaugeSprite.getWidth()*.75f, gaugeSprite.getHeight()*.75f);
 	frameCount = 0;
+	bigFrameCount = 0;
 }
 
 
@@ -106,8 +128,16 @@ public void render(float delta) {
      renderer.render();
      batch.begin();
      player.draw(batch);
-     lapFont.draw(batch, lap + "/3\nFPS: " + Gdx.graphics.getFramesPerSecond(), player.getX()-450, player.getY()-300);
-     timeFont.draw(batch, lapOneTime + "\n" + lapTwoTime + "\n" + lapThreeTime, player.getX()-350, player.getY()-300);
+     gaugeSprite.setPosition(0, 0);
+     
+     gaugeSprite.draw(batch);
+     lapFont.draw(batch, lap + "/3 ", player.getX()-530, player.getY()-287);
+     lapOneFont.draw(batch, lapOneTime, w/30 + 5, h/4 - 5);
+     lapTwoFont.draw(batch, lapTwoTime, w/30 + 5, h/4 -30);
+     lapThreeFont.draw(batch, lapThreeTime, w/30 + 5, h/4 - 55);
+     finalTimeFont.draw(batch, finalTime, w/30 + 5, h/4 - 80);
+     double speed = player.getSpeed() * (9/2f);
+     speedFont.draw(batch,new String("" + (int)speed + "MPH"), 200, 200);
      if (road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("blocked")) {
     	 player.setSpeed(0);
     	 player.moveAfterCollision();
@@ -138,20 +168,30 @@ public void render(float delta) {
     		{
     		int min = frameCount / 3600 ;
 			int sec = (frameCount %  3600) / 60;
-			lapOneTime = min + ":" + sec;
+			
+			if (sec < 10) lapOneTime = "1: " + min + ":0" + sec;
+			else lapOneTime = "1: " + min + ":" + sec;
     		}
     	else if (lap == 2)
     		{
     		int min = frameCount / 3600 ;
 			int sec = (frameCount %  3600) / 60;
-			lapTwoTime = min + ":" + sec;
+			if (sec < 10) lapTwoTime = "2: " + min + ":0" + sec;
+			else lapTwoTime = "2: " + min + ":" + sec;
     		}
-    	else if (lap == 3) 
+    	
+    	else if (lap >= 3) 
     		{
-    		int min = frameCount / 3600 ;
+    		int fmin = bigFrameCount / 3600 ;
+			int fsec = (bigFrameCount %  3600) / 60;
+			int min = frameCount / 3600 ;
 			int sec = (frameCount %  3600) / 60;
-			lapThreeTime = min + ":" + sec;
+			if (sec < 10) lapThreeTime = "3: " + min + ":0" + sec;
+			else lapThreeTime = "3: " + min + ":" + sec;
+			if (fsec < 10) finalTime = "3: " + min + ":0" + sec;
+			else finalTime = "3: " + fmin + ":" + fsec;
     		}
+    	
      	frameCount = 0;
     }
     if (checkpoint.getCell(playerPosition.x, playerPosition.y) != null) {
@@ -183,6 +223,7 @@ public void render(float delta) {
     }
    
     frameCount++;
+    bigFrameCount++;
 }
 
 
@@ -219,7 +260,7 @@ public void initAssetManager()
 {
 	manager = new AssetManager();
 	manager.load("Race/car1.png", Texture.class);
-	
+	manager.load("Race/gaugeCluster.png", Texture.class);
 	manager.finishLoading();
 }
 
