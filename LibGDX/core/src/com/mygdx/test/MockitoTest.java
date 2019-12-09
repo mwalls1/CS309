@@ -39,7 +39,7 @@ public class MockitoTest {
 	@Mock
 	Goon goon;
 	@Mock
-	Map map;
+	lvlOne map;
 	@Mock
 	Checkpoint check1;
 	

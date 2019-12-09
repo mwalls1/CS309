@@ -102,13 +102,13 @@ public class Goon {
     		sprite.setY(y);
     		midX = (2*x + width)/2;
         	midY = (2*y + height)/2;
-    		update(player, walls, time, batch);
     		elapsed+=Gdx.graphics.getDeltaTime();
+    		update(player, walls, time, batch);
     	}
     	
     }
 
-	public void update(Character player, TiledMapTileLayer walls, float time, SpriteBatch batch) {
+	private void update(Character player, TiledMapTileLayer walls, float time, SpriteBatch batch) {
 		if (active) {
 			isMoving = true;
 			if (left) {

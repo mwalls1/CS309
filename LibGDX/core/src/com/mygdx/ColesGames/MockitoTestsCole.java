@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
  * @author Cole Weitzel
  *
  */
-public class MockitoTests {
+public class MockitoTestsCole {
 	
-	/** --------------------------
-	 * Mockito tests
-	 -------------------------- */
+	/**
+	 * Mockito tests for DEMO 4
+	 */
 	@Test
 	public void mockCheckGameWon() {
 		Zone[][] zones = new Zone[6][7];
@@ -60,5 +60,22 @@ public class MockitoTests {
 		z[0][3].setTile("red");
 		
 		assertTrue(game.checkGameOver(z));
+	}
+	
+	/**
+	 * Mockito Tests for DEMO 5
+	 */
+	
+	@Test
+	public void findLowestTileTest() {
+		int[] arr1 = { 4, 3 };
+		int[] arr2 = { 0, 3 };
+		ConnectFour game = mock(ConnectFour.class);
+		game.createZones();
+		when(game.findLowestTile(arr1)).thenReturn(arr2);
+		when(game.findLowestTile(arr2)).thenReturn(arr2);
+		
+		assertEquals(arr2, game.findLowestTile(arr1));
+		assertEquals(arr2, game.findLowestTile(arr2));
 	}
 }

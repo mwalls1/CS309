@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.mygdx.games.GameTest;
 import com.mygdx.gui.MainScreen;
 import com.mygdx.maptest.MapTest;
-import com.mygdx.platformer.Map;
+import com.mygdx.platformer.lvlOne;
 import com.mygdx.ticktacktoe.Runner;
 
 public class MyGdxGame extends Game {

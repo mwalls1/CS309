@@ -13,7 +13,8 @@ import com.mygdx.ColesGames.Checkers;
 import com.mygdx.ColesGames.Drop;
 import com.mygdx.ColesGames.SelectScreen;
 import com.mygdx.games.GameTest;
-import com.mygdx.platformer.Map;
+import com.mygdx.platformer.Platformer;
+import com.mygdx.platformer.lvlOne;
 import com.mygdx.space.Space;
 import com.mygdx.ticktacktoe.Runner;
 
@@ -202,7 +203,7 @@ public class SinglePlayerGameSelectScreen extends Game implements Screen{
         	@Override
         	public void clicked(InputEvent event, float x, float y) {
         		dispose();
-        		game.setScreen(new Map(game));
+        		game.setScreen(new Platformer(game));
         		
         	}
         });
