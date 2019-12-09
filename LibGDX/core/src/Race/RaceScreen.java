@@ -137,7 +137,7 @@ public void render(float delta) {
      lapThreeFont.draw(batch, lapThreeTime, w/30 + 5, h/4 - 55);
      finalTimeFont.draw(batch, finalTime, w/30 + 5, h/4 - 80);
      double speed = player.getSpeed() * (9/2f);
-     speedFont.draw(batch,new String("" + (int)speed + "MPH"), 200, 200);
+     speedFont.draw(batch,new String("" + (int)speed + "MPH"), player.getX()-540, player.getY()-330);
      if (road.getCell(playerPosition.x, playerPosition.y).getTile().getProperties().containsKey("blocked")) {
     	 player.setSpeed(0);
     	 player.moveAfterCollision();

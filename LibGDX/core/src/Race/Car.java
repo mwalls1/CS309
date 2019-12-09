@@ -30,7 +30,7 @@ public class Car {
 		sprite = new Sprite(texture);
 		speed = 0;
 		acceleration = 0.1f;
-		deceleration = 0.15f;
+		deceleration = 0.1f;
 		angle = 90;
 		topSpeed = 20;
 	}
