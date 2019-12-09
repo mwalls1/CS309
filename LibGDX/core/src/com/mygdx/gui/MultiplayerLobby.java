@@ -536,6 +536,7 @@ public class MultiplayerLobby extends Game implements Screen {
 						|| MultiplayerLobby.this.players.get(2).getText().toString().equals(Constants.user)
 						|| MultiplayerLobby.this.players.get(3).getText().toString().equals(Constants.user))
 					//Start the game
+					this.dispose();
 					if (topVoteLabel.getText().contains("Game 1")) game.setScreen(new GameTest(game));
 					if (topVoteLabel.getText().contains("Game 2")) game.setScreen(new ConnectFour(game,-1));
 			}

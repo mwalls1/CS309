@@ -129,7 +129,7 @@ public class ConnectFour extends Game implements Screen {
 		
 		
 		// for difficulty = -1 is online PvP
-		if(difficulty == -1 && !isGameOver && !animate) difficulty0nline();
+		if(difficulty == -1 && !isGameOver /*&& !animate*/) difficulty0nline();
 		
 		// for difficulty = 0 is PvP
 		else if(difficulty == 0 && !isGameOver && !animate) difficulty0();
@@ -199,8 +199,6 @@ public class ConnectFour extends Game implements Screen {
 
 				@Override
 				public void onError(Exception e) {
-//					cc.close();
-//					connect();
 					e.printStackTrace();
 					System.out.println("onError: "+e.getMessage());
 				}

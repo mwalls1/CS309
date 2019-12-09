@@ -36,6 +36,8 @@ public class CheckerPiece {
 	
 	public ArrayList<Sprite> getPossibleMoveSprites(){ return possibleMoveSprites;}
 	
+	public boolean isKing() {return king;}
+	
 	public Sprite updateSkin() {
 		if(value == 1) {
 			if(!king) {
@@ -61,6 +63,8 @@ public class CheckerPiece {
 		checker.setPosition((float) ((position[0])*74.5+3+(new Random().nextInt(11)+3)), (float) (position[1]*74.0+(new Random().nextInt(11)+3)));
 		return checker;
 	}
+	
+	public void kingMe() {king = true;}
 	
 	public void setPossibleMoves(ArrayList<int[]> arr){
 		possibleMoves = arr;
