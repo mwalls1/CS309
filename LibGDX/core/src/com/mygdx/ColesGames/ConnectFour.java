@@ -135,7 +135,7 @@ public class ConnectFour extends Game implements Screen {
 //		else playerRedORYellow = true;
 		
 		// check if the game has been won by either player
-		if(!isGameOver) isGameOver = checkGameOver();
+		if(!isGameOver) isGameOver = checkGameOver(zones);
 		
 		// handle the user pressing and place their tile
 		if (difficulty > 0 && Gdx.input.justTouched() && !isGameOver && playerRedORYellow && !animate) placeUserTile();
@@ -511,6 +511,10 @@ public class ConnectFour extends Game implements Screen {
 	
 	/**
 	 * returns the lowest row that is not active
+	 * @param arr
+	 * 			index 0 is row, index 1 is column
+	 * @return
+	 * 			return array is the same format as parameter
 	 */
 	public int[] findLowestTile(int[] arr) {
 		if (arr[0] == 0)
@@ -563,8 +567,12 @@ public class ConnectFour extends Game implements Screen {
 	 * returns true if the game is over
 	 * assigns the value of the private variable winner
 	 * with the output string for when game is won
+	 * @param z
+	 * 			used for mocking to check method
+	 * @return
+	 * 			return true for game over
 	 */
-	public boolean checkGameOver() {
+	public boolean checkGameOver(Zone[][] z) {
 		int row, col;
 		if(isGameOver == true) return false;
 		

@@ -127,6 +127,7 @@ public boolean isIntact()
 /**
  * Tests if asteroid has collided with a player or player's fire
  * @param coll
+ * 			sprite
  */
 public void collision(Sprite coll)
 {
