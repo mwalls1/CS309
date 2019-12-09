@@ -56,10 +56,20 @@ public class ConnectFour extends Game implements Screen {
 	private boolean animate;
 	private int[] lowest;
 	
+	/**
+	 * Creates a connect four game by calling the create method
+	 */
 	public ConnectFour() {
 		create();
 	}
 
+	/**
+	 * Creates a connect four game by calling the create method
+	 * @param game
+	 * 			given game to use
+	 * @param diff
+	 * 			-1 for multiplayer, 0 for PvP, 1 for random AI, 2 for medium AI, 3 for hard AI
+	 */
 	public ConnectFour(Game game, int diff) {
 		this.game = game;
 		difficulty = diff;
@@ -69,7 +79,8 @@ public class ConnectFour extends Game implements Screen {
 	}
 
 	/**
-	 * initializes all necessary components for the game
+	 * Initializes all necessary components for the game
+	 * Set screen size, creates the zones, sprites and other private variables
 	 */
 	@Override
 	public void create() {
@@ -107,7 +118,9 @@ public class ConnectFour extends Game implements Screen {
 	}
 
 	/**
-	 * Updates game status
+	 * Updates game status each frame
+	 * Handles wait time for the AI, and user input from the mouse and keyboard
+	 * Calls appropriate methods for each difficulty
 	 */
 	@Override
 	public void render(float delta) {
@@ -122,7 +135,7 @@ public class ConnectFour extends Game implements Screen {
 //		else playerRedORYellow = true;
 		
 		// check if the game has been won by either player
-		if(!isGameOver) isGameOver = checkGameOver(zones);
+		if(!isGameOver) isGameOver = checkGameOver();
 		
 		// handle the user pressing and place their tile
 		if (difficulty > 0 && Gdx.input.justTouched() && !isGameOver && playerRedORYellow && !animate) placeUserTile();
@@ -145,7 +158,7 @@ public class ConnectFour extends Game implements Screen {
 	}
 	
 	/**
-	 * place user tile
+	 * Place a tile for the red player for AI modes
 	 */
 	private void placeUserTile() {
 		if(playerRedORYellow) {
@@ -166,6 +179,9 @@ public class ConnectFour extends Game implements Screen {
 		}
 	}
 	
+	/**
+	 * connect to the web socket for online games
+	 */
 	private void connect() {
     	try {
     		
@@ -215,6 +231,7 @@ public class ConnectFour extends Game implements Screen {
 	
 	/**
 	 * OnlinePvP
+	 * Uses the already connected web socket to send data back and forth from player to player
 	 */
 	private void difficulty0nline(){
 		if ((Gdx.input.justTouched() || receiveMousex > 0) && !isGameOver) {
@@ -262,6 +279,7 @@ public class ConnectFour extends Game implements Screen {
 
 	/**
 	 * PvP play
+	 * used to handle input from the screen for player versus player mode
 	 */
 	private void difficulty0() {
 		if (Gdx.input.justTouched() && !isGameOver) {
@@ -305,7 +323,7 @@ public class ConnectFour extends Game implements Screen {
 	}
 	
 	/**
-	 * logic for difficulty 2
+	 * AI tries to place a tile off of an already placed tile to create a line
 	 */
 	private void difficulty2() {
 		int numOfYellow = 0;
@@ -387,7 +405,8 @@ public class ConnectFour extends Game implements Screen {
 	}
 	
 	/**
-	 * logic for difficulty 3
+	 * Not currently implemented
+	 * The AI would be able to keep track of previous moves and place a tile off of that to make a line to win
 	 */
 	private void difficulty3() {
 		difficulty2();
@@ -412,6 +431,11 @@ public class ConnectFour extends Game implements Screen {
 //		return "";
 //	}
 	
+	/**
+	 * used to set the status of the AI tile, finds the lowest tile in the given column
+	 * @param r
+	 * @param c
+	 */
 	private void setPlayerYellow(int r, int c) {
 		lowest = findLowestTile(new int[] {5, c});
 //		System.out.println("index: 5 " + c + " lowest: " + this.lowest[0] + " " + this.lowest[1]);
@@ -455,6 +479,11 @@ public class ConnectFour extends Game implements Screen {
 		batch.end();
 	}
 	
+	/**
+	 * actually animate the tile down the screen
+	 * @param color
+	 * 			given color of the tile to be moved down the screen, red or yellow
+	 */
 	private void animateTile(String color) {
 		if(color.equals("yellow")) {
 			if(spriteMoveYellow.getY() < zones[lowest[0]][lowest[1]].getY()) {
@@ -515,7 +544,7 @@ public class ConnectFour extends Game implements Screen {
 	}
 
 	/**
-	 * checks whether the escape key was pressed to end the game
+	 * Handles keyboard input to change game status
 	 */
 	private void handleKeys() {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
@@ -535,7 +564,7 @@ public class ConnectFour extends Game implements Screen {
 	 * assigns the value of the private variable winner
 	 * with the output string for when game is won
 	 */
-	public boolean checkGameOver(Zone[][] z) {
+	public boolean checkGameOver() {
 		int row, col;
 		if(isGameOver == true) return false;
 		
