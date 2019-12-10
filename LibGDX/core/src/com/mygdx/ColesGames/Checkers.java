@@ -27,7 +27,7 @@ import util.JsonParser;
 
 /**
  * Checkers
- * @author Cole Weitzel
+ * @author Taylor Weil
  *
  */
 public class Checkers extends Game implements Screen {
@@ -48,7 +48,6 @@ public class Checkers extends Game implements Screen {
 	boolean doubleJump;	
 	boolean received;
 	private WebSocketClient cc;
-
 	
 	private String[] colors = {"red","yellow","posMove"};
 	private HashMap<String,ArrayList<CheckerPiece>> pieces = new HashMap<String,ArrayList<CheckerPiece>>();
@@ -84,13 +83,11 @@ public class Checkers extends Game implements Screen {
 		//Initialize Colors
 		for (String color : colors) pieces.put(color, new ArrayList<CheckerPiece>());
 		setBoard();
-		
 		batch = new SpriteBatch();
 	}
 	
 	private void connect() {
     	try {
-    		
     		Draft[] drafts = { new Draft_6455() };
     		String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
 			cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
@@ -166,6 +163,7 @@ public class Checkers extends Game implements Screen {
 		
 		if (moveAbility == 0) //If it is your turn (online) and there are no moves left
 			System.out.println("Game is over");
+		
 		if (moveAbility == 2) doubleJump = true;
 		
 		if (Gdx.input.justTouched() && (isTurn || Constants.playerNumber == 0)) {

@@ -64,7 +64,11 @@ public class CheckerPiece {
 		return checker;
 	}
 	
-	public void kingMe() {king = true;}
+	public void kingMe() {
+		king = true;
+		if (value == 1) checker.setTexture(new Texture("redCircleKing.png"));
+		else checker.setTexture(new Texture("yellowCircleKing.png"));
+	}
 	
 	public void setPossibleMoves(ArrayList<int[]> arr){
 		possibleMoves = arr;
