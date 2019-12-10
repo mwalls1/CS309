@@ -10,17 +10,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.mygdx.objects.*;
+
 public class JsonParser {
-	
-	public static ArrayList<userInfo> parseUserInfo(String s){
+
+	public static ArrayList<userInfo> parseUserInfo(String s) {
 		ArrayList<userInfo> users = new ArrayList<userInfo>();
-		s = s.substring(2, s.length()-2);
-		
+		s = s.substring(2, s.length() - 2);
+
 		s = s.replace("}", "-").replace("{", "-");
 		System.out.println(s);
 		String[] arr = s.split("-,-");
 		for (int i = 0; i < arr.length; i++) {
-			arr[i] = arr[i].substring(1, arr[i].length()-1);
+			arr[i] = arr[i].substring(1, arr[i].length() - 1);
 			userInfo user = new userInfo();
 			String[] sarr = arr[i].split(",");
 			user.setId(Integer.getInteger(sarr[0].split(":")[1]));
@@ -30,14 +31,14 @@ public class JsonParser {
 		}
 		return users;
 	}
-	
-	public static ArrayList<score> parseScore(String s){
+
+	public static ArrayList<score> parseScore(String s) {
 		ArrayList<score> scores = new ArrayList<score>();
-		s = s.substring(2, s.length()-2);
+		s = s.substring(2, s.length() - 2);
 		s = s.replace("}", "-").replace("{", "-");
 		String[] arr = s.split("-,-");
 		for (int i = 0; i < arr.length; i++) {
-			arr[i] = arr[i].substring(1, arr[i].length()-1);
+			arr[i] = arr[i].substring(1, arr[i].length() - 1);
 			score sc = new score();
 			String[] sarr = arr[i].split(",");
 			sc.setId(Integer.getInteger(sarr[0].split(":")[1]));
@@ -49,7 +50,7 @@ public class JsonParser {
 		}
 		return scores;
 	}
-	
+
 	public static String getHTML(String urlToRead) throws Exception {
 		StringBuilder result = new StringBuilder();
 		URL url = new URL(urlToRead);
@@ -63,35 +64,34 @@ public class JsonParser {
 		rd.close();
 		return result.toString();
 	}
-	
-	public static boolean sendHTML(String methurd, String para) throws Exception{
+
+	public static boolean sendHTML(String methurd, String para) throws Exception {
 		String urlToSend = "http://coms-309-tc-1.misc.iastate.edu:8080/" + methurd + "?";
 		URL url = new URL(urlToSend);
 		String urlParameters = para;
 		byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
-		HttpURLConnection conn =  (HttpURLConnection) url.openConnection();
-        conn.setDoOutput(true);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setDoOutput(true);
 		conn.setRequestMethod("POST");
 		try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
-            wr.write(postData);
-        }
+			wr.write(postData);
+		}
 		StringBuilder content;
-		try (BufferedReader in = new BufferedReader(
-                new InputStreamReader(conn.getInputStream()))) {
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
 
-            String line;
-            content = new StringBuilder();
+			String line;
+			content = new StringBuilder();
 
-            while ((line = in.readLine()) != null) {
-                content.append(line);
-                content.append(System.lineSeparator());
-            }
-        }
+			while ((line = in.readLine()) != null) {
+				content.append(line);
+				content.append(System.lineSeparator());
+			}
+		}
 
-        System.out.println(content.toString());
+		System.out.println(content.toString());
 		conn.disconnect();
 
 		return true;
 	}
-	
+
 }

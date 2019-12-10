@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Ram implements Ship{
+public class Ram implements Ship {
 	private Texture texture;
 	private Texture damagedTexture;
 	private Sprite sprite;
@@ -17,38 +17,38 @@ public class Ram implements Ship{
 	private boolean shotFired;
 	private Random rand;
 	private float speed;
+
 	/*
 	 * Creates new ship at default position; used for debugging
 	 */
-	public Ram(AssetManager manager)
-	{
+	public Ram(AssetManager manager) {
 		rand = new Random();
 		texture = manager.get("enemy2.png");
 		damagedTexture = manager.get("enemy2damaged.png");
-		
+
 		sprite = new Sprite(texture);
-		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()-50);
+		sprite.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() - 50);
 		alive = true;
 		health = 4;
 		speed = rand.nextInt();
 	}
+
 	/*
 	 * Creates new ship at a given x position
 	 */
-	public Ram(float xPos, AssetManager manager)
-	{
+	public Ram(float xPos, AssetManager manager) {
 		rand = new Random();
 		texture = manager.get("assets/enemy2.png");
 		damagedTexture = manager.get("assets/enemy2damaged.png");
-		
+
 		sprite = new Sprite(texture);
 		sprite.setPosition(xPos, Gdx.graphics.getHeight());
 		alive = true;
 		health = 4;
 		shotFired = false;
-		speed = rand.nextFloat()+2;
+		speed = rand.nextFloat() + 2;
 	}
-	
+
 	@Override
 	/*
 	 * Returns ship sprite
@@ -92,8 +92,7 @@ public class Ram implements Ship{
 
 	@Override
 	public void collision(Sprite coll) {
-		if (Math.abs(sprite.getX() - coll.getX()) < 25 && Math.abs(sprite.getY() - coll.getY()) < 10 && isAlive())
-		{
+		if (Math.abs(sprite.getX() - coll.getX()) < 25 && Math.abs(sprite.getY() - coll.getY()) < 10 && isAlive()) {
 			coll.setPosition(0, 0);
 			Space.shotsLanded++;
 			health--;
@@ -102,9 +101,9 @@ public class Ram implements Ship{
 				float y = sprite.getY();
 				sprite.setTexture(damagedTexture);
 				sprite.setPosition(x, y);
-			}
-			else if(health == 0) destroy();
-		}				
+			} else if (health == 0)
+				destroy();
+		}
 	}
 
 	@Override
@@ -119,13 +118,12 @@ public class Ram implements Ship{
 
 	@Override
 	public void move() {
-		sprite.translateY(-1*speed);
+		sprite.translateY(-1 * speed);
 		System.out.println(speed);
-		
-		if (sprite.getY() < 1)
-			{
+
+		if (sprite.getY() < 1) {
 			sprite.setY(Gdx.graphics.getHeight());
-			}
+		}
 	}
 
 	@Override
@@ -140,7 +138,7 @@ public class Ram implements Ship{
 		Space.enemiesKilled++;
 		sprite.setPosition(0, 0);
 		sprite.setAlpha(0);
-		Space.accuracy = Space.shotsLanded/Space.shotsTaken; 
+		Space.accuracy = Space.shotsLanded / Space.shotsTaken;
 	}
 
 	@Override
@@ -154,13 +152,11 @@ public class Ram implements Ship{
 		return true;
 	}
 
-	public void dispose()
-	{
-		//Wow, look! Nothing!
+	public void dispose() {
+		// Wow, look! Nothing!
 	}
-	
-	public String getType()
-	{
+
+	public String getType() {
 		return "Ram";
 	}
 }

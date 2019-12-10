@@ -1,7 +1,5 @@
 package com.mygdx.maptest;
 
-
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -24,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import util.Constants;
 
-public class MapTest extends Game implements Screen{
+public class MapTest extends Game implements Screen {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private Skin skin;
@@ -40,31 +38,31 @@ public class MapTest extends Game implements Screen{
 	private TiledMapTileLayer terrain;
 	private TiledMapTileLayer walls;
 	private MapLayers mapLayers;
-	
-	public MapTest(Game game)
-	{
+
+	public MapTest(Game game) {
 		this.game = game;
-		camera = new OrthographicCamera(1920/2,1080/2);
+		camera = new OrthographicCamera(1920 / 2, 1080 / 2);
 		create();
 	}
+
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(stage);
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		 Gdx.gl.glClearColor(0, 0, 0, 0);
-	     Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	     camera.update();
+		Gdx.gl.glClearColor(0, 0, 0, 0);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		camera.update();
 
-	     renderer.setView(camera);
-	     renderer.render();
-	     stage.draw();
-		 
+		renderer.setView(camera);
+		renderer.render();
+		stage.draw();
+
 	}
 
 	@Override
@@ -75,19 +73,19 @@ public class MapTest extends Game implements Screen{
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -95,22 +93,20 @@ public class MapTest extends Game implements Screen{
 		// TODO Auto-generated method stub
 		stage.dispose();
 	}
-	
 
-	
 	@Override
 	public void create() {
 		Gdx.graphics.setResizable(false);
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-        stage = new Stage();
-        map = new TmxMapLoader().load("testMap.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
-        mapLayers = map.getLayers();
-        terrain = (TiledMapTileLayer)mapLayers.get("terrain");
-        walls = (TiledMapTileLayer)mapLayers.get("walls");
-        Gdx.input.setInputProcessor(stage);
+		stage = new Stage();
+		map = new TmxMapLoader().load("testMap.tmx");
+		renderer = new OrthogonalTiledMapRenderer(map);
+		mapLayers = map.getLayers();
+		terrain = (TiledMapTileLayer) mapLayers.get("terrain");
+		walls = (TiledMapTileLayer) mapLayers.get("walls");
+		Gdx.input.setInputProcessor(stage);
 
 	}
 

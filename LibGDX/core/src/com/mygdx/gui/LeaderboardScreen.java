@@ -68,7 +68,6 @@ public class LeaderboardScreen extends Game implements Screen {
 		stage.dispose();
 	}
 
-
 	@Override
 	public void create() {
 //		batch = new SpriteBatch();
@@ -79,7 +78,7 @@ public class LeaderboardScreen extends Game implements Screen {
 		 * LEADERBOARD DISPLAY
 		 */
 		TextArea textField = new TextArea("text", skin, "default");
-		
+
 		try {
 //			String s = "[{\"id\":29,\"name\":\"tay2\",\"password\":\"newpass\"},{\"id\":28,\"name\":\"tay\",\"password\":\"newpass\"},{\"id\":14,\"name\":\"name3\",\"password\":\"newpass\"},{\"id\":6,\"name\":\"taylor\",\"password\":\"pw\"},{\"id\":15,\"name\":\"name1\",\"password\":\"newpass\"},{\"id\":13,\"name\":\"name2\",\"password\":\"newpass\"}]";
 			String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getScores");
@@ -87,10 +86,10 @@ public class LeaderboardScreen extends Game implements Screen {
 			ArrayList<score> scores = JsonParser.parseScore(s2);
 			System.out.println(scores.get(0).getScore());
 			for (score sc : scores) {
-				userString = userString.concat(sc.getName()+":"+sc.getScore()+"\n");
+				userString = userString.concat(sc.getName() + ":" + sc.getScore() + "\n");
 			}
 			textField = new TextArea(userString, skin, "default");
-		
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,7 +120,8 @@ public class LeaderboardScreen extends Game implements Screen {
 		final TextButton refresh = new TextButton("Refresh", skin, "default");
 		refresh.setWidth(Constants.BUTTON_WIDTH);
 		refresh.setHeight(Constants.BUTTON_HEIGHT);
-		refresh.setPosition(Gdx.graphics.getWidth() - Constants.BUTTON_WIDTH, Gdx.graphics.getHeight() - Constants.BUTTON_HEIGHT);
+		refresh.setPosition(Gdx.graphics.getWidth() - Constants.BUTTON_WIDTH,
+				Gdx.graphics.getHeight() - Constants.BUTTON_HEIGHT);
 		refresh.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -130,9 +130,9 @@ public class LeaderboardScreen extends Game implements Screen {
 				game.setScreen(new LeaderboardScreen(game));
 			}
 		});
-		
+
 		/*
-		 * UPDATE DISPLAY 
+		 * UPDATE DISPLAY
 		 */
 		stage.addActor(backButton);
 		stage.addActor(textField);

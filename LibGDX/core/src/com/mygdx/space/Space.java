@@ -22,7 +22,7 @@ import com.mygdx.gui.MainScreen;
 
 import util.Constants;
 
-public class Space extends Game implements Screen{
+public class Space extends Game implements Screen {
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private Game game;
@@ -35,7 +35,7 @@ public class Space extends Game implements Screen{
 	public static double shotsLanded = 0;
 	private PlayerShip player;
 	private boolean shotPressed;
-	private  Random rand = new Random();	
+	private Random rand = new Random();
 	private final int LAST_LEVEL = 7;
 	private Stage stage;
 	public static double accuracy;
@@ -49,126 +49,127 @@ public class Space extends Game implements Screen{
 	public static boolean gameOver;
 	private boolean isPaused;
 	private AssetManager manager;
-	
-	
+
 	/**
 	 * Main screen with play, options and leaderboard buttons
-	 * @param game game object, we use Game's setScreen() method to switch between different screens
+	 * 
+	 * @param game game object, we use Game's setScreen() method to switch between
+	 *             different screens
 	 */
 
-	public Space(Game game)
-	{
+	public Space(Game game) {
 		this.game = game;
 	}
+
 	/**
 	 * From screen interface, called when this screen is set
 	 */
 	public void show() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	/**
 	 * Runs every frame, draws updated stage and sets background color
 	 */
 	public void render(float delta) {
-		handleInput(delta); //Get input from keyboard
+		handleInput(delta); // Get input from keyboard
 		batch = new SpriteBatch();
-		 Gdx.gl.glClearColor((float)4/255, (float)7/255, (float)40/255, 1); //Color of background
-	     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //Don't know why but you need this	     
-	     
-	     enemies = level.getShips(); //Array of enemy ships determined by current level
-	     
-	     batch.begin(); //Start drawing
-	     
-	     if (Gdx.input.isKeyPressed(Keys.R)) create(); //Reset; for debugging only
-	     player.draw(batch);
-	     
-		 enemies[rand.nextInt(enemies.length)].shoot(batch); //Chooses a random enemy to attempt to fire every frame
-		 
-		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) { //Handles logic for streak of hitting asteroids
+		Gdx.gl.glClearColor((float) 4 / 255, (float) 7 / 255, (float) 40 / 255, 1); // Color of background
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Don't know why but you need this
+
+		enemies = level.getShips(); // Array of enemy ships determined by current level
+
+		batch.begin(); // Start drawing
+
+		if (Gdx.input.isKeyPressed(Keys.R))
+			create(); // Reset; for debugging only
+		player.draw(batch);
+
+		enemies[rand.nextInt(enemies.length)].shoot(batch); // Chooses a random enemy to attempt to fire every frame
+
+		if (!asteroid.isIntact() && enemiesKilled < 3 && asteroidsShot < 4) { // Handles logic for streak of hitting
+																				// asteroids
 			asteroid = new Asteroid(asteroidsShot, levelNum, manager);
 		}
-		 
-		 if (asteroid.isIntact()) //Move asteroid as long as it is intact
-		 {
-			 asteroid.draw(batch);
-			 asteroid.move(asteroid.getDir(), 0);
-			
-		 }
-	     for (int i = 0; i < enemies.length; i++) 
-	     {
-	    	 if (enemies[i].getType() == "Captain") enemies[i].shoot(batch); //Calls captain's shoot method every frame
-	    	 if (enemies[i].isShotFired()) {
-	    		 player.collision(enemies[i].getShot()); //Continue moving ship's fire if ship has fired
-	    	 }
-	    	 if (enemies[i].isAlive())
-	    		 {
-	    		 	enemies[i].draw(batch);
-	    		 	enemies[i].move();
-	    		 }
-	    	 if (enemies[i].isShotFired()) enemies[i].shoot(batch);
-	     }
-	    	
-	 
-	  
-	    
-	    if (shotPressed) //Handles logic of player ship's fire
-	    {
-	    	player.shoot(batch);
-	    	for (int j = 0; j < enemies.length; j++) //Checks for collisions of player shots with asteroids and enemy ships
-	    	{
-	    		enemies[j].collision(player.getShotOneSprite());
-	    		enemies[j].collision(player.getShotTwoSprite());
-	    		asteroid.collision(player.getShotOneSprite());
-	    		asteroid.collision(player.getShotTwoSprite());
-	    	}
-	    }
-	     
-	   if (shotsTaken ==0 || shotsLanded == 0) accuracy = 0;
-	    
-	    double accToDisplay = accuracy * 100;
-	     font.draw(batch, "Score\n" + score + "\nStage: "+ levelNum + "\nAccuracy: " + (int)accToDisplay + "%\n" + Gdx.graphics.getFramesPerSecond() + " FPS", 20, 200); //Draws player info
-	     batch.end(); //Stop drawing
-		
-	     if (isComplete()) //If level has been finished
-	     {
-	    	 asteroidsShot = 0; //Reset asteroid streak counter
-	    	 enemiesKilled = 0; //Reset kill count per level
-	    	 asteroid = new Asteroid(asteroidsShot, levelNum, manager); //Creates new asteroids for new level
-	    	 batch.begin(); //Start drawing
-	    	 int scoreAdded = (int)accuracy * 1000; 
-	    	 //TODO get this line to work 
-	    	 font.draw(batch, "Level " + levelNum + " complete! \nAccuracy Bonus: " + scoreAdded, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-	    	 
-	    	 
-	    	 score += (int)(accuracy * 1000); //Add accuracy bonus to score
-	    	 levelNum++; //Increment level
-	    	 shotsTaken = 0; //Reset for accuracy calculation
-	    	 shotsLanded = 0; //Reset for accuracy calculation
-	    	 //TODO implement real game exiting
-	    	 if (levelNum == LAST_LEVEL) game.setScreen(new MainScreen(game)); //Exits game if won
-	    	 level = new Level(levelNum, player, manager); //Create new level
-	    	 batch.end(); //Stop drawing
-	    	 dispose(); //Dispose unused textures
-	     }
-	     
-	     if (gameOver || isPaused)
-	     {
-	    	 Gdx.input.setCursorCatched(false);
-	    	 retryButton.setVisible(true);
-	    	 exitButton.setVisible(true);
-	    	 stage.act();
-	    	 stage.draw();
-	    	 
-	     }
-	     else if (!isPaused && !gameOver)
-	     {
-	    	 //Gdx.input.setCursorCatched(true);
-	    	 Gdx.input.setCursorPosition(Gdx.graphics.getWidth(), 0);
-	    	 retryButton.setVisible(false);
-	    	 exitButton.setVisible(false);
-	     }
+
+		if (asteroid.isIntact()) // Move asteroid as long as it is intact
+		{
+			asteroid.draw(batch);
+			asteroid.move(asteroid.getDir(), 0);
+
+		}
+		for (int i = 0; i < enemies.length; i++) {
+			if (enemies[i].getType() == "Captain")
+				enemies[i].shoot(batch); // Calls captain's shoot method every frame
+			if (enemies[i].isShotFired()) {
+				player.collision(enemies[i].getShot()); // Continue moving ship's fire if ship has fired
+			}
+			if (enemies[i].isAlive()) {
+				enemies[i].draw(batch);
+				enemies[i].move();
+			}
+			if (enemies[i].isShotFired())
+				enemies[i].shoot(batch);
+		}
+
+		if (shotPressed) // Handles logic of player ship's fire
+		{
+			player.shoot(batch);
+			for (int j = 0; j < enemies.length; j++) // Checks for collisions of player shots with asteroids and enemy
+														// ships
+			{
+				enemies[j].collision(player.getShotOneSprite());
+				enemies[j].collision(player.getShotTwoSprite());
+				asteroid.collision(player.getShotOneSprite());
+				asteroid.collision(player.getShotTwoSprite());
+			}
+		}
+
+		if (shotsTaken == 0 || shotsLanded == 0)
+			accuracy = 0;
+
+		double accToDisplay = accuracy * 100;
+		font.draw(batch, "Score\n" + score + "\nStage: " + levelNum + "\nAccuracy: " + (int) accToDisplay + "%\n"
+				+ Gdx.graphics.getFramesPerSecond() + " FPS", 20, 200); // Draws player info
+		batch.end(); // Stop drawing
+
+		if (isComplete()) // If level has been finished
+		{
+			asteroidsShot = 0; // Reset asteroid streak counter
+			enemiesKilled = 0; // Reset kill count per level
+			asteroid = new Asteroid(asteroidsShot, levelNum, manager); // Creates new asteroids for new level
+			batch.begin(); // Start drawing
+			int scoreAdded = (int) accuracy * 1000;
+			// TODO get this line to work
+			font.draw(batch, "Level " + levelNum + " complete! \nAccuracy Bonus: " + scoreAdded,
+					Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+
+			score += (int) (accuracy * 1000); // Add accuracy bonus to score
+			levelNum++; // Increment level
+			shotsTaken = 0; // Reset for accuracy calculation
+			shotsLanded = 0; // Reset for accuracy calculation
+			// TODO implement real game exiting
+			if (levelNum == LAST_LEVEL)
+				game.setScreen(new MainScreen(game)); // Exits game if won
+			level = new Level(levelNum, player, manager); // Create new level
+			batch.end(); // Stop drawing
+			dispose(); // Dispose unused textures
+		}
+
+		if (gameOver || isPaused) {
+			Gdx.input.setCursorCatched(false);
+			retryButton.setVisible(true);
+			exitButton.setVisible(true);
+			stage.act();
+			stage.draw();
+
+		} else if (!isPaused && !gameOver) {
+			// Gdx.input.setCursorCatched(true);
+			Gdx.input.setCursorPosition(Gdx.graphics.getWidth(), 0);
+			retryButton.setVisible(false);
+			exitButton.setVisible(false);
+		}
 	}
 
 	@Override
@@ -191,7 +192,7 @@ public class Space extends Game implements Screen{
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override
@@ -199,12 +200,11 @@ public class Space extends Game implements Screen{
 	 * Clears screen to free memory
 	 */
 	public void dispose() {
-		for (int i = 0; i<enemies.length; i++) enemies[i].dispose();
-		
+		for (int i = 0; i < enemies.length; i++)
+			enemies[i].dispose();
+		manager.dispose();
 	}
-	
 
-	
 	/**
 	 * Describes button functionality and position
 	 */
@@ -225,50 +225,52 @@ public class Space extends Game implements Screen{
 		level = new Level(levelNum, player, manager);
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		stage = new Stage();
-		
+
 		exitButton = new TextButton("Exit", skin, "default");
 		retryButton = new TextButton("Retry", skin, "default");
-		
-		exitButton.setPosition(Gdx.graphics.getWidth() /2 - Constants.BUTTON_WIDTH/2, Gdx.graphics.getHeight() / 2 - 2*Constants.BUTTON_OFFSET);
-		retryButton.setPosition(Gdx.graphics.getWidth() / 2 - Constants.BUTTON_WIDTH/2, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
-		
+
+		exitButton.setPosition(Gdx.graphics.getWidth() / 2 - Constants.BUTTON_WIDTH / 2,
+				Gdx.graphics.getHeight() / 2 - 2 * Constants.BUTTON_OFFSET);
+		retryButton.setPosition(Gdx.graphics.getWidth() / 2 - Constants.BUTTON_WIDTH / 2,
+				Gdx.graphics.getHeight() / 2 - 3 * Constants.BUTTON_OFFSET);
+
 		exitButton.setHeight(Constants.BUTTON_HEIGHT);
 		retryButton.setHeight(Constants.BUTTON_HEIGHT);
 		exitButton.setWidth(Constants.BUTTON_WIDTH);
 		retryButton.setWidth(Constants.BUTTON_WIDTH);
-		
-		
+
 		stage.addActor(exitButton);
 		stage.addActor(retryButton);
 		Gdx.input.setInputProcessor(stage);
-		
+
 		exitButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!exitButton.isVisible()) return;
+				if (!exitButton.isVisible())
+					return;
 				dispose();
 				game.setScreen(new MainScreen(game));
 			}
 		});
-		
+
 		retryButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!retryButton.isVisible()) return;
+				if (!retryButton.isVisible())
+					return;
 				dispose();
 				game.setScreen(new Space(game));
 			}
 		});
 
-		
 	}
+
 	/*
 	 * Handles input from keyboard
 	 */
-	private void handleInput(float deltaTime)
-	{
-		//TODO implement instructions for touch screen capability
-		if (Gdx.app.getType() != Application.ApplicationType.Desktop) //Ensures device is desktop
+	private void handleInput(float deltaTime) {
+		// TODO implement instructions for touch screen capability
+		if (Gdx.app.getType() != Application.ApplicationType.Desktop) // Ensures device is desktop
 		{
 			return;
 		}
@@ -277,50 +279,51 @@ public class Space extends Game implements Screen{
 			dispose();
 			create();
 		}
-		//Movement according to WASD, arrow keys, and space bar
-		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && sprite.getX() > 90) player.getSprite().translate(-sprMoveSpeed,0);
-		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && sprite.getX() < Gdx.graphics.getWidth()-100) player.getSprite().translate(sprMoveSpeed,0);
-		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50) player.getSprite().translate(0,sprMoveSpeed);
-		if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) && sprite.getY() > 5) player.getSprite().translate(0,-sprMoveSpeed);
-		if (Gdx.input.isKeyPressed(Keys.SPACE)) shotPressed = true;
-		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) 
-			{
-				isPaused = !isPaused;
-				
-			}
-		
-		
-		
+		// Movement according to WASD, arrow keys, and space bar
+		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && sprite.getX() > 90)
+			player.getSprite().translate(-sprMoveSpeed, 0);
+		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT))
+				&& sprite.getX() < Gdx.graphics.getWidth() - 100)
+			player.getSprite().translate(sprMoveSpeed, 0);
+		if ((Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.DPAD_UP)) && sprite.getY() < 50)
+			player.getSprite().translate(0, sprMoveSpeed);
+		if ((Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN)) && sprite.getY() > 5)
+			player.getSprite().translate(0, -sprMoveSpeed);
+		if (Gdx.input.isKeyPressed(Keys.SPACE))
+			shotPressed = true;
+		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+			isPaused = !isPaused;
+
+		}
+
 	}
-	
-	private void loadAssets()
-	{
+
+	private void loadAssets() {
+		manager.load("Space/largeAsteroid.png", Texture.class);
 		manager.load("Space/enemy1.png", Texture.class);
 		manager.load("Space/enemy2.png", Texture.class);
 		manager.load("Space/enemy2damaged.png", Texture.class);
 		manager.load("Space/enemy3.png", Texture.class);
 		manager.load("Space/enemy4.png", Texture.class);
 		manager.load("Space/goldenAsteroid.png", Texture.class);
-		manager.load("Space/largeAsteroid.png", Texture.class);
+
 		manager.load("Space/mediumAsteroid.png", Texture.class);
 		manager.load("Space/smallAsteroid.png", Texture.class);
 		manager.load("Space/ship.png", Texture.class);
 		manager.load("Space/shot.png", Texture.class);
-		
+
 		manager.finishLoading();
 	}
 
 	/*
 	 * Checks if level is complete
 	 */
-public boolean isComplete()
-{
-	for (int i = 0; i<enemies.length; i++) {
-		if (enemies[i].isAlive()) return false; //If one enemy is alive, returns false
+	public boolean isComplete() {
+		for (int i = 0; i < enemies.length; i++) {
+			if (enemies[i].isAlive())
+				return false; // If one enemy is alive, returns false
+		}
+		return true;
 	}
-	return true;
+
 }
-
-
-	}
-

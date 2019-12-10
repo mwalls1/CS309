@@ -24,11 +24,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.gui.MainScreen;
 
-
 import util.Constants;
 import util.JsonParser;
 
-public class GameTest extends Game implements Screen{
+public class GameTest extends Game implements Screen {
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private Stage stage;
@@ -56,18 +55,17 @@ public class GameTest extends Game implements Screen{
 	public ArrayList<Zombie> zombies = new ArrayList<Zombie>();
 	public ArrayList<Dragon> dragons = new ArrayList<Dragon>();
 	public ArrayList<Coin> coins = new ArrayList<Coin>();
-	//public serverThread thread = new serverThread();
-	Random randX = new Random(); //866
-	Random ranY = new Random(); //893
-    public  float randomX;
-    public float randomY;
-    private int player1id = 0;
-    private int player2id = 0;
-    private int player3id = 0;
-    private int player4id = 0;
-    
-	public GameTest(Game game)
-	{
+	// public serverThread thread = new serverThread();
+	Random randX = new Random(); // 866
+	Random ranY = new Random(); // 893
+	public float randomX;
+	public float randomY;
+	private int player1id = 0;
+	private int player2id = 0;
+	private int player3id = 0;
+	private int player4id = 0;
+
+	public GameTest(Game game) {
 		font = new BitmapFont();
 		this.game = game;
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
@@ -78,66 +76,70 @@ public class GameTest extends Game implements Screen{
 		walls = (TiledMapTileLayer) mapLayers.get("walls");
 		collision = (TiledMapTileLayer) mapLayers.get("blockage");
 		player = new Player(847, 54);
-		player2 = new Player(847,54);
-		player3 = new Player(847,54);
-		player4 = new Player(847,54);
+		player2 = new Player(847, 54);
+		player3 = new Player(847, 54);
+		player4 = new Player(847, 54);
 		blade = new Texture(Gdx.files.internal("blade.png"));
 		Texture zom = new Texture(Gdx.files.internal("zombie_idle_anim_f0.png"));
 		Texture wiz = new Texture(Gdx.files.internal("wizard.png"));
 		Texture asn = new Texture(Gdx.files.internal("daway.png"));
-		hazards.add(new Hazard(blade,872,240, camera));
-		hazards.add(new Hazard(blade,869,718, camera));
-		hazards.add(new Hazard(blade,639,737, camera));
-		hazards.add(new Hazard(blade,856,890, camera));
-		hazards.add(new Hazard(blade,737,868, camera));
-		hazards.add(new Hazard(blade,662,895, camera));
-		hazards.add(new Hazard(blade,401, 893, camera));
+		hazards.add(new Hazard(blade, 872, 240, camera));
+		hazards.add(new Hazard(blade, 869, 718, camera));
+		hazards.add(new Hazard(blade, 639, 737, camera));
+		hazards.add(new Hazard(blade, 856, 890, camera));
+		hazards.add(new Hazard(blade, 737, 868, camera));
+		hazards.add(new Hazard(blade, 662, 895, camera));
+		hazards.add(new Hazard(blade, 401, 893, camera));
 		shape = new ShapeRenderer();
-		for(int i = 0; i < 15; i ++)
-		{
-			randomX = randX.nextInt(866)+16;
-			randomY = randX.nextInt(893)+21;
-			while(walls.getCell((int)(((randomX))/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+16)/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+16)/16), (int)((randomY+16)/16))!=null||walls.getCell((int)((randomX)/16), (int)((randomY+16)/16))!=null)
-			{
-				randomX = randX.nextInt(866)+16;
-				randomY = randX.nextInt(893)+21;
+		for (int i = 0; i < 15; i++) {
+			randomX = randX.nextInt(866) + 16;
+			randomY = randX.nextInt(893) + 21;
+			while (walls.getCell((int) (((randomX)) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 16) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 16) / 16), (int) ((randomY + 16) / 16)) != null
+					|| walls.getCell((int) ((randomX) / 16), (int) ((randomY + 16) / 16)) != null) {
+				randomX = randX.nextInt(866) + 16;
+				randomY = randX.nextInt(893) + 21;
 			}
-			assassins.add(new Assassin(zom, (int)randomX, (int)randomY, camera));
+			assassins.add(new Assassin(zom, (int) randomX, (int) randomY, camera));
 		}
-		for(int i = 0; i < 15; i ++)
-		{
-			randomX = randX.nextInt(866)+16;
-			randomY = randX.nextInt(893)+21;
-			while(walls.getCell((int)(((randomX))/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+16)/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+16)/16), (int)((randomY+16)/16))!=null||walls.getCell((int)((randomX)/16), (int)((randomY+16)/16))!=null)
-			{
-				randomX = randX.nextInt(866)+16;
-				randomY = randX.nextInt(893)+21;
+		for (int i = 0; i < 15; i++) {
+			randomX = randX.nextInt(866) + 16;
+			randomY = randX.nextInt(893) + 21;
+			while (walls.getCell((int) (((randomX)) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 16) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 16) / 16), (int) ((randomY + 16) / 16)) != null
+					|| walls.getCell((int) ((randomX) / 16), (int) ((randomY + 16) / 16)) != null) {
+				randomX = randX.nextInt(866) + 16;
+				randomY = randX.nextInt(893) + 21;
 			}
-			zombies.add(new Zombie(zom, (int)randomX, (int)randomY, camera));
+			zombies.add(new Zombie(zom, (int) randomX, (int) randomY, camera));
 		}
-		for(int i = 0; i < 15; i ++)
-		{
-			randomX = randX.nextInt(866)+16;
-			randomY = randX.nextInt(893)+21;
-			while(walls.getCell((int)(((randomX))/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+16)/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+16)/16), (int)((randomY+16)/16))!=null||walls.getCell((int)((randomX)/16), (int)((randomY+16)/16))!=null)
-			{
-				randomX = randX.nextInt(866)+16;
-				randomY = randX.nextInt(893)+21;
+		for (int i = 0; i < 15; i++) {
+			randomX = randX.nextInt(866) + 16;
+			randomY = randX.nextInt(893) + 21;
+			while (walls.getCell((int) (((randomX)) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 16) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 16) / 16), (int) ((randomY + 16) / 16)) != null
+					|| walls.getCell((int) ((randomX) / 16), (int) ((randomY + 16) / 16)) != null) {
+				randomX = randX.nextInt(866) + 16;
+				randomY = randX.nextInt(893) + 21;
 			}
-			dragons.add(new Dragon(wiz, (int)randomX, (int)randomY, camera));
+			dragons.add(new Dragon(wiz, (int) randomX, (int) randomY, camera));
 		}
-		for(int i = 0; i < 50; i ++)
-		{
-			randomX = randX.nextInt(866)+16;
-			randomY = randX.nextInt(893)+21;
-			while(walls.getCell((int)(((randomX))/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+6)/16), (int)(randomY/16))!=null||walls.getCell((int)((randomX+6)/16), (int)((randomY+6)/16))!=null||walls.getCell((int)((randomX)/16), (int)((randomY+6)/16))!=null)
-			{
-				randomX = randX.nextInt(866)+16;
-				randomY = randX.nextInt(893)+21;
+		for (int i = 0; i < 50; i++) {
+			randomX = randX.nextInt(866) + 16;
+			randomY = randX.nextInt(893) + 21;
+			while (walls.getCell((int) (((randomX)) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 6) / 16), (int) (randomY / 16)) != null
+					|| walls.getCell((int) ((randomX + 6) / 16), (int) ((randomY + 6) / 16)) != null
+					|| walls.getCell((int) ((randomX) / 16), (int) ((randomY + 6) / 16)) != null) {
+				randomX = randX.nextInt(866) + 16;
+				randomY = randX.nextInt(893) + 21;
 			}
 			coins.add(new Coin(randomX, randomY));
 		}
-		//Retrieves all player IDs by lobby number
+		// Retrieves all player IDs by lobby number
 //		String playerIds = "";
 //    	try { playerIds = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPlayersIdByLobby?id="+Constants.lobby);} catch (Exception e1) {e1.printStackTrace();}
 //		player1id = Integer.parseInt(playerIds.split(" ")[0]);
@@ -146,55 +148,59 @@ public class GameTest extends Game implements Screen{
 //		player4id = Integer.parseInt(playerIds.split(" ")[3]);
 		create();
 	}
+
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(stage);
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		
-		//Sends position and updates all four players
-		//String playerUpdate = "no";
-		//System.out.println(Constants.lobby);
-		//System.out.println(Constants.userID);
-		//System.out.println(player.getX());
-		//System.out.println(player.getY());
-		//try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers", "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());} catch (Exception e) {e.printStackTrace();}
-		//String[] playerUpdateArr = playerUpdate.split(" ");
-		//player.setPos(850, 50);
-		//player2.setPos(0, 0);
-		//player3.setPos(0, 0);
-		//player4.setPos(0, 0);
-		//System.out.println(playerUpdate);
-		//System.out.println(Arrays.toString(playerUpdateArr));
-		//System.out.println(playerUpdateArr[0]);
-		/*for (int i = 0; i < 4; i++) {
-			if(Integer.parseInt(playerUpdateArr[3*i]) == Constants.userID) {
-				player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-			}
-			else if(player2.getX() == 0) player2.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-			else if(player3.getX() == 0) player3.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-			else if(player4.getX() == 0) player4.setPos(Integer.parseInt(playerUpdateArr[3*i+1]), Integer.parseInt(playerUpdateArr[3*i+2]));
-		}*/
 
-		if(elapsed<3)
-		{
+		// Sends position and updates all four players
+		// String playerUpdate = "no";
+		// System.out.println(Constants.lobby);
+		// System.out.println(Constants.userID);
+		// System.out.println(player.getX());
+		// System.out.println(player.getY());
+		// try {playerUpdate = JsonParser.sendHTML("sendPosGetPlayers",
+		// "lobbyId="+Constants.lobby+"&playerId="+Constants.userID+"&xpos="+player.getX()+"&ypos="+player.getY());}
+		// catch (Exception e) {e.printStackTrace();}
+		// String[] playerUpdateArr = playerUpdate.split(" ");
+		// player.setPos(850, 50);
+		// player2.setPos(0, 0);
+		// player3.setPos(0, 0);
+		// player4.setPos(0, 0);
+		// System.out.println(playerUpdate);
+		// System.out.println(Arrays.toString(playerUpdateArr));
+		// System.out.println(playerUpdateArr[0]);
+		/*
+		 * for (int i = 0; i < 4; i++) { if(Integer.parseInt(playerUpdateArr[3*i]) ==
+		 * Constants.userID) { player.setPos(Integer.parseInt(playerUpdateArr[3*i+1]),
+		 * Integer.parseInt(playerUpdateArr[3*i+2])); } else if(player2.getX() == 0)
+		 * player2.setPos(Integer.parseInt(playerUpdateArr[3*i+1]),
+		 * Integer.parseInt(playerUpdateArr[3*i+2])); else if(player3.getX() == 0)
+		 * player3.setPos(Integer.parseInt(playerUpdateArr[3*i+1]),
+		 * Integer.parseInt(playerUpdateArr[3*i+2])); else if(player4.getX() == 0)
+		 * player4.setPos(Integer.parseInt(playerUpdateArr[3*i+1]),
+		 * Integer.parseInt(playerUpdateArr[3*i+2])); }
+		 */
+
+		if (elapsed < 3) {
 			batch.begin();
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			font.draw(batch, "Kill all enemies and collect all coins", player.x-40, player.y);
-			font.draw(batch, "Good Luck", player.x-40, player.y-20);
+			font.draw(batch, "Kill all enemies and collect all coins", player.x - 40, player.y);
+			font.draw(batch, "Good Luck", player.x - 40, player.y - 20);
 			batch.end();
-			elapsed+=Gdx.graphics.getDeltaTime();
-		}
-	else if (player.hp > 0 && !gameOver) {
-		if(player.numCoins==50 && player.numEnemies == 0)
-			gameOver = true;
+			elapsed += Gdx.graphics.getDeltaTime();
+		} else if (player.hp > 0 && !gameOver) {
+			if (player.numCoins == 50 && player.numEnemies == 0)
+				gameOver = true;
 //<<<<<<< HEAD
-			//thread.run(player, player2);
+			// thread.run(player, player2);
 //		if (player.hp > 0) {
 //			try {
 //				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
@@ -213,22 +219,16 @@ public class GameTest extends Game implements Screen{
 //			}
 //			thread.run(player, player2);
 //=======
-			//thread.run(player, player2);
-			/*try {
-				String s2 = JsonParser.getHTML("http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46");
-				scan = new Scanner(s2);
-				player2.setPos(scan.nextInt(), scan.nextInt());
-				scan.close();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				JsonParser.sendHTML("updatePos", "id=45&xpos="+player.getX()+"&ypos="+player.getY());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+			// thread.run(player, player2);
+			/*
+			 * try { String s2 = JsonParser.getHTML(
+			 * "http://coms-309-tc-1.misc.iastate.edu:8080/getPosByID?id=46"); scan = new
+			 * Scanner(s2); player2.setPos(scan.nextInt(), scan.nextInt()); scan.close(); }
+			 * catch (Exception e) { // TODO Auto-generated catch block e.printStackTrace();
+			 * } try { JsonParser.sendHTML("updatePos",
+			 * "id=45&xpos="+player.getX()+"&ypos="+player.getY()); } catch (Exception e) {
+			 * // TODO Auto-generated catch block e.printStackTrace(); }
+			 */
 //>>>>>>> c76a4289bde39501c019432394c0b590a553b0d1
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -251,8 +251,7 @@ public class GameTest extends Game implements Screen{
 			for (Dragon drag : dragons) {
 				drag.render(batch, player, collision, enemyShots, elapsed);
 			}
-			for(Coin coins : coins)
-			{
+			for (Coin coins : coins) {
 				coins.render(shape, camera, batch);
 				coins.checkCollision(player);
 			}
@@ -261,19 +260,18 @@ public class GameTest extends Game implements Screen{
 			}
 			font.getData().setScale(.5f);
 			font.draw(batch, "Health: " + player.hp, player.getX() - 235, player.getY() + 130);
-			font.draw(batch, ""+Gdx.graphics.getFramesPerSecond(), player.getX() + 229, player.getY() + 133);
-			font.draw(batch, "Coins: "+player.numCoins, player.getX()-235, player.getY()+120);
-			font.draw(batch, "Enemies Left: "+player.numEnemies, player.getX()-235, player.getY() +110);
+			font.draw(batch, "" + Gdx.graphics.getFramesPerSecond(), player.getX() + 229, player.getY() + 133);
+			font.draw(batch, "Coins: " + player.numCoins, player.getX() - 235, player.getY() + 120);
+			font.draw(batch, "Enemies Left: " + player.numEnemies, player.getX() - 235, player.getY() + 110);
 			for (int i = 0; i < Player.numBullets; i++) {
 				if (shots.get(i).active)
 					shots.get(i).render(batch, collision, zombies, dragons, assassins);
 			}
-			for(Bolt bolts: enemyShots)
-			{
-				if(bolts.active)
+			for (Bolt bolts : enemyShots) {
+				if (bolts.active)
 					bolts.render(batch, collision, player);
 			}
-			player.update(collision, shots, camera,batch);
+			player.update(collision, shots, camera, batch);
 			player2.update(batch);
 			player3.update(batch);
 			player4.update(batch);
@@ -284,32 +282,26 @@ public class GameTest extends Game implements Screen{
 			player3.render();
 			player4.render();
 
-		}
-		else
-		{
+		} else {
 			batch.begin();
 			Gdx.gl.glClearColor(0, 0, 0, 0);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			if(player.hp<1)
-			{
-				font.draw(batch, "Game Over", player.x-40, player.y);
-				font.draw(batch, "Press Esc to Exit", player.x-40, player.y-20);
+			if (player.hp < 1) {
+				font.draw(batch, "Game Over", player.x - 40, player.y);
+				font.draw(batch, "Press Esc to Exit", player.x - 40, player.y - 20);
+				batch.end();
+			} else {
+				score = (int) (player.hp / elapsed * 1000);
+				font.draw(batch, "You Win!", player.x - 40, player.y);
+				font.draw(batch, "Press Esc to Exit", player.x - 40, player.y - 20);
+				font.draw(batch, "Score: " + score, player.x - 40, player.y - 40);
 				batch.end();
 			}
-			else
-			{
-				score = (int)(player.hp/elapsed * 1000);
-				font.draw(batch, "You Win!", player.x-40, player.y);
-				font.draw(batch, "Press Esc to Exit", player.x-40, player.y-20);
-				font.draw(batch, "Score: "+score, player.x-40, player.y-40);
-				batch.end();
-			}		
 		}
-	     if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-	     {
-	    	 dispose();
-	    	 game.setScreen(new MainScreen(game));
-	     }
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			dispose();
+			game.setScreen(new MainScreen(game));
+		}
 	}
 
 	@Override
@@ -320,19 +312,19 @@ public class GameTest extends Game implements Screen{
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -342,11 +334,9 @@ public class GameTest extends Game implements Screen{
 		map.dispose();
 		renderer.dispose();
 		stage.dispose();
-		
-	}
-	
 
-	
+	}
+
 	@Override
 	public void create() {
 		Gdx.graphics.setResizable(false);
@@ -354,8 +344,8 @@ public class GameTest extends Game implements Screen{
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
 		batch = new SpriteBatch();
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
 
 	}
 }

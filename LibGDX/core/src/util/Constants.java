@@ -16,7 +16,5 @@ public class Constants {
 	public static float blue = 0.12f;
 	public static float green = 0.16f;
 	public static float alpha = 1f;
-	
+
 }
-
-

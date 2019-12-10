@@ -23,8 +23,8 @@ public class Car {
 	private double radians;
 	private float speedX;
 	private float speedY;
-	public Car(String texturePath, AssetManager manager, OrthographicCamera camera)
-	{
+
+	public Car(String texturePath, AssetManager manager, OrthographicCamera camera) {
 		this.camera = camera;
 		texture = manager.get(texturePath, Texture.class);
 		sprite = new Sprite(texture);
@@ -34,129 +34,129 @@ public class Car {
 		angle = 90;
 		topSpeed = 20;
 	}
-	
-	public float getX()
-	{
+
+	public float getX() {
 		return sprite.getX();
 	}
-	
-	public float getY()
-	{
+
+	public float getY() {
 		return sprite.getY();
 	}
-	
-	public void move()
-	{
+
+	public void move() {
 		float radians;
-		
-		
-		if (angle > 270) angle = -90;
-		if (angle < -90) angle = 270;
+
+		if (angle > 270)
+			angle = -90;
+		if (angle < -90)
+			angle = 270;
 		radians = angle * 0.0174533f;
-		
-		
-		if (Gdx.input.isKeyPressed(Keys.W)) speed += acceleration;
-		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN) ) speed -= deceleration;
+
+		if (Gdx.input.isKeyPressed(Keys.W))
+			speed += acceleration;
+		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN))
+			speed -= deceleration;
 		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && speed != 0) {
 			sprite.rotate(-1);
 			angle--;
 		}
-		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && speed != 0)	
-		{
+		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && speed != 0) {
 			sprite.rotate(1);
 			angle++;
 		}
-		if(speed < .05f && speed > -0.05f) speed = 0;
-		if (speed > 0) speed -= 0.05f;
-		if (speed < 0) speed += 0.05f;
-		if (speed < -3f) speed = -3f;
-		
-		if (speed > topSpeed) speed = topSpeed;
-		speedX = speed*(float)Math.cos(radians);
-		speedY = speed * (float)Math.sin(radians);
+		if (speed < .05f && speed > -0.05f)
+			speed = 0;
+		if (speed > 0)
+			speed -= 0.05f;
+		if (speed < 0)
+			speed += 0.05f;
+		if (speed < -3f)
+			speed = -3f;
+
+		if (speed > topSpeed)
+			speed = topSpeed;
+		speedX = speed * (float) Math.cos(radians);
+		speedY = speed * (float) Math.sin(radians);
 		camera.translate(speedX, speedY);
 		camera.update();
-		
-		
+
 	}
-	public float getSpeedX()
-	{
+
+	public float getSpeedX() {
 		return speedX;
 	}
-	
-	public float getSpeedY()
-	{
+
+	public float getSpeedY() {
 		return speedY;
 	}
-	public Sprite getSprite()
-	{
+
+	public Sprite getSprite() {
 		return sprite;
 	}
-	
-	public void draw(SpriteBatch batch)
-	{
+
+	public void draw(SpriteBatch batch) {
 		sprite.draw(batch);
 	}
-	
-	public void setPosition(float x, float y)
-	{
+
+	public void setPosition(float x, float y) {
 		sprite.setPosition(x, y);
 	}
-	
-	public Point getTilePosition()
-	{
-		int xPos = (int)Math.floor(camera.position.x + speedX);
-		int yPos = (int)Math.floor(camera.position.y + speedY);
-		
-		
-		
+
+	public Point getTilePosition() {
+		int xPos = (int) Math.floor(camera.position.x + speedX);
+		int yPos = (int) Math.floor(camera.position.y + speedY);
+
 		return new Point(xPos / 32, yPos / 32);
-		
+
 	}
-	
-	public void decSpeed(float newSpeed)
-	{
-		if (speed > 2.0f) speed -= newSpeed;
-		if (speed < -0.5f) speed += newSpeed;
+
+	public void decSpeed(float newSpeed) {
+		if (speed > 2.0f)
+			speed -= newSpeed;
+		if (speed < -0.5f)
+			speed += newSpeed;
 	}
-	
-	public void setSpeed(float newSpeed)
-	{
+
+	public void setSpeed(float newSpeed) {
 		speed = newSpeed;
 	}
-	
-	public float getSpeed()
-	{
+
+	public float getSpeed() {
 		return speed;
 	}
-	
-	public void moveAfterCollision()
-	{
-float radians;
-		
-		if (angle > 270) angle = -90;
-		if (angle < -90) angle = 270;
+
+	public void moveAfterCollision() {
+		float radians;
+
+		if (angle > 270)
+			angle = -90;
+		if (angle < -90)
+			angle = 270;
 		radians = angle * 0.0174533f;
-		
-		
-		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN) ) speed -= deceleration;
+
+		if (Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DPAD_DOWN))
+			speed -= deceleration;
 		if ((Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.DPAD_RIGHT)) && speed != 0) {
 			sprite.rotate(-1);
 			angle--;
 		}
-		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && speed != 0)	
-		{
+		if ((Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.DPAD_LEFT)) && speed != 0) {
 			sprite.rotate(1);
 			angle++;
 		}
-		if(speed < 0.05f && speed > -0.05f) speed = 0;
-		if (speed > 0) speed -= 0.05f;
-		if (speed < 0) speed += 0.05f;
-		if (speed < -3f) speed = -3f;
-		
-		if (speed > topSpeed) speed = topSpeed;
-		speedX = speed*(float)Math.cos(radians);
-		speedY = speed * (float)Math.sin(radians);
+		if (speed < 0.05f && speed > -0.05f)
+			speed = 0;
+		if (speed > 0)
+			speed -= 0.05f;
+		if (speed < 0)
+			speed += 0.05f;
+		if (speed < -3f)
+			speed = -3f;
+
+		if (speed > topSpeed)
+			speed = topSpeed;
+		speedX = speed * (float) Math.cos(radians);
+		speedY = speed * (float) Math.sin(radians);
 		camera.translate(speedX, speedY);
 		camera.update();
 	}

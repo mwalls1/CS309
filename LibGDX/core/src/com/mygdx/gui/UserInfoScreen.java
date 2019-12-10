@@ -24,6 +24,7 @@ public class UserInfoScreen extends Game implements Screen {
 	private boolean loggedIn = false;
 	public String user = "default";
 	private int useless;
+
 	public UserInfoScreen(Game game) {
 		this.game = game;
 		create();
@@ -33,7 +34,7 @@ public class UserInfoScreen extends Game implements Screen {
 	public void show() {
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(stage);
-		
+
 	}
 
 	@Override
@@ -41,13 +42,13 @@ public class UserInfoScreen extends Game implements Screen {
 		// TODO Auto-generated method stub
 		Gdx.gl.glClearColor(Constants.red, Constants.blue, Constants.green, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		stage.act();
 		stage.draw();
 		if (Gdx.input.isKeyJustPressed(Keys.TAB) && userSelected) {
 			passwordTextField.setText("");
 			passwordTextField.setPasswordMode(true);
-			
+
 		}
 	}
 
@@ -93,7 +94,7 @@ public class UserInfoScreen extends Game implements Screen {
 		final TextButton loginWithUsernamePassword = new TextButton("Enter", skin, "default");
 		final TextButton createNewUser = new TextButton("New User", skin, "default");
 		/*
-		 * BACK BUTTON 
+		 * BACK BUTTON
 		 */
 		backButton.setWidth(Constants.BUTTON_WIDTH);
 		backButton.setHeight(Constants.BUTTON_HEIGHT);
@@ -105,17 +106,19 @@ public class UserInfoScreen extends Game implements Screen {
 				game.setScreen(new MainScreen(game));
 			}
 		});
-		
+
 		/*
 		 * CREATE USER
 		 */
 		createUserButton.setWidth(Constants.BUTTON_WIDTH);
 		createUserButton.setHeight(Constants.BUTTON_HEIGHT);
-		createUserButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - Constants.BUTTON_OFFSET);
+		createUserButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f,
+				Gdx.graphics.getHeight() / 2 - Constants.BUTTON_OFFSET);
 
 		loginButton.setWidth(Constants.BUTTON_WIDTH);
 		loginButton.setHeight(Constants.BUTTON_HEIGHT);
-		loginButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 2*Constants.BUTTON_OFFSET);
+		loginButton.setPosition(Gdx.graphics.getWidth() / 2 - 100f,
+				Gdx.graphics.getHeight() / 2 - 2 * Constants.BUTTON_OFFSET);
 		loginButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -125,21 +128,20 @@ public class UserInfoScreen extends Game implements Screen {
 				create();
 			}
 		});
-	
+
 		usernameTextField.setWidth(Constants.BUTTON_WIDTH);
 		usernameTextField.setHeight(Constants.BUTTON_HEIGHT);
-		usernameTextField.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
+		usernameTextField.setPosition(Gdx.graphics.getWidth() / 2 - 100f,
+				Gdx.graphics.getHeight() / 2 - 3 * Constants.BUTTON_OFFSET);
 		usernameTextField.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				userSelected = true;
 				usernameTextField.setText("");
-			
+
 			}
 		});
-		
-		
-		
+
 		passwordTextField.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -147,41 +149,42 @@ public class UserInfoScreen extends Game implements Screen {
 				passwordTextField.setPasswordMode(true);
 			}
 		});
-		
+
 		passwordTextField.setWidth(Constants.BUTTON_WIDTH);
 		passwordTextField.setHeight(Constants.BUTTON_HEIGHT);
-		passwordTextField.setPosition(Gdx.graphics.getWidth() / 2 - 100f, Gdx.graphics.getHeight() / 2 - 4*Constants.BUTTON_OFFSET);
+		passwordTextField.setPosition(Gdx.graphics.getWidth() / 2 - 100f,
+				Gdx.graphics.getHeight() / 2 - 4 * Constants.BUTTON_OFFSET);
 		passwordTextField.setPasswordCharacter('*');
-		
+
 		loginWithUsernamePassword.setHeight(Constants.BUTTON_HEIGHT);
-		loginWithUsernamePassword.setWidth(Gdx.graphics.getWidth()/8);
-		loginWithUsernamePassword.setPosition(Gdx.graphics.getWidth() / 2 + 150f, Gdx.graphics.getHeight() / 2 - 4*Constants.BUTTON_OFFSET);
-	
+		loginWithUsernamePassword.setWidth(Gdx.graphics.getWidth() / 8);
+		loginWithUsernamePassword.setPosition(Gdx.graphics.getWidth() / 2 + 150f,
+				Gdx.graphics.getHeight() / 2 - 4 * Constants.BUTTON_OFFSET);
+
 		createNewUser.setHeight(Constants.BUTTON_HEIGHT);
-		createNewUser.setWidth(Gdx.graphics.getWidth()/8);
-		createNewUser.setPosition(Gdx.graphics.getWidth() / 2 + 150f, Gdx.graphics.getHeight() / 2 - 3*Constants.BUTTON_OFFSET);
+		createNewUser.setWidth(Gdx.graphics.getWidth() / 8);
+		createNewUser.setPosition(Gdx.graphics.getWidth() / 2 + 150f,
+				Gdx.graphics.getHeight() / 2 - 3 * Constants.BUTTON_OFFSET);
 		createNewUser.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Constants.user = "name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText(); 
+				Constants.user = "name=" + usernameTextField.getText() + "&password=" + passwordTextField.getText();
 				try {
-					JsonParser.sendHTML("newUser",Constants.user);
+					JsonParser.sendHTML("newUser", Constants.user);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
-		
-		
+
 		if (!loggedIn) {
 			usernameTextField.setVisible(false);
 			passwordTextField.setVisible(false);
 			loginWithUsernamePassword.setVisible(false);
 			createNewUser.setVisible(false);
 		}
-		
-		
+
 		stage.addActor(backButton);
 		stage.addActor(createUserButton);
 		stage.addActor(loginButton);
@@ -190,11 +193,10 @@ public class UserInfoScreen extends Game implements Screen {
 		stage.addActor(loginWithUsernamePassword);
 		stage.addActor(createNewUser);
 		Gdx.input.setInputProcessor(stage);
-		
 
 	}
-	public String getUser()
-	{
+
+	public String getUser() {
 		return user;
 	}
 
