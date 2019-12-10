@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.mygdx.ColesGames.Checkers;
 import com.mygdx.ColesGames.ConnectFour;
 import com.mygdx.games.GameTest;
 
@@ -539,6 +540,7 @@ public class MultiplayerLobby extends Game implements Screen {
 					this.dispose();
 					if (topVoteLabel.getText().contains("Game 1")) game.setScreen(new GameTest(game));
 					if (topVoteLabel.getText().contains("Game 2")) game.setScreen(new ConnectFour(game,-1));
+					if (topVoteLabel.getText().contains("Game 3")) game.setScreen(new Checkers(game));
 			}
 			gameStartCD.setText(
 					"Game Starting in " + (int)(gameCountDown - (System.currentTimeMillis() - time) / 1000) / 1);
