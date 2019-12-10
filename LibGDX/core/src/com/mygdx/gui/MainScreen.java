@@ -31,8 +31,12 @@ public class MainScreen extends Game implements Screen{
 	 */
 	public void show() {
 		// TODO Auto-generated method stub
-		Gdx.input.setInputProcessor(stage); //Uses the stage, gets input from cursor/clicks
+
 		
+	}
+	private void init()
+	{
+ 		
 	}
 	
 	/**
