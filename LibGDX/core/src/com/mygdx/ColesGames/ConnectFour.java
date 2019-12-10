@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import util.Constants;
 import util.JsonParser;
+import java.util.ArrayList;
 
 /**
  * Connect Four game
@@ -57,6 +58,7 @@ public class ConnectFour extends Game implements Screen {
 	private int[] lowest;
 	
 	private ConnectFourLogic logic;
+	private ArrayList<ConnectFourPiece> AIMoves;
 	
 	/**
 	 * Creates a connect four game by calling the create method
@@ -117,6 +119,7 @@ public class ConnectFour extends Game implements Screen {
 		text.setColor(new Color(0,0,0,1));
 		
 		logic = new ConnectFourLogic();
+		AIMoves = new ArrayList<ConnectFourPiece>();
 
 		createZones();
 	}
@@ -417,28 +420,50 @@ public class ConnectFour extends Game implements Screen {
 					System.out.println("-----");
 					System.out.println("--" + countOfTiles + "--");
 					System.out.println("-----");
+					ConnectFourPiece piece = new ConnectFourPiece(r, c);
 					// diagonal down left
-					if(r == 1 && c > 0 && !zones[r-1][c-1].isActive()) System.out.println((r-1) + " " + (c-1));
+					if(r == 1 && c > 0 && !zones[r-1][c-1].isActive()) {
+						System.out.println((r-1) + " " + (c-1));
+					}
 					// diagonal down left case 2
-					if(r > 1 && c > 0 && !zones[r-1][c-1].isActive() && zones[r-2][c-1].isActive()) System.out.println((r-1) + " " + (c-1));
+					if(r > 1 && c > 0 && !zones[r-1][c-1].isActive() && zones[r-2][c-1].isActive()) {
+						System.out.println((r-1) + " " + (c-1));
+					}
 					// left
-					if(r == 0 && c > 0 && !zones[r][c-1].isActive()) System.out.println(r + " " + (c-1));
+					if(r == 0 && c > 0 && !zones[r][c-1].isActive()) {
+						System.out.println(r + " " + (c-1));
+					}
 					// left case 2
-					if(r > 0 && c > 0 && !zones[r][c-1].isActive() && zones[r-1][c-1].isActive()) System.out.println(r + " " + (c-1));
+					if(r > 0 && c > 0 && !zones[r][c-1].isActive() && zones[r-1][c-1].isActive()) {
+						System.out.println(r + " " + (c-1));
+					}
 					// diagonal up left
-					if(r < 5 && c > 0 && !zones[r+1][c-1].isActive() && zones[r][c-1].isActive()) System.out.println((r+1) + " " + (c-1));
+					if(r < 5 && c > 0 && !zones[r+1][c-1].isActive() && zones[r][c-1].isActive()) {
+						System.out.println((r+1) + " " + (c-1));
+					}
 					// up
 					if(r < 5 && c > 0 && !zones[r+1][c].isActive()) System.out.println((r+1) + " " + c);
 					// diagonal up right
-					if(r < 5 && c < 6 && !zones[r+1][c+1].isActive() && zones[r][c+1].isActive()) System.out.println((r+1) + " " + (c+1));
+					if(r < 5 && c < 6 && !zones[r+1][c+1].isActive() && zones[r][c+1].isActive()) {
+						System.out.println((r+1) + " " + (c+1));
+					}
 					// right
-					if(r == 0 && c < 6 && !zones[r][c+1].isActive() && zones[r][c+1].isActive()) System.out.println(r + " " + (c+1));
+					if(r == 0 && c < 6 && !zones[r][c+1].isActive() && zones[r][c+1].isActive()) {
+						System.out.println(r + " " + (c+1));
+					}
 					// right case 2
-					if(r > 0 && c < 6 && !zones[r][c+1].isActive() && zones[r-1][c+1].isActive()) System.out.println(r + " " + (c+1));
+					if(r > 0 && c < 6 && !zones[r][c+1].isActive() && zones[r-1][c+1].isActive()) {
+						System.out.println(r + " " + (c+1));
+					}
 					// diagonal down right
-					if(r == 1 && c < 6 && !zones[r-1][c+1].isActive()) System.out.println((r-1) + " " + (c+1));
+					if(r == 1 && c < 6 && !zones[r-1][c+1].isActive()) {
+						System.out.println((r-1) + " " + (c+1));
+					}
 					// diagonal down right case 2
-					if(r > 1 && c < 6 && !zones[r-1][c+1].isActive() && zones[r-2][c+1].isActive()) System.out.println((r-1) + " " + (c+1));
+					if(r > 1 && c < 6 && !zones[r-1][c+1].isActive() && zones[r-2][c+1].isActive()) {
+						System.out.println((r-1) + " " + (c+1));
+					}
+					AIMoves.add(piece);
 					countOfTiles++;
 				}
 			}
