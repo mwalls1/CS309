@@ -160,10 +160,9 @@ public class Checkers extends Game implements Screen {
 		
 		//Handle the players turn
 		int moveAbility = 0;
-		if (Constants.playerNumber == 0) {
-			if (isTurn) moveAbility = checkCanMove(pieces.get(colors[0]));
+//		if (Constants.playerNumber == 0) {
+			if (isTurn && Constants.playerNumber == 0 || isTurn && Constants.playerNumber == 1 || !isTurn && Constants.playerNumber == 2) moveAbility = checkCanMove(pieces.get(colors[0]));
 			else moveAbility = checkCanMove(pieces.get(colors[1]));
-		} else moveAbility = checkCanMove(pieces.get(colors[Constants.playerNumber-1]));
 		
 		if (moveAbility == 0) //If it is your turn (online) and there are no moves left
 			System.out.println("Game is over");
