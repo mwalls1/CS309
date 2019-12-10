@@ -10,4 +10,7 @@ _site/
 .mvn/
 /bin/
 /.metadata/
+<<<<<<< HEAD
+=======
 *.metadata/*
+>>>>>>> master

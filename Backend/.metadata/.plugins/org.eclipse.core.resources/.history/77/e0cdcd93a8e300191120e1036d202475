@@ -1,0 +1,34 @@
+package com.example.demo.leaderboardSpace;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class leaderboardSpaceController {
+
+	@Autowired
+	private leaderboardSpaceRepository leaderboardRepo;
+	
+	/**
+	 * Return all instances in the table
+	 * @return
+	 */
+	@GetMapping("/getLeaderboardSpace")
+	public List<leaderboardSpace> getLeaderboardSpace(){
+		return leaderboardRepo.findAll();
+	}
+	
+	@PutMapping("/updateLeaderboardSpace/{id}")
+	leaderboardSpace updateLeaderboardSpace(@RequestBody leaderboardSpace p, @PathVariable Integer id) {
+		leaderboardSpace old_p = leaderboardRepo.getOne(id);
+		old_p.setScore(p.getScore());
+		leaderboardRepo.save(old_p);
+		return old_p;
+	}
+
+}

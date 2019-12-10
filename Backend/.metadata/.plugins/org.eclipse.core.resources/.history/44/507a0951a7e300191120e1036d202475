@@ -1,0 +1,59 @@
+package com.example.demo.leaderboardSpace;
+
+import javax.persistence.*;
+import javax.persistence.Table;
+import javax.validation.constraints.*;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+/**
+ * 
+ * 
+ * @author Cole Weitzel
+ * @author Taylor Weil
+ *
+ */
+
+@Entity
+@Table(name = "leaderboardSpace")
+public class leaderboardSpace {
+	
+	@Column(name = "name")
+	private String name;
+	
+	@Column(name = "score")
+	private Integer score;
+	
+	public leaderboardSpace() {
+		this.name = "";
+		this.score = 0;
+	}
+	
+	public leaderboardSpace(String paraName) {
+		setName(paraName);
+		setScore(0);
+	}
+	
+	public leaderboardSpace(String paraName, Integer paraScore) {
+		setName(paraName);
+		setScore(paraScore);
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String paraName) {
+		this.name = paraName;
+	}
+	
+	public Integer getScore() {
+		return this.score;
+	}
+	
+	public void setScore(Integer paraScore) {
+		this.score = paraScore;
+	}
+
+}
