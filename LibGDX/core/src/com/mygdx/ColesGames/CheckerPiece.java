@@ -69,11 +69,5 @@ public class CheckerPiece {
 	public void setPossibleMoves(ArrayList<int[]> arr){
 		possibleMoves = arr;
 		possibleMoveSprites.clear();
-		for (int[] move : arr) {
-//			Sprite newMove = new Sprite(new Texture("download.png"));
-//			newMove.setSize(60, 60);
-//			newMove.setPosition((float) ((move[1]*2+move[0]%2)*74.5+12), (float) (move[0]*74.0+9));
-//			possibleMoveSprites.add(newMove);
-		}
 	}
 }

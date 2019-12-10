@@ -206,7 +206,7 @@ public class Checkers extends Game implements Screen {
 		}
 	}
 	
-	private ArrayList<int[]> getPossibleMoves(int col, int row){
+	public ArrayList<int[]> getPossibleMoves(int col, int row){
 		ArrayList<int[]> possibleMoves = new ArrayList<int[]>();
 		if (gameBoardArr[row][col] == 0) throw new NoSuchElementException();
 		String[] pieceString = getPieceByPosition(row, col).split(" ");
