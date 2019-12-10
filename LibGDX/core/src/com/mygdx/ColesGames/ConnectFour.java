@@ -140,7 +140,7 @@ public class ConnectFour extends Game implements Screen {
 		if(!isGameOver) {
 			isGameOver = logic.checkGameOver(zones, isGameOver);
 			winner = logic.getWinner();
-			System.out.println(logic.getWinner());
+//			System.out.println(logic.getWinner());
 		}
 		
 		// handle the user pressing and place their tile
@@ -331,6 +331,7 @@ public class ConnectFour extends Game implements Screen {
 			}
 		} 
 		boolean isTilePlaced = false;
+		findPossibleMoves();
 		for(int i = 0; i < numOfYellow; i+=2) {
 			// check to the left, col > 0, row == 0
 			if(arr[i+1] > 0 && arr[i] == 0 && !zones[arr[i]][arr[i+1]-1].isActive()) {
@@ -362,12 +363,6 @@ public class ConnectFour extends Game implements Screen {
 				isTilePlaced = true;
 				break;
 			}
-			// check up, row < 5
-			else if(arr[i] < 5 && !zones[arr[i]+1][arr[i+1]].isActive()) {
-				setPlayerYellow(arr[i]+1, arr[i+1]);
-				isTilePlaced = true;
-				break;
-			}
 			// check right diagonal, col < 6, row < 5
 			else if(arr[i] < 5 && arr[i+1] < 6 && !zones[arr[i]+1][arr[i+1]+1].isActive() && zones[arr[i]][arr[i+1]+1].isActive()) {
 				setPlayerYellow(arr[i]+1, arr[i+1]+1);
@@ -386,13 +381,67 @@ public class ConnectFour extends Game implements Screen {
 				isTilePlaced = true;
 				break;
 			}
+			// check up, row < 5
+			else if (arr[i] < 5 && !zones[arr[i] + 1][arr[i + 1]].isActive()) {
+				setPlayerYellow(arr[i] + 1, arr[i + 1]);
+				isTilePlaced = true;
+				break;
+			}
 		}
-		if(!isTilePlaced) {
+		if (!isTilePlaced) {
 			numOfYellow = 0;
 		}
-		// if 0 yellow tiles, place at random spot
+		// if 0 yellow tiles, place next to the red tile
 		if(numOfYellow == 0) {
-			difficulty1();
+			// temp r and c
+			int row = -1, col = -1;
+			for(int r = 0; r < 6; r++) {
+				for(int c = 0; c < 7; c++) {
+					if(zones[r][c].getTile().equals("red")) {
+						row = r;
+						col = c;
+						break;
+					}
+				}
+				if(row != -1 && col != -1) break;
+			}
+			setPlayerYellow(row, col);
+		}
+	}
+	
+	private void findPossibleMoves() {
+		int countOfTiles = 1;
+		for(int r = 0; r < 6; r++) {
+			for(int c = 0; c < 7; c++) {
+				if(zones[r][c].getTile().equals("yellow")) {
+					System.out.println("-----");
+					System.out.println("--" + countOfTiles + "--");
+					System.out.println("-----");
+					// diagonal down left
+					if(r == 1 && c > 0 && !zones[r-1][c-1].isActive()) System.out.println((r-1) + " " + (c-1));
+					// diagonal down left case 2
+					if(r > 1 && c > 0 && !zones[r-1][c-1].isActive() && zones[r-2][c-1].isActive()) System.out.println((r-1) + " " + (c-1));
+					// left
+					if(r == 0 && c > 0 && !zones[r][c-1].isActive()) System.out.println(r + " " + (c-1));
+					// left case 2
+					if(r > 0 && c > 0 && !zones[r][c-1].isActive() && zones[r-1][c-1].isActive()) System.out.println(r + " " + (c-1));
+					// diagonal up left
+					if(r < 5 && c > 0 && !zones[r+1][c-1].isActive() && zones[r][c-1].isActive()) System.out.println((r+1) + " " + (c-1));
+					// up
+					if(r < 5 && c > 0 && !zones[r+1][c].isActive()) System.out.println((r+1) + " " + c);
+					// diagonal up right
+					if(r < 5 && c < 6 && !zones[r+1][c+1].isActive() && zones[r][c+1].isActive()) System.out.println((r+1) + " " + (c+1));
+					// right
+					if(r == 0 && c < 6 && !zones[r][c+1].isActive() && zones[r][c+1].isActive()) System.out.println(r + " " + (c+1));
+					// right case 2
+					if(r > 0 && c < 6 && !zones[r][c+1].isActive() && zones[r-1][c+1].isActive()) System.out.println(r + " " + (c+1));
+					// diagonal down right
+					if(r == 1 && c < 6 && !zones[r-1][c+1].isActive()) System.out.println((r-1) + " " + (c+1));
+					// diagonal down right case 2
+					if(r > 1 && c < 6 && !zones[r-1][c+1].isActive() && zones[r-2][c+1].isActive()) System.out.println((r-1) + " " + (c+1));
+					countOfTiles++;
+				}
+			}
 		}
 	}
 	
