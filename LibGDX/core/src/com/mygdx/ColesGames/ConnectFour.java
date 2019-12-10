@@ -56,6 +56,8 @@ public class ConnectFour extends Game implements Screen {
 	private boolean animate;
 	private int[] lowest;
 	
+	private ConnectFourLogic logic;
+	
 	/**
 	 * Creates a connect four game by calling the create method
 	 */
@@ -113,6 +115,8 @@ public class ConnectFour extends Game implements Screen {
 		
 		text = new BitmapFont();
 		text.setColor(new Color(0,0,0,1));
+		
+		logic = new ConnectFourLogic();
 
 		createZones();
 	}
@@ -131,11 +135,13 @@ public class ConnectFour extends Game implements Screen {
 		drawScreen();
 		
 		if(wait < WAITTIME) wait++;
-//		if(animate) playerRedORYellow = false;
-//		else playerRedORYellow = true;
 		
 		// check if the game has been won by either player
-		if(!isGameOver) isGameOver = checkGameOver(zones);
+		if(!isGameOver) {
+			isGameOver = logic.checkGameOver(zones, isGameOver);
+			winner = logic.getWinner();
+			System.out.println(logic.getWinner());
+		}
 		
 		// handle the user pressing and place their tile
 		if (difficulty > 0 && Gdx.input.justTouched() && !isGameOver && playerRedORYellow && !animate) placeUserTile();
@@ -164,15 +170,12 @@ public class ConnectFour extends Game implements Screen {
 		if(playerRedORYellow) {
 			mousex = Gdx.input.getX();
 			mousey = 520 - Gdx.input.getY();
-//			System.out.println(mousex + " " + mousey);
 			for (int r = 0; r < 6; r++) {
 				for (int c = 0; c < 7; c++) {
 					if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow) {
-						this.lowest = findLowestTile(new int[] {r, c});
+						this.lowest = logic.findLowestTile(new int[] {r, c}, zones);
 						spriteMoveRed.setPosition(zones[5][c].getX(), 400);
-//						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
 						animate = true;
-//						System.out.println(r + " " + c);
 					}
 				}
 			}
@@ -241,31 +244,27 @@ public class ConnectFour extends Game implements Screen {
 						receiveMousex = 0;
 						receiveMousey = 0;
 						cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
-						this.lowest = findLowestTile(new int[] {r, c});
+						this.lowest = logic.findLowestTile(new int[] {r, c}, zones);
 						spriteMoveRed.setPosition(zones[5][c].getX(), 400);
-//						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
 						animate = true;
 					} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedORYellow && Constants.playerNumber == 2) {
 						receiveMousex = 0;
 						receiveMousey = 0;
 						cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
-						this.lowest = findLowestTile(new int[] {r, c});
+						this.lowest = logic.findLowestTile(new int[] {r, c}, zones);
 						spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
-//						System.out.println(spriteMoveYellow.getX() + " " + spriteMoveYellow.getY());
 						animate = true;
 					}
 					else if (zones[r][c].contains(receiveMousex, receiveMousey) && !zones[r][c].isActive() && !playerRedORYellow && Constants.playerNumber == 1) {
-						this.lowest = findLowestTile(new int[] {r, c});
+						this.lowest = logic.findLowestTile(new int[] {r, c}, zones);
 						spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
-//						System.out.println(spriteMoveYellow.getX() + " " + spriteMoveYellow.getY());
 						animate = true;
 						receiveMousex = 0;
 						receiveMousey = 0;
 					}
 					else if (zones[r][c].contains(receiveMousex, receiveMousey) && !zones[r][c].isActive() && playerRedORYellow && Constants.playerNumber == 2) {
-						this.lowest = findLowestTile(new int[] {r, c});
+						this.lowest = logic.findLowestTile(new int[] {r, c}, zones);
 						spriteMoveRed.setPosition(zones[5][c].getX(), 400);
-//						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
 						animate = true;
 						receiveMousex = 0;
 						receiveMousey = 0;
@@ -283,18 +282,15 @@ public class ConnectFour extends Game implements Screen {
 		if (Gdx.input.justTouched() && !isGameOver) {
 			mousex = Gdx.input.getX();
 			mousey = 520 - Gdx.input.getY();
-//			System.out.println(mousex + " " + mousey);
 			for (int r = 0; r < 6; r++) {
 				for (int c = 0; c < 7; c++) {
 					if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && playerRedORYellow) {
-						this.lowest = findLowestTile(new int[] {r, c});
+						this.lowest = logic.findLowestTile(new int[] {r, c}, zones);
 						spriteMoveRed.setPosition(zones[5][c].getX(), 400);
-//						System.out.println(spriteMoveRed.getX() + " " + spriteMoveRed.getY());
 						animate = true;
 					} else if (zones[r][c].contains(mousex, mousey) && !zones[r][c].isActive() && !playerRedORYellow) {
-						this.lowest = findLowestTile(new int[] {r, c});
+						this.lowest = logic.findLowestTile(new int[] {r, c}, zones);
 						spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
-//						System.out.println(spriteMoveYellow.getX() + " " + spriteMoveYellow.getY());
 						animate = true;
 					}
 				}
@@ -310,10 +306,8 @@ public class ConnectFour extends Game implements Screen {
 		while(!tileFound) {
 			int c = new Random().nextInt(7);
 			if(!zones[5][c].isActive()) {
-				lowest = findLowestTile(new int[] {5, c});
-//				System.out.println("index: 5 " + c + " lowest: " + this.lowest[0] + " " + this.lowest[1]);
+				this.lowest = logic.findLowestTile(new int[] {5, c}, zones);
 				spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
-//				System.out.println(spriteMoveYellow.getX() + " " + spriteMoveYellow.getY());
 				tileFound = true;
 				animate = true;
 			}
@@ -410,35 +404,14 @@ public class ConnectFour extends Game implements Screen {
 		difficulty2();
 	}
 	
-//	private String findDirectionToGo(int[] arr) {
-////		int max = 0;
-////		int rmax = -1;
-////		int cmax = -1;
-//		for(int i = 0; i < arr.length; i++) {
-//			
-//		}
-//		
-////		for(int i = 0; i < 6; i++) {
-////			for(int j = 0; j < 7; j++) {
-////				if(j > 0) {
-////					
-////				}
-////			}
-////		}
-//		
-//		return "";
-//	}
-	
 	/**
 	 * used to set the status of the AI tile, finds the lowest tile in the given column
 	 * @param r
 	 * @param c
 	 */
 	private void setPlayerYellow(int r, int c) {
-		lowest = findLowestTile(new int[] {5, c});
-//		System.out.println("index: 5 " + c + " lowest: " + this.lowest[0] + " " + this.lowest[1]);
+		lowest = logic.findLowestTile(new int[] {5, c}, zones);
 		spriteMoveYellow.setPosition(zones[5][c].getX(), 400);
-//		System.out.println(spriteMoveYellow.getX() + " " + spriteMoveYellow.getY());
 		animate = true;
 	}
 	
@@ -447,7 +420,6 @@ public class ConnectFour extends Game implements Screen {
 	 */
 	private void drawScreen() {
 		batch.begin();
-//		batch.draw(connectFourBoard, 0, 0);
 		if(playerRedORYellow && !isGameOver) text.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond() + "\nPlayer: red", 20, 515);
 		else if(!playerRedORYellow && !isGameOver) text.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond() + " \nPlayer: yellow", 20, 515);
 		if(isGameOver) {
@@ -471,7 +443,6 @@ public class ConnectFour extends Game implements Screen {
 		if(animate) {
 			if(playerRedORYellow) animateTile("red");
 			else animateTile("yellow");
-//			animateTile("yellow");
 		}
 		batch.draw(connectFourBoard, 0, 0);
 		batch.end();
@@ -506,28 +477,6 @@ public class ConnectFour extends Game implements Screen {
 			}
 		}
 	}
-	
-	/**
-	 * returns the lowest row that is not active
-	 * @param arr
-	 * 			index 0 is row, index 1 is column
-	 * @return
-	 * 			return array is the same format as parameter
-	 */
-	public int[] findLowestTile(int[] arr) {
-		if (arr[0] == 0)
-			return arr;
-		int row = arr[0];
-		int col = arr[1];
-		for (int i = row; i > 0; i--) {
-			if (!zones[row - 1][col].isActive()) {
-				row--;
-			}
-		}
-		arr[0] = row;
-		arr[1] = col;
-		return arr;
-	}
 
 	/**
 	 * creates the zones on screen to click
@@ -559,103 +508,6 @@ public class ConnectFour extends Game implements Screen {
 			System.out.println("restarted");
 			restart();
 		}
-	}
-
-	/**
-	 * returns true if the game is over
-	 * assigns the value of the private variable winner
-	 * with the output string for when game is won
-	 * @param z
-	 * 			used for mocking to check method
-	 * @return
-	 * 			return true for game over
-	 */
-	public boolean checkGameOver(Zone[][] z) {
-		int row, col;
-		if(isGameOver == true) return false;
-		
-		int sum = 0;
-		for(int i = 0; i < 6; i++) {
-			for(int j = 0; j < 7; j++) {
-				if(zones[i][j].getTile().equals("yellow") || zones[i][j].getTile().equals("red")) sum++;
-			}
-		}
-		if(sum == 42) {
-			winner = "board is full\nPress R to replay or ESCAPE to return to main menu";
-			return true;
-		}
-		
-		// check 4 in a row (horizontal)
-		int rowPlus4 = 0;
-		int colPlus4 = 0;
-		for(row = 0; row < 6; row++) {
-			for(col = 0; col < 4; col++) {
-				if(zones[row][col].getTile().equals("red") && zones[row][col+1].getTile().equals("red") && zones[row][col+2].getTile().equals("red") && zones[row][col+3].getTile().equals("red")) {
-					colPlus4 = col+4;
-					winner = "Game is over, red won at row:" + row + " col:" + col + "-" + colPlus4 + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				} else if(zones[row][col].getTile().equals("yellow") && zones[row][col+1].getTile().equals("yellow") && zones[row][col+2].getTile().equals("yellow") && zones[row][col+3].getTile().equals("yellow")) {
-					colPlus4 = col+4;
-					winner = "Game is over, yellow won at row:" + row + " col:" + col + "-" + colPlus4 + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				}
-			}
-		}
-		
-		// check 4 in a column (vertical)
-		for(col = 0; col < 7; col++) {
-			for(row = 0; row < 3; row++) {
-				if(zones[row][col].getTile().equals("red") && zones[row+1][col].getTile().equals("red") && zones[row+2][col].getTile().equals("red") && zones[row+3][col].getTile().equals("red")) {
-					rowPlus4 = row+4;
-					winner = "Game is over, red won at row:" + row + "-" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				} else if(zones[row][col].getTile().equals("yellow") && zones[row+1][col].getTile().equals("yellow") && zones[row+2][col].getTile().equals("yellow") && zones[row+3][col].getTile().equals("yellow")) {
-					rowPlus4 = row+4;
-					winner = "Game is over, yellow won at row:" + row + "-" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				}
-			}
-		}
-		
-		// check 4 diagonal (left to right bottom to top : 45 degrees : positive slope)
-		for(row = 0; row < 3; row++) {
-			for(col = 0; col < 4; col++) {
-				if(zones[row][col].getTile().equals("red") && zones[row+1][col+1].getTile().equals("red") && zones[row+2][col+2].getTile().equals("red") && zones[row+3][col+3].getTile().equals("red")) {
-					winner = "Game is over, red won diagonally starting at row:" + row + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				} else if(zones[row][col].getTile().equals("yellow") && zones[row+1][col+1].getTile().equals("yellow") && zones[row+2][col+2].getTile().equals("yellow") && zones[row+3][col+3].getTile().equals("yellow")) {
-					winner = "Game is over, yellow won diagonally starting at row:" + row + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				}
-			}
-		}
-		
-		// check 4 diagonal (left to right top to bottom : -45 degrees : negative slope)
-		for(row = 0; row < 3; row++) {
-			for(col = 0; col < 4; col++) {
-				if(zones[row+3][col].getTile().equals("red") && zones[row+2][col+1].getTile().equals("red") && zones[row+1][col+2].getTile().equals("red") && zones[row][col+3].getTile().equals("red")) {
-					rowPlus4 = row+4;
-					colPlus4 = col+4;
-					winner = "Game is over, red won diagonally starting at row:" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				} else if(zones[row+3][col].getTile().equals("yellow") && zones[row+2][col+1].getTile().equals("yellow") && zones[row+1][col+2].getTile().equals("yellow") && zones[row][col+3].getTile().equals("yellow")) {
-					rowPlus4 = row+4;
-					colPlus4 = col+4;
-					winner = "Game is over, yellow won diagonally starting at row:" + rowPlus4 + " col:" + col + "\nPress R to replay or ESCAPE to return to main menu";
-					System.out.println(winner);
-					return true;
-				}
-			}
-		}
-		
-		return false;
 	}
 	
 	/**

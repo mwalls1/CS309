@@ -19,18 +19,18 @@ public class MockitoTestsCole {
 	@Test
 	public void mockCheckGameWon() {
 		Zone[][] zones = new Zone[6][7];
-		ConnectFour game = mock(ConnectFour.class);
+		ConnectFourLogic game = mock(ConnectFourLogic.class);
 		
 		// assume the method doesn't work yet and mock it, return true
-		when(game.checkGameOver(zones)).thenReturn(false);
+		when(game.checkGameOver(zones, false)).thenReturn(false);
 		
-		assertFalse(game.checkGameOver(zones));
+		assertFalse(game.checkGameOver(zones, false));
 		
-		game.checkGameOver(zones);
-		game.checkGameOver(zones);
+		game.checkGameOver(zones, false);
+		game.checkGameOver(zones, false);
 		
 		// verify there were only 3 interactions with this method
-		verify(game, times(3)).checkGameOver(zones);
+		verify(game, times(3)).checkGameOver(zones, false);
 		verifyNoMoreInteractions(game);
 	}
 	
@@ -38,8 +38,8 @@ public class MockitoTestsCole {
 	@Test
 	public void testCheckGameWon() {
 		Zone[][] z = new Zone[6][7];
-		ConnectFour game = mock(ConnectFour.class);
-		when(game.checkGameOver(z)).thenReturn(true);
+		ConnectFourLogic game = mock(ConnectFourLogic.class);
+		when(game.checkGameOver(z, false)).thenReturn(true);
 		
 		// populate zone array
 		int x = 6;
@@ -59,7 +59,7 @@ public class MockitoTestsCole {
 		z[0][2].setTile("red");
 		z[0][3].setTile("red");
 		
-		assertTrue(game.checkGameOver(z));
+		assertTrue(game.checkGameOver(z, false));
 	}
 	
 	/**
@@ -70,12 +70,23 @@ public class MockitoTestsCole {
 	public void findLowestTileTest() {
 		int[] arr1 = { 4, 3 };
 		int[] arr2 = { 0, 3 };
-		ConnectFour game = mock(ConnectFour.class);
-		game.createZones();
-		when(game.findLowestTile(arr1)).thenReturn(arr2);
-		when(game.findLowestTile(arr2)).thenReturn(arr2);
+		ConnectFourLogic logic = mock(ConnectFourLogic.class);
+		Zone[][] z = new Zone[6][7];
+		// populate zone array
+		int x = 6;
+		int y = 0;
+		for (int r = 0; r < 6; r++) {
+			for (int c = 0; c < 7; c++) {
+				z[r][c] = new Zone(x, y, 80, 80);
+				x += 91;
+			}
+			y += 80;
+			x = 6;
+		}
+		when(logic.findLowestTile(arr1, z)).thenReturn(arr2);
+		when(logic.findLowestTile(arr2, z)).thenReturn(arr2);
 		
-		assertEquals(arr2, game.findLowestTile(arr1));
-		assertEquals(arr2, game.findLowestTile(arr2));
+		assertEquals(arr2, logic.findLowestTile(arr1, z));
+		assertEquals(arr2, logic.findLowestTile(arr2, z));
 	}
 }
