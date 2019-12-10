@@ -1,9 +1,16 @@
 package com.mygdx.ColesGames;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -16,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.gui.MainScreen;
 
 import util.Constants;
+import util.JsonParser;
 
 /**
  * Checkers
@@ -37,7 +45,10 @@ public class Checkers extends Game implements Screen {
 //	private boolean isGameOver;
 	private int mousex;
 	private int mousey;
-	boolean doubleJump;
+	boolean doubleJump;	
+	boolean received;
+	private WebSocketClient cc;
+
 	
 	private String[] colors = {"red","yellow","posMove"};
 	private HashMap<String,ArrayList<CheckerPiece>> pieces = new HashMap<String,ArrayList<CheckerPiece>>();
@@ -48,7 +59,6 @@ public class Checkers extends Game implements Screen {
 	
 	public Checkers(Game game) {
 		this.game = game;
-//		connect();
 		create();
 	}
 
@@ -63,7 +73,12 @@ public class Checkers extends Game implements Screen {
 		gameBoardArr = new int[8][4];
 		//Initialize game
 		if (Constants.playerNumber == 0) isTurn = true; //Constants.playerNumber = 1;
+		else {
+			connect();
+			isTurn = Constants.playerNumber == 1;
+		}
 		doubleJump = false;
+		received = false;
 		possibleMoves = new ArrayList<Sprite>();
 		currentPiece = null;
 		//Initialize Colors
@@ -71,8 +86,53 @@ public class Checkers extends Game implements Screen {
 		setBoard();
 		
 		batch = new SpriteBatch();
-		
 	}
+	
+	private void connect() {
+    	try {
+    		
+    		Draft[] drafts = { new Draft_6455() };
+    		String w = "ws://coms-309-tc-1.misc.iastate.edu:8080/websocket/" + Constants.userID; // coms-309-tc-1.misc.iastate.edu
+			cc = new WebSocketClient(new URI(w), (Draft) drafts[0]) {
+				@Override
+				public void onMessage(String message) {
+					System.out.println("NewMessage:" + message);
+					if (!message.contains("User:") && (!isTurn) && !message.contains("UPDATEPOS")) {
+						mousex = Integer.parseInt(message.split(" ")[7-(3*Constants.playerNumber)]);
+						mousey = Integer.parseInt(message.split(" ")[8-(3*Constants.playerNumber)]);
+						received = true;
+						System.out.println("Received: "+mousex + ". " + mousey);
+					}
+				}
+
+				@Override
+				public void onOpen(ServerHandshake handshake) {
+					System.out.println("opOpen");
+				}
+
+				@Override
+				public void onClose(int code, String reason, boolean remote) {
+					System.out.println("onClose");
+					try {
+						JsonParser.sendHTML("removePlayerFromLobbies", "id=" + Constants.userID);
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+					}
+				}
+
+				@Override
+				public void onError(Exception e) {
+					e.printStackTrace();
+					System.out.println("onError: "+e.getMessage());
+				}
+			};
+		} catch (URISyntaxException e) {
+			System.out.println("fail");
+			e.printStackTrace();
+		}
+		cc.connect();
+    }
 
 	@Override
 	public void render(float delta) {
@@ -114,11 +174,11 @@ public class Checkers extends Game implements Screen {
 			mousey = (int) 7-(Gdx.input.getY()/75);
 			System.out.println(mousex + " " + mousey );
 		}
-		if (mousex >= 0 || mousey >= 0) {
+		if (mousex >= 0 && mousey >= 0 && mousex <= 3 & mousey <= 7) {
 			//Check to see if piece is clicked on by its owner
-			if(gameBoardArr[mousey][mousex] == Constants.playerNumber && Constants.playerNumber != 0 || (Constants.playerNumber == 0 && (gameBoardArr[mousey][mousex] == (isTurn ? 1: 2)))) {
+			if((received && (gameBoardArr[mousey][mousex] == 1 || gameBoardArr[mousey][mousex] == 2))  || gameBoardArr[mousey][mousex] == Constants.playerNumber && Constants.playerNumber != 0 || (Constants.playerNumber == 0 && (gameBoardArr[mousey][mousex] == (isTurn ? 1: 2)))) {
+				if (!received && Constants.playerNumber != 0) cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
 				pieces.get("posMove").clear();
-//				if (checkCanMove(pieces.get(key)))
 				System.out.println(isTurn ? 1: 2);
 				currentPiece = getPieceByPosition(mousey, mousex).split(" ");
 				CheckerPiece piece = pieces.get(currentPiece[0]).get(Integer.parseInt(currentPiece[1]));
@@ -130,6 +190,7 @@ public class Checkers extends Game implements Screen {
 			}
 			//Check to see if possible move is clicked on and moves piece
 			else if(gameBoardArr[mousey][mousex] == 3) {
+				if (!received && Constants.playerNumber != 0) cc.send("UPDATEPOS:"+Constants.lobby+" "+mousex+" "+mousey);
 				//Checks to see if move was a jump
 				CheckerPiece currentChecker = pieces.get(currentPiece[0]).get(Integer.parseInt(currentPiece[1]));
 				if(Math.abs(currentChecker.getRow() - mousey) == 2) { //Case for if a piece will jump another
@@ -155,14 +216,11 @@ public class Checkers extends Game implements Screen {
 			}
 			mousex = -1;
 			mousey = -1;
-			
+			received = false;
 		}
 		for (Sprite possibleMove : possibleMoves) {
 			possibleMove.draw(batch);
 		}
-		
-		
-		
 		batch.end();
 	}
 	
@@ -171,6 +229,7 @@ public class Checkers extends Game implements Screen {
 	 */
 	private void handleKeys() {
 		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+			cc.close();
 			game.setScreen(new MainScreen(game));
 		}
 		if(Gdx.input.isKeyJustPressed(Keys.P)) {
@@ -185,7 +244,8 @@ public class Checkers extends Game implements Screen {
 	 * restarts the game
 	 */
 	public void restart() {
-		create();
+		this.dispose();
+		this.setScreen(new Checkers(game));
 	}
 
 	@Override
@@ -260,4 +320,6 @@ public class Checkers extends Game implements Screen {
 		if (possibleMoves.size() > 0) return 1;
 		return 0;
 	}
+	
+	
 }

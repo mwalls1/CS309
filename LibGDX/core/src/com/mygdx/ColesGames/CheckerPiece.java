@@ -47,7 +47,7 @@ public class CheckerPiece {
 		}
 		else if (value == 2){
 			if(!king) {
-				checker = new Sprite(new Texture("yellowCircle.png"));
+				checker = new Sprite(new Texture("yellowCircle2.png"));
 			}
 			else checker = new Sprite(new Texture("yellowCircleKing.png"));
 		}
