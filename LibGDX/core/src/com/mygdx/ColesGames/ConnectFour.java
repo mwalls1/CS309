@@ -424,44 +424,57 @@ public class ConnectFour extends Game implements Screen {
 					// diagonal down left
 					if(r == 1 && c > 0 && !zones[r-1][c-1].isActive()) {
 						System.out.println((r-1) + " " + (c-1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// diagonal down left case 2
 					if(r > 1 && c > 0 && !zones[r-1][c-1].isActive() && zones[r-2][c-1].isActive()) {
 						System.out.println((r-1) + " " + (c-1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// left
 					if(r == 0 && c > 0 && !zones[r][c-1].isActive()) {
 						System.out.println(r + " " + (c-1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// left case 2
 					if(r > 0 && c > 0 && !zones[r][c-1].isActive() && zones[r-1][c-1].isActive()) {
 						System.out.println(r + " " + (c-1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// diagonal up left
 					if(r < 5 && c > 0 && !zones[r+1][c-1].isActive() && zones[r][c-1].isActive()) {
 						System.out.println((r+1) + " " + (c-1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// up
-					if(r < 5 && c > 0 && !zones[r+1][c].isActive()) System.out.println((r+1) + " " + c);
+					if(r < 5 && c > 0 && !zones[r+1][c].isActive()) {
+						System.out.println((r+1) + " " + c);
+						piece.addPossibleMove(r + ":" + c);
+					}
 					// diagonal up right
 					if(r < 5 && c < 6 && !zones[r+1][c+1].isActive() && zones[r][c+1].isActive()) {
 						System.out.println((r+1) + " " + (c+1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// right
 					if(r == 0 && c < 6 && !zones[r][c+1].isActive() && zones[r][c+1].isActive()) {
 						System.out.println(r + " " + (c+1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// right case 2
 					if(r > 0 && c < 6 && !zones[r][c+1].isActive() && zones[r-1][c+1].isActive()) {
 						System.out.println(r + " " + (c+1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// diagonal down right
 					if(r == 1 && c < 6 && !zones[r-1][c+1].isActive()) {
 						System.out.println((r-1) + " " + (c+1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					// diagonal down right case 2
 					if(r > 1 && c < 6 && !zones[r-1][c+1].isActive() && zones[r-2][c+1].isActive()) {
 						System.out.println((r-1) + " " + (c+1));
+						piece.addPossibleMove(r + ":" + c);
 					}
 					AIMoves.add(piece);
 					countOfTiles++;
